@@ -1,0 +1,7 @@
+<app-header title="Edit category"></app-header>
+
+<ion-content>
+  <section class="o-container  o-container--full">
+    <app-categories-edit [category]="category$" [id]="currentID" (OnEditCategory)="editCategory($event)"></app-categories-edit>
+  </section>
+</ion-content>

@@ -1,0 +1,98 @@
+/*==========================================================================*\
+  +++ Menus +++
+/*==========================================================================*/
+
+.c-menu {
+
+    ion-header {
+        height: 120px;
+    }
+
+    ion-header,
+    ion-toolbar {
+        position: relative;
+    }
+
+    ion-toolbar {
+        display: flex;
+        align-content: center;
+        height: 100%;
+        background-image: url('/assets/images/bg-header.jpg');
+        background-repeat: no-repeat;
+        background-position: left top;
+        background-size: cover;
+
+        &:before {
+            content: "";
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 1;
+            height: 100%;
+            width: 100%;
+            backdrop-filter: blur(15px);
+            background: var(--ion-color-orange-rgba);
+        }
+    }
+
+    ion-avatar {
+        display: block;
+        margin: 0 auto;
+
+        img {
+            box-shadow: var(--ion-color-primary-contrast) 0 0 8px;
+        }
+    }
+
+    ion-title {
+        padding: 0;
+
+        ion-item {
+            --background: transparent;
+        }
+
+        ion-label {
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+            font-size: .95rem;
+            text-shadow: var(--ion-color-dark) 1px 1px 1px;
+        }
+
+    }
+
+    ion-content {
+
+        &:first-of-type {
+            --background: var(--ion-color-primary-contrast);
+        }
+
+        ion-icon {
+            font-size: 1.1rem;
+        }
+
+    }
+
+    ion-menu-toggle {
+
+        ion-label {
+            margin-left: 15px;
+            text-decoration: none;
+            font-size: .9rem !important;
+            color: var(--ion-color-step-600, #555) !important;
+        }
+
+        ion-item {
+            transition: all .2s ease-in-out;
+            --background: transparent;
+
+            &:focus,
+            &:hover {
+                --background: var(--ion-color-grey-medium);
+            }
+        }
+
+    }
+
+}

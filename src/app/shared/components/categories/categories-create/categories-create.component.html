@@ -1,0 +1,56 @@
+<ion-grid class="o-grid">
+  <ion-row>
+    <ion-col size="2" class="ion-text-start">
+      <app-backbutton></app-backbutton>
+    </ion-col> 
+  </ion-row>
+  <form class="c-form" [formGroup]="createCategoryForm" (ngSubmit)="createCategory()">
+    <ion-row>
+      <ion-col class="c-form-group" [ngClass]="createCategoryForm.get('title').valid ? 'is-valid' : ''">
+        <ion-label for="title" position="fixed">Title: <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input id="title" name="title" formControlName="title"></ion-input>
+        <ion-icon name="checkmark-circle-outline" *ngIf="createCategoryForm.get('title').valid"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" [disabled]="createCategoryForm.invalid" title="New category" 
+                    type="submit" class="ion-no-margin" *ngIf="isLoading === false">Create</ion-button>
+        <ion-button expand="block" class="ion-no-margin" *ngIf="isLoading === true" disabled>Saving</ion-button>
+      </ion-col>
+    </ion-row>
+  </form> 
+</ion-grid>
+<!--
+<div class="row">
+  <div class="col-sm  d-flex  justify-content-end">
+    <app-backbutton></app-backbutton>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm">
+    <form [formGroup]="createCategoryForm" (ngSubmit)="createCategory()">
+    
+      <div class="form-group  row">
+        <div class="col-md-6">
+          <input type="text" id="title" class="form-control" formControlName="title" placeholder="Title">
+          <ion-icon name="checkmark-circle-outline" *ngIf="createCategoryForm.get('title').valid"></ion-icon>
+        </div>
+        <div class="col-md-6">
+          <input type="text" id="slug" class="form-control" formControlName="slug" placeholder="Slug">
+          <ion-icon name="checkmark-circle-outline" *ngIf="createCategoryForm.get('slug').valid"></ion-icon>
+        </div>
+      </div>
+  
+      <button [disabled]="createCategoryForm.invalid" title="Crear categoría" type="submit" class="ion-no-margin" *ngIf="isLoading === false">
+        Crear Categoría
+      </button>
+      <button type="submit" class="ion-no-margin" *ngIf="isLoading === true" disabled>
+        Guardando
+      </button>
+  
+    </form> 
+  </div>
+</div>
+-->

@@ -1,0 +1,49 @@
+<ion-grid class="o-grid">
+  <ion-row>
+    <ion-col size="2" class="ion-text-start">
+      <app-backbutton></app-backbutton>
+    </ion-col> 
+  </ion-row>
+  <form class="c-form" [formGroup]="createFavoriteForm" (ngSubmit)="createFavorite()">
+    <ion-row>
+      <ion-col class="c-form-group" [ngClass]="createFavoriteForm.get('title').valid ? 'is-valid' : ''">
+        <ion-label for="title" position="fixed">Title: <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input id="title" name="title" formControlName="title"></ion-input>
+        <ion-icon name="checkmark-circle-outline" *ngIf="createFavoriteForm.get('title').valid"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="c-form-group" [ngClass]="createFavoriteForm.get('description').valid ? 'is-valid' : ''">
+        <ion-label for="description" position="fixed">Description: <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input id="description" name="description" formControlName="description"></ion-input>
+        <ion-icon name="checkmark-circle-outline" *ngIf="createFavoriteForm.get('description').valid"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="c-form-group" [ngClass]="createFavoriteForm.get('category_id').valid ? 'is-valid' : ''">
+        <ion-label for="category" position="fixed">Category: <ion-text color="danger">*</ion-text></ion-label>
+        <ion-select id="category" class="form-control" formControlName="category_id">
+          <ion-select-option selected>Select category...</ion-select-option>
+          <ion-select-option [id]="cat.id" [value]="cat.id" *ngFor="let cat of categories">
+            {{ cat.title }}
+          </ion-select-option>
+        </ion-select>
+        <ion-icon name="checkmark-circle-outline" *ngIf="createFavoriteForm.get('category_id').valid"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="c-form-group" [ngClass]="createFavoriteForm.get('url').valid ? 'is-valid' : ''">
+        <ion-label for="url" position="fixed">Url: <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input id="url" name="url" formControlName="url"></ion-input>
+        <ion-icon name="checkmark-circle-outline" *ngIf="createFavoriteForm.get('url').valid"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" [disabled]="createFavoriteForm.invalid" title="New favorite" 
+                    type="submit" class="ion-no-margin" *ngIf="isLoading === false">Create</ion-button>
+        <ion-button expand="block" class="ion-no-margin" *ngIf="isLoading === true" disabled>Saving</ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-grid>

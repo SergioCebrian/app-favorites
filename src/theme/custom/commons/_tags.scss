@@ -1,0 +1,35 @@
+/*==========================================================================*\
+  +++ Tags +++
+/*==========================================================================*/
+
+body {
+    --ion-background-color: var(--ion-color-grey-medium);
+}
+
+ion-button {
+    -webkit-appearance: none !important;
+            appearance: none !important;
+
+    &:not(:disabled) {
+        cursor: pointer;
+    }
+
+    &:disabled {
+        opacity: .5;           
+    }
+}
+
+ion-title {
+    font-weight: 600;
+    color: var(--ion-color-primary-contrast);
+}
+
+/*
+@media only screen and (min-width: 1025px) {
+    body {
+        max-width: 1024px;
+        left: 50%;
+        margin-left: calc(-1024px / 2);
+    }
+}
+*/

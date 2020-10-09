@@ -1,0 +1,41 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "paths":{
+      "@auth/*": ["app/core/auth/*"],
+      "@components/*": ["app/shared/components/*"],
+      "@configs/*": ["app/configs/*"],
+      "@directives/*": ["app/shared/directives/*"],
+      "@environments/*": ["environments/*"],
+      "@guards/*": ["app/core/guards/*"],
+      "@helpers/*": ["app/core/helpers/*"],
+      "@http/*": ["app/core/http/*"],
+      "@interceptors/*": ["app/core/interceptors/*"],
+      "@interfaces/*": ["app/shared/interfaces/*"],
+      "@mocks/*": ["app/core/mocks/*"],
+      "@models/*": ["app/shared/models/*"],
+      "@modules/*": ["app/core/modules/*"],
+      "@pipes/*": ["app/shared/pipes/*"],
+      "@services/*": ["app/core/services/*"],
+      "@store/*": ["app/shared/store/*"]
+    }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
+}

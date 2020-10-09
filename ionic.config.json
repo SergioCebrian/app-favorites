@@ -1,0 +1,7 @@
+{
+  "name": "favoritos-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,7 @@
+<app-header title="Home"></app-header>
+
+<ion-content [fullscreen]="true">
+  <section class="container-fluid">
+    <app-favorites-list [allCategories]="categories$" [allFavorites]="favorites$" (OnDeleteFavorite)="openModal($event)"></app-favorites-list>
+  </section>
+</ion-content>

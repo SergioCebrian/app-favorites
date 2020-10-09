@@ -1,0 +1,7 @@
+<app-header title="Categories"></app-header>
+
+<ion-content>
+  <div class="container-fluid">
+    <app-categories-list [allCategories]="categories$" (OnDeleteCategory)="openModal($event)"></app-categories-list>
+  </div>
+</ion-content>

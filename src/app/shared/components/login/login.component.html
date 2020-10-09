@@ -1,0 +1,39 @@
+<ion-progress-bar type="indeterminate" *ngIf="isLoading === true"></ion-progress-bar>
+
+<ion-grid class="o-container">
+  <ion-row>
+    <ion-col>
+      <ion-toolbar color="none"> 
+        <ion-icon class="logo" name="logo-angular"></ion-icon>   
+        <ion-title>Favorites App</ion-title>
+      </ion-toolbar>
+    </ion-col>
+  </ion-row>
+  <form class="c-form  c-form--light" [formGroup]="loginForm" (ngSubmit)="signIn()">
+    <ion-row>
+      <ion-col class="c-form-group" [ngClass]="loginForm.get('email').valid ? 'is-valid' : ''">
+        <ion-icon color="light" name="mail"></ion-icon>
+        <ion-input type="email" color="light" id="email" formControlName="email" placeholder="Email"></ion-input>
+        <ion-icon color="success" name="checkmark-circle-outline" *ngIf="loginForm.get('email').valid"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="c-form-group" [ngClass]="loginForm.get('password').valid ? 'is-valid' : ''">
+        <ion-icon color="light" name="lock-closed"></ion-icon>
+        <ion-input color="light" type="password" id="password" formControlName="password" placeholder="Password" placeholder="Password"></ion-input>
+        <ion-icon color="success" name="checkmark-circle-outline" *ngIf="loginForm.get('password').valid"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" type="submit" [disabled]="loginForm.invalid" class="ion-activatable  u-ripple-parent" title="Connect" *ngIf="isLoading === false">
+          Connect
+          <ion-ripple-effect></ion-ripple-effect>
+        </ion-button>
+        <ion-button expand="block" *ngIf="isLoading === true" disabled>
+          Connecting
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-grid>

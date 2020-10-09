@@ -1,0 +1,79 @@
+/*==========================================================================*\
+  +++ Lists +++
+/*==========================================================================*/
+
+.c-list {
+  margin: 0 .4rem;
+  padding-top: 0;
+
+  ion-avatar {
+    --border-radius: 0;
+  }
+
+  ion-avatar,
+  ion-label {
+    cursor: pointer;
+  }
+
+  ion-label {
+    padding-right: 10px;
+    box-sizing: border-box;
+
+    h2, 
+    p {
+      text-overflow: initial;
+      white-space: initial;
+    }
+  }
+
+  ion-item {
+    position: relative;
+    --background: var(--ion-color-primary-contrast);
+
+    ion-icon {
+      position: absolute;
+      right: 6px;
+    }
+  }
+
+  ion-item-sliding {
+    box-shadow: var(--ion-color-grey-light) 1px 1px 1px;
+
+    &:not(:last-child) {
+      margin-bottom: .7rem;
+    }
+  }
+
+  ion-item-option {
+    transition: all .2s ease-in-out;
+    
+    &:first-child {
+      &:focus,
+      &:hover {
+        --background: var(--ion-color-secondary-shade);
+      }
+    }
+
+    &:last-child {
+      &:focus,
+      &:hover {
+        --background: var(--ion-color-danger-shade);
+      }
+    }
+  }
+
+}
+
+@media only screen and (min-width: 768px) {
+
+  .c-list--columns {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+  
+    ion-item-sliding {
+      width: 49%;
+    }
+  }
+
+}

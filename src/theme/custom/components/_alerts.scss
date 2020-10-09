@@ -1,0 +1,100 @@
+/*==========================================================================*\
+  +++ Alerts +++
+/*==========================================================================*/
+
+.c-alert {
+
+    &.has-before {
+        
+        h2 {
+            text-align: center;
+
+            &:first-child {
+                font-size: 2.2rem;
+                font-weight: bold;
+                margin-bottom: 1rem;
+        
+                &:before {
+                    display: block;
+                    height: 65px;
+                    width: 65px;
+                    font-size: 3.3rem;
+                    font-weight: lighter;
+                    margin: 0 auto .2rem;
+                    border-radius: 100%;
+                    border-style: solid;
+                    border-width: 2px;
+                }
+        
+            }
+        
+        }
+    }
+    
+    &--error {
+
+        h2 {
+
+            &:first-child {
+                color: var(--ion-color-danger-tint);
+
+                &:before {
+                    content: "\002B"; // \0021
+                    transform: rotate(42deg);
+                    border-color: var(--ion-color-danger-tint);
+                }
+            
+            }
+
+            &:last-child {
+                font-size: 1.1rem;
+                line-height: 1.5rem;
+                color: var(--ion-color-grey-dark);
+            }
+        }
+
+    }
+
+    &--success {
+        h2 {
+            &:first-child {
+                color: var(--ion-color-success-tint);
+                &:before {
+                    content: "\2713";
+                    border-color: var(--ion-color-success-tint);
+                }
+            }
+        }
+    }
+
+    &--warning {
+        h2 {
+            &:first-child {
+                color: var(--ion-color-orange);
+                &:before {
+                    content: "\0021";
+                    border-color: var(--ion-color-orange);  
+                }
+            }
+        }
+    }
+
+    button {
+        color: var(--ion-color-tertiary);
+    }
+
+}
+
+.c-container {
+
+    padding: 10px;
+    font-size: .87rem;
+    text-align: center;
+    display: block;
+
+    &--error {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: var(--ion-color-danger-tint);
+    }
+}

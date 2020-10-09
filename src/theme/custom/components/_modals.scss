@@ -1,0 +1,19 @@
+/*==========================================================================*\
+  +++ Modals +++
+/*==========================================================================*/
+
+.c-modal {
+
+    ion-header {
+        --background: var(--color-custom-grey-medium);
+    }
+
+    ion-title {
+        color: var(--color-custom-grey-dark);
+    }
+
+    ion-content {
+        --background: var(--ion-color-primary-contrast);
+    }
+
+}

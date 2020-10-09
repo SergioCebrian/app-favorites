@@ -1,0 +1,145 @@
+/*==========================================================================*\
+  +++ Forms +++
+/*==========================================================================*/
+
+ion-input,
+ion-select {
+    font-size: .9rem;
+    height: 38px;
+}
+
+ion-input[type="hidden"] {
+    height: 0;
+    padding: 0;
+}
+
+.c-form {
+
+    ion-button {
+        --background: var(--ion-color-brown);
+    }
+    
+    ion-label {
+        font-size: .87rem;
+        color: var(--ion-color-medium-shade);
+    }
+
+    &.c-form--light {
+
+        ion-input {
+            border-bottom-color: var(--ion-color-primary-contrast);
+            --padding-start: 1.5rem !important;
+        }
+    
+        &:focus {
+            @extend ::placeholder;
+        }
+    
+        &::placeholder {
+            color: var(--ion-color-primary-contrast);
+        }
+
+    }
+
+    &:not(.c-form--light) {
+
+        ion-input,
+        ion-select {
+            margin-top: .3rem;
+            color: var(--ion-color-grey-dark);
+            border-bottom-color: var(--ion-color-grey-medium);
+            background-color: var(--ion-color-grey-medium);
+            --padding-end: 2rem;
+            --padding-start: .5rem !important;
+            --padding-top: 1.4rem !important;
+        }
+
+        ion-icon {
+
+            &[name^="checkmark"] {
+                bottom: 14px;
+                right: 11px;
+                top: auto;
+                z-index: 10;
+            }
+
+        }
+
+    }
+
+}
+
+.c-form-group {
+    width: 100%;
+    position: relative;
+    margin-bottom: 1.2rem;
+
+    ion-input {
+        border: 0;
+        border-radius: 0;
+        --padding-bottom: 1.5rem !important;
+        @extend :focus;
+    
+        &:focus {
+            --ion-background-color: transparent;
+        }
+
+    }
+
+    ion-input,
+    ion-select {
+        border-bottom-style: solid;
+        border-bottom-width: 2px;
+    }
+
+    ion-select {
+        --padding-bottom: 1.2rem;
+    }
+
+    ion-icon {
+        position: absolute;
+        top: 5px;
+        
+        &[name^="checkmark"] {
+            right: 6px;
+        }
+
+        &:not([name^="checkmark"]) {
+            left: 0;
+        }
+    }
+
+    &.is-valid {
+        ion-input {
+            border-bottom-color: var(--ion-color-success);
+        }
+    }
+}
+
+.c-search {
+    position: relative;
+    --background: var(--ion-color-primary-contrast);
+
+    ion-icon {
+        position: absolute;
+        right: 28px;
+        z-index: 2;
+        cursor: pointer;
+        color: var(--ion-color-primary);
+    }
+
+    ion-input {
+        height: 33px;
+        font-size: .9rem;
+        border-radius: 20px;
+        --background: var(--ion-color-grey-shade);
+        --color: var(--ion-color-grey-dark);
+        --padding-end: 42px;
+        --padding-start: 20px !important;
+
+        &:focus {
+            border-bottom: 0;
+        }
+    }
+
+}

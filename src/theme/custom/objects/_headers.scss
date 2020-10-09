@@ -1,0 +1,56 @@
+/*==========================================================================*\
+  +++ Header +++
+/*==========================================================================*/
+
+.o-header {
+  --ion-background-color: transparent;
+  background: linear-gradient(to right, var(--ion-color-yellow-rgba) 0%, var(--ion-color-orange-rgba) 100%);
+  // --ion-background-color: var(--ion-color-primary);
+
+  ion-buttons {
+    margin-left: 0;
+
+    ion-button {
+      margin-left: -5px;
+    }
+  }
+
+  ion-back-button,
+  ion-icon {
+      color: var(--ion-color-primary-contrast); 
+  }
+
+  ion-icon {
+    font-size: 1.4rem;
+    cursor: pointer;
+  }
+
+  ion-title {
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+    font-size: 1.6rem;
+    font-weight: lighter;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    color: var(--ion-color-primary-contrast); 
+  }
+
+ ion-toolbar {
+    max-width: 1505px;
+    width: 100%;
+    margin: 0 auto;
+    padding-right: 9px;
+    padding-left: 9px;
+    box-sizing: border-box;
+ }
+
+}
+
+.has-bgimage {
+
+  ion-toolbar {
+    margin-bottom: 3rem;
+  }
+
+}

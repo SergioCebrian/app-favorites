@@ -1,0 +1,30 @@
+.o-container {
+    margin: 0 auto;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: transparent;
+}
+
+.logo {
+    display: block;
+    font-size: 5rem;
+    margin: 0 auto 10px;
+    color: var(--ion-color-angular) !important;
+}
+
+ion-img {
+    margin: 0 auto 10px;
+    width: 25%;
+}
+
+ion-progress-bar {
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
+ion-title {
+    text-align: center;
+}

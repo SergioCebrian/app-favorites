@@ -1,0 +1,26 @@
+<ion-app>
+  <!--<ion-split-pane contentId="main">
+    <ion-menu class="c-menu" side="start" menuId="primary-menu" contentId="main">
+      <ion-header>
+        <ion-toolbar color="transparent">
+          <ion-title>
+            <ion-avatar>
+              <img src="/assets/images/photo.jpg" alt="Photo Admin">
+            </ion-avatar>
+            <ion-label class="ion-nomargin" color="light">Admin</ion-label>
+          </ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-menu-toggle auto-hide="false" *ngFor="let menuItem of menuItems">
+          <ion-item lines="none" [title]="menuItem.title" [routerDirection]="menuItem.direct" [routerLink]="menuItem.link">
+            <ion-icon [name]="menuItem.icon"></ion-icon>
+            <ion-label>{{ menuItem.title }}</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-content>
+    </ion-menu> 
+    <ion-router-outlet id="main"></ion-router-outlet>
+  </ion-split-pane>-->
+  <ion-router-outlet></ion-router-outlet>
+</ion-app>
