@@ -20,7 +20,7 @@ export class FavoritesCreateComponent implements OnInit {
   @Output()
   OnSaveFavorite: EventEmitter<{ [key: string]: string }> = new EventEmitter<{ [key: string]: string }>();
 
-  private loadingSubscription: Subscription;
+  // private loadingSubscription: Subscription;
   public categories: [{ [key: string]: string }];
   public createFavoriteForm: FormGroup;
   public isLoading: boolean = false;
@@ -34,14 +34,15 @@ export class FavoritesCreateComponent implements OnInit {
       title: ['', [ Validators.minLength(4), Validators.required ]],
       description: ['', [ Validators.minLength(4), Validators.required ]],
       category_id: ['', [ Validators.required ]],
-      url: ['', [ Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?'), Validators.required ]]
+      url: ['', [ Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?'), Validators.required ]],
+      important: [false, [ ]]
     });
   }
 
   ngOnInit() {
-    this.loadingSubscription = this.store
+    /*this.loadingSubscription = this.store
                                    .select('loading')
-                                   .subscribe(state => this.isLoading = state.isLoading);
+                                   .subscribe(state => this.isLoading = state.isLoading);*/
   }
 
   ngOnChanges() {
@@ -53,8 +54,14 @@ export class FavoritesCreateComponent implements OnInit {
   createFavorite() {
     if (this.createFavoriteForm.invalid) { return }
     if (this.createFavoriteForm.valid) {
-      this.OnSaveFavorite.emit({ favorite: this.createFavoriteForm.value })
+      this.OnSaveFavorite.emit({ favorite: this.createFavoriteForm.value });
+      this.createFavoriteForm.reset();
+      setTimeout(() => this.isLoading = false, 3000);
     }
+  }
+
+  ngOnDestroy() {
+    // this.loadingSubscription.unsubscribe();
   }
 
 }

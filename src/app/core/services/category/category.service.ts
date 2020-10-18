@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { Store } from '@ngrx/store';
@@ -20,7 +19,6 @@ export class CategoryService {
 
   constructor(
     private db: AngularFirestore,
-    private router: Router,
     private store: Store<AppState>,
     private slugService: SlugService
   ) { }
@@ -58,10 +56,7 @@ export class CategoryService {
                .collection(this.collectionName)
                .add(category)
                .then(resp => {
-                 setTimeout(() => {
-                   this.router.navigate(['/categories']);
                    this.store.dispatch(loadingActions.stopLoading());
-                 }, 2000);
                })
                .catch(err => {
                  this.store.dispatch(loadingActions.stopLoading());

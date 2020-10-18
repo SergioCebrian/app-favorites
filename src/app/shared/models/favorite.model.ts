@@ -5,5 +5,7 @@ export interface FavoriteModel {
     url: string,
     slug: string,
     category_id: string,
-    lastModifiedDate: Date
+    lastModifiedDate: Date,
+    important: Boolean,
+    visits: Number
 }

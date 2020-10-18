@@ -1,9 +1,4 @@
 <ion-grid class="o-grid">
-  <ion-row>
-    <ion-col size="2" class="ion-text-start">
-      <app-backbutton></app-backbutton>
-    </ion-col> 
-  </ion-row>
   <form class="c-form" [formGroup]="editFavoriteForm" (ngSubmit)="updateFavorite()">
     <ion-row>
       <ion-col class="c-form-group" [ngClass]="editFavoriteForm.get('title').valid ? 'is-valid' : ''">
@@ -15,7 +10,7 @@
     <ion-row>
       <ion-col class="c-form-group" [ngClass]="editFavoriteForm.get('description').valid ? 'is-valid' : ''">
         <ion-label for="description" position="fixed">Description: <ion-text color="danger">*</ion-text></ion-label>
-        <ion-input id="description" name="description" formControlName="description"></ion-input>
+        <ion-textarea id="description" name="description" formControlName="description"></ion-textarea>
         <ion-icon name="checkmark-circle-outline" *ngIf="editFavoriteForm.get('description').valid"></ion-icon>
       </ion-col>
     </ion-row>
@@ -35,6 +30,15 @@
         <ion-label for="url" position="fixed">Url: <ion-text color="danger">*</ion-text></ion-label>
         <ion-input id="url" name="url" formControlName="url"></ion-input>
         <ion-icon name="checkmark-circle-outline" *ngIf="editFavoriteForm.get('url').valid"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="c-form-group">
+        <ion-item class="ion-no-margin" lines="none">
+          <ion-label class="ion-no-margin" for="important">Is Important?</ion-label>
+          <ion-checkbox class="ion-no-margin" color="danger" name="important" formControlName="important" slot="start"  
+                        [checked]="editFavoriteForm.get('important')"></ion-checkbox>
+        </ion-item>
       </ion-col>
     </ion-row>
     <ion-row>

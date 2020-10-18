@@ -1,7 +1,9 @@
 <app-header title="Categories"></app-header>
 
-<ion-content>
-  <div class="container-fluid">
+<ion-content [fullscreen]="true">
+  <section class="container-fluid">
     <app-categories-list [allCategories]="categories$" (OnDeleteCategory)="openModal($event)"></app-categories-list>
-  </div>
+  </section>
+  <ion-icon class="c-icon--bigger" name="add-outline" title="New category" routerLink="/categories/new"></ion-icon>
+  <app-tabs [active]="'categories'"></app-tabs>
 </ion-content>

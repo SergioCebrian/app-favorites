@@ -5,5 +5,7 @@ export interface Favorite {
     slug: string,
     category_id: string,
     createdDate: Date,
-    lastModifiedDate: Date
+    lastModifiedDate: Date,
+    important: Boolean,
+    visits: Number
 }

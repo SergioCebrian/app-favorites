@@ -1,0 +1,27 @@
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button (click)="redirectUrl('/')" [ngClass]="(active === 'favorites') ? 'is-active' : ''">
+      <ion-icon name="star"></ion-icon>
+      <ion-label>Favorites</ion-label>
+      <ion-badge>{{ totalFavorites }}</ion-badge>
+    </ion-tab-button>
+
+    <ion-tab-button (click)="redirectUrl('categories')" [ngClass]="(active === 'categories') ? 'is-active' : ''">
+      <ion-icon name="bookmark"></ion-icon>
+      <ion-label>Categories</ion-label>
+      <ion-badge>{{ totalCategories }}</ion-badge>
+    </ion-tab-button>
+
+    <ion-tab-button (click)="redirectUrl('history')" [ngClass]="(active === 'history') ? 'is-active' : ''">
+      <ion-icon name="eye"></ion-icon>
+      <ion-label>History</ion-label>
+      <ion-badge>{{ totalFavoritesHistory }}</ion-badge>
+    </ion-tab-button>
+
+    <ion-tab-button (click)="redirectUrl('importants')" [ngClass]="(active === 'importants') ? 'is-active' : ''">
+      <ion-icon name="heart"></ion-icon>
+      <ion-label>Importants</ion-label>
+      <ion-badge>{{ totalFavoritesImportants }}</ion-badge>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

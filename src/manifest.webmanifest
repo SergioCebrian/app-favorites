@@ -1,8 +1,8 @@
 {
-  "name": "app",
-  "short_name": "app",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "name": "My favorites",
+  "short_name": "My favorites",
+  "theme_color": "#ff9f43",
+  "background_color": "#F4EEF0",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",

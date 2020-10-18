@@ -17,7 +17,7 @@ export class CategoriesCreateComponent implements OnInit, OnDestroy {
   @Output()
   categoryNewValues: EventEmitter<{ [key: string]: string }> = new EventEmitter<{ [key: string]: string }>();
 
-  private loadingSubscription: Subscription;
+  // private loadingSubscription: Subscription;
   public createCategoryForm: FormGroup;
   public isLoading: boolean = false;
 
@@ -32,20 +32,22 @@ export class CategoriesCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.loadingSubscription = this.store
+    /*this.loadingSubscription = this.store
                                    .select('loading')
-                                   .subscribe(state => this.isLoading = state.isLoading);
+                                   .subscribe(state => this.isLoading = state.isLoading);*/
   }
 
   createCategory() {
     if (this.createCategoryForm.invalid) { return }
     if (this.createCategoryForm.valid) {
-      this.categoryNewValues.emit({ categoryData: this.createCategoryForm.value })
+      this.categoryNewValues.emit({ categoryData: this.createCategoryForm.value });
+      this.createCategoryForm.reset();
+      setTimeout(() => this.isLoading = false, 3000);
     }
   }
 
   ngOnDestroy() {
-    this.loadingSubscription.unsubscribe();
+    // this.loadingSubscription.unsubscribe();
   }
 
 }

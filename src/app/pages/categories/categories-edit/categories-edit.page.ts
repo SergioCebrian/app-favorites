@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 
 import { CategoryService } from '@services/category/category.service';
@@ -16,13 +16,13 @@ export class CategoriesEditPage implements OnInit {
   public currentID: string;
 
   constructor(
-    private router: Router,
+    private toastController: ToastController,
     private categoryService: CategoryService,
     private httpService: HttpService
   ) { }
 
   ngOnInit() {
-    this.currentID = this.httpService.getParam('id');
+    this.currentID = this.httpService.getQueryParam('id');
 
     this.categoryService
         .getOne(this.currentID)
@@ -31,7 +31,16 @@ export class CategoriesEditPage implements OnInit {
 
   async editCategory(event) {
     await this.categoryService.edit(event.category);
-    await setTimeout(() => this.router.navigate(['/categories']), 2000);
+    await this.presentToast();
+  }
+
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'The category has been updated.',
+      duration: 2000,
+      cssClass: 'is-success'
+    });
+    toast.present();
   }
 
 }

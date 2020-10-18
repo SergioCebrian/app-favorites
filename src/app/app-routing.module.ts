@@ -27,7 +27,19 @@ const routes: Routes = [
     path: 'favorites',
     loadChildren: () => import('./pages/favorites/favorites.module').then( m => m.FavoritesPageModule),
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'history',
+    loadChildren: () => import('./pages/history/history.module').then( m => m.HistoryPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'importants',
+    loadChildren: () => import('./pages/importants/importants.module').then( m => m.ImportantsPageModule),
+    canActivate: [AuthGuard]
   }
+
+
 ];
 
 @NgModule({

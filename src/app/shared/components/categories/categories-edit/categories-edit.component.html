@@ -1,9 +1,4 @@
 <ion-grid class="o-grid">
-  <ion-row>
-    <ion-col size="2" class="ion-text-start">
-      <app-backbutton></app-backbutton>
-    </ion-col> 
-  </ion-row>
   <form class="c-form" [formGroup]="editCategoryForm" (ngSubmit)="updateCategory()">
     <ion-row>
       <ion-col class="c-form-group" [ngClass]="editCategoryForm.get('title').valid ? 'is-valid' : ''">

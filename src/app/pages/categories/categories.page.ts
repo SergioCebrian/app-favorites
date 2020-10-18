@@ -32,29 +32,31 @@ export class CategoriesPage implements OnInit {
         });
   }
 
-  categoryDelete(event) {
+  categoryDelete(event: any): void {
     const { id, title } = event.category;
     this.categoryService.delete(id);
     this.deleteAlert('Finished!', `The category ${ title } has been removed.`);
   }
 
-  openModal(category: { [key: string]: number | string }) {
-    // this.presentAlert('¿Are you sure?', `Press the confirm button to delete the category : ${ category.category.title }.`, category);
-    this.presentAlert('¿Are you sure?', `Press the confirm button to delete the category : .`, category);
+  openModal(category: { [key: string]: number | string | any }): void {
+    const { title } = category.category;
+    this.presentAlert('¿Are you sure?', `Press the confirm button to delete the category: ${ title }.`, category);
   }
 
   async presentAlert(title: string, msg: string, category: { [key: string]: number | string }) {
     const alertComponent = await this.alertController.create({
       cssClass: 'c-alert  c-alert--warning  has-before',
       header: title,
-      subHeader: msg,
+      message: msg,
       buttons: [
         {
           text: 'Cancel',
-          role: 'cancel'
+          role: 'cancel',
+          cssClass: 'is-error'
         }, {
           text: 'Confirm',
           role: 'confirm',
+          cssClass: 'is-success',
           handler: () => {
             this.categoryDelete(category);
           }
@@ -67,10 +69,16 @@ export class CategoriesPage implements OnInit {
 
   async deleteAlert(title: string, msg: string) {
     const alertComponent = await this.alertController.create({
-      cssClass: 'c-alert  c-alert--success  has-before',
+      cssClass: 'c-alert  c-alert--success  has-before  has-only-button',
       header: title,
-      subHeader: msg,
-      buttons: ['Close']
+      message: msg,
+      buttons: [
+        {
+          text: 'Close',
+          role: 'cancel',
+          cssClass: 'is-success'
+        }
+      ]
     });
 
     await alertComponent.present();

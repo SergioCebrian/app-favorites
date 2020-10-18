@@ -19,6 +19,9 @@ export class FavoritesListComponent implements OnInit {
   @Output()
   OnDeleteFavorite: EventEmitter<any> = new EventEmitter<any>();
 
+  @Output()
+  OnIncrementCounterFavorite: EventEmitter<any> = new EventEmitter<any>();
+
   private favoritesResults: FavoriteModel[];
   public categories = new Map;
   public numItemsSkeleton: number = 10;
@@ -41,6 +44,11 @@ export class FavoritesListComponent implements OnInit {
 
   favoriteDelete(favorite: { [key: string]: number | string }) {
     this.OnDeleteFavorite.emit({ favorite });
+  }
+
+  incrementCounter(favorite): void {
+    favorite.visits = favorite.visits + 1;
+    this.OnIncrementCounterFavorite.emit({ favorite });
   }
 
   search(term: string | any) {

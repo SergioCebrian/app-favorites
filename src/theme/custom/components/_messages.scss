@@ -1,0 +1,16 @@
+/*==========================================================================*\
+  +++ Messages +++
+/*==========================================================================*/
+
+.c-message {
+    margin: 0 .4rem;
+    padding: 10px;
+    font-size: .87rem;
+    text-align: center;
+    display: block;
+
+    &--error {
+        background-color: #f8d7da;
+        color: var(--ion-color-danger-tint);
+    }
+}

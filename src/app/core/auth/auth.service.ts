@@ -52,16 +52,22 @@ export class AuthService {
   }
 
   async logOut() {
-    return await this.authFB.signOut();
-    return await this.storage.clear();
+    await this.storage.clear();
+    await this.authFB.signOut();
   }
 
   async presentAlert(msg: any) {
     const alertComponent = await this.alertController.create({
-      cssClass: 'c-alert  c-alert--error  has-before',
+      cssClass: 'c-alert  c-alert--error  has-before  has-only-button',
       header: 'Opps!',
-      subHeader: msg.message,
-      buttons: ['Close']
+      message: msg.message,
+      buttons: [
+        {
+          text: 'Close',
+          role: 'cancel',
+          cssClass: 'is-error'
+        }
+      ]
     });
 
     await alertComponent.present();

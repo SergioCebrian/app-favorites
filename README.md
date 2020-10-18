@@ -1,14 +1,8 @@
-# App Favoritos con Angular
+# Favorites App
 
-Demo de aplicación escrita en Angular para gestionar los favoritos del navegador a través de un Api Rest con Json Server.
+App written by Angular and Firebase.
 
-## Json Server
+## PENDIENTE:
 
-Para proveer de un api que devuelve los datos en formato JSON. Soporta los verbos GET, POST, PUT, PATCH y DELETE, además de 
-distintos métodos para filtrar los datos.
-
-[JsonServer](https://github.com/typicode/json-server)
-
-y una vez instalado en tu local, lo inicias con:
-
-`json-server --watch db.json`
+- Arreglar bugs de estilos que no reconoce al iniciar la app desde el móvil.
+- Despues del primer login en pro, redirige a login.

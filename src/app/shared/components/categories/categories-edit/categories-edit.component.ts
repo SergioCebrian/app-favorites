@@ -13,7 +13,7 @@ export class CategoriesEditComponent implements OnInit {
   category: { [key: string]: string };
 
   @Input()
-  currentID: string;
+  categoryID: string;
 
   @Output()
   OnEditCategory: EventEmitter<any> = new EventEmitter<any>();
@@ -34,7 +34,7 @@ export class CategoriesEditComponent implements OnInit {
 
   ngOnChanges() {
       if (this.category !== undefined) {
-        this.editCategoryForm.controls['id'].setValue(this.currentID);
+        this.editCategoryForm.controls['id'].setValue(this.categoryID);
         this.editCategoryForm.controls['title'].setValue(this.category.title);
       }
   }
@@ -49,6 +49,7 @@ export class CategoriesEditComponent implements OnInit {
         title: this.editCategoryForm.value.title,
       }
       this.OnEditCategory.emit({ category: updateCategory });
+      setTimeout(() => this.isLoading = false, 3000);
     }
   }
 

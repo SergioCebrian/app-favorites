@@ -13,7 +13,7 @@ export class FavoritesEditComponent implements OnInit {
   allCategories: [{ [key: string]: string }];
 
   @Input()
-  currentID: string;
+  favoriteID: string;
 
   @Input()
   favorite: { [key: string]: string };
@@ -36,6 +36,7 @@ export class FavoritesEditComponent implements OnInit {
       description: ['', [ Validators.minLength(4), Validators.required ]],
       category: ['', [ Validators.required ]],
       url: ['', [ Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?'), Validators.required ]],
+      important: ['', [ ]]
     });
   }
 
@@ -45,11 +46,12 @@ export class FavoritesEditComponent implements OnInit {
     }
 
     if (this.favorite !== undefined) {
-      this.editFavoriteForm.controls['id'].setValue(this.currentID);
+      this.editFavoriteForm.controls['id'].setValue(this.favoriteID);
       this.editFavoriteForm.controls['title'].setValue(this.favorite.title);
       this.editFavoriteForm.controls['description'].setValue(this.favorite.description);
       this.editFavoriteForm.controls['category'].setValue(this.favorite.category_id);
       this.editFavoriteForm.controls['url'].setValue(this.favorite.url);
+      this.editFavoriteForm.controls['important'].setValue(this.favorite.important);
     }
   }
 
@@ -63,9 +65,11 @@ export class FavoritesEditComponent implements OnInit {
         title: this.editFavoriteForm.value.title,
         description: this.editFavoriteForm.value.description,
         category_id: this.editFavoriteForm.value.category,
-        url: this.editFavoriteForm.value.url
+        url: this.editFavoriteForm.value.url,
+        important: this.editFavoriteForm.value.important
       }
       this.OnEditFavorite.emit({ favorite: updateFavorite });
+      setTimeout(() => this.isLoading = false, 3000);
     }
   }
 

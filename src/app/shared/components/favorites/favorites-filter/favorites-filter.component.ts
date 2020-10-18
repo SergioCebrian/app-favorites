@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FavoriteModel } from '@models/favorite.model';
 
 @Component({
   selector: 'app-favorites-filter',
@@ -7,32 +8,31 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class FavoritesFilterComponent implements OnInit {
 
-  /*@Input()
-  allCategories: any;*/
+  @Input()
+  allFavorites: FavoriteModel[];
 
-  /*@Input()
-  allFavorites: any;*/
+  @Input()
+  category: string;
 
   @Output()
   OnDeleteFavorite: EventEmitter<any> = new EventEmitter<any>();
 
-  private numItemsSkeleton: number = 10;
-  // private categories = new Map;
+  @Output()
+  OnIncrementCounterFavorite: EventEmitter<any> = new EventEmitter<any>();
+
+  public numItemsSkeleton: number = 10;
 
   constructor() { }
 
   ngOnInit() { }
 
-  /*ngOnChanges() {
-    if (this.allCategories !== undefined) {
-      this.allCategories.map(category => {
-        this.categories.set(category.id, category.slug);
-      });
-    }
-  }*/
-
   favoriteDelete(favorite: { [key: string]: number | string }) {
     this.OnDeleteFavorite.emit({ favorite });
+  }
+
+  incrementCounter(favorite): void {
+    favorite.visits = favorite.visits + 1;
+    this.OnIncrementCounterFavorite.emit({ favorite });
   }
 
 }

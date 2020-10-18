@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -7,11 +7,19 @@ import { ActivatedRoute } from '@angular/router';
 export class HttpService {
 
   constructor(
-    private activatedRouter: ActivatedRoute
+    private activatedRouter: ActivatedRoute,
+    private router: Router
   ) { }
 
-  getParam(param: string) {
+  getQueryParam(param: string): string { // path?qs=value
     return this.activatedRouter.snapshot.queryParams[param];
   }
 
+  getPathVar(param: string): any { // path/:param1/
+    return this.activatedRouter.snapshot.params[param];
+  }
+
+  redirectUrl(url: string): void {
+    this.router.navigateByUrl(url);
+  }
 }

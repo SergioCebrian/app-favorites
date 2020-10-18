@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { Store } from '@ngrx/store';
@@ -20,7 +19,6 @@ export class FavoriteService {
 
   constructor(
     private db: AngularFirestore,
-    private router: Router,
     private store: Store<AppState>,
     private slugService: SlugService
   ) { }
@@ -31,6 +29,14 @@ export class FavoriteService {
 
   getAllByCategory(categoryID: string): Observable<any> {
     return this.db.collection<Favorite>(this.collectionName, ref => ref.where('category_id', '==', categoryID)).snapshotChanges();
+  }
+
+  getAllByImportants(): Observable<any> {
+    return this.db.collection<Favorite>(this.collectionName, ref => ref.where('important', '==', true)).snapshotChanges();
+  }
+
+  getAllByVisits(): Observable<any> {
+    return this.db.collection<Favorite>(this.collectionName, ref => ref.orderBy('visits', 'desc').where('visits', '>', 0)).snapshotChanges();
   }
 
   getOne(documentID: string): Observable<any> { // Observable<firebase.firestore.QuerySnapshot>
@@ -49,23 +55,22 @@ export class FavoriteService {
     return this.db.collection(this.collectionName).doc(favoriteID).update(favorite);
   }
 
-  editPartial(id: string, favorite: Object): Promise<void> {
-    return this.db.collection(this.collectionName).doc(id).update(favorite);
+  editPartial(favoriteID: string, favorite: FavoriteModel): Promise<void> {
+    favorite.lastModifiedDate = new Date();
+    return this.db.collection(this.collectionName).doc(favoriteID).update(favorite);
   }
 
   save(favorite: Favorite): Promise<void> { // Promise<DocumentReference>
     favorite.createdDate = new Date();
     favorite.lastModifiedDate = new Date();
     favorite.slug = this.slugService.create(favorite.title);
+    favorite.visits = 0;
     this.store.dispatch(loadingActions.isLoading());
     return this.db
                .collection(this.collectionName)
                .add(favorite)
                .then(resp => {
-                 setTimeout(() => {
-                   this.router.navigate(['/']);
-                   this.store.dispatch(loadingActions.stopLoading());
-                 }, 2000);
+                  this.store.dispatch(loadingActions.stopLoading());
                })
                .catch(err => {
                  this.store.dispatch(loadingActions.stopLoading());

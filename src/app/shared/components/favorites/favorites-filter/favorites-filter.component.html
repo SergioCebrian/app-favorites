@@ -1,30 +1,26 @@
-<!--<ion-grid class="o-grid">
+<ion-grid class="o-grid  u-nospace">
   <ion-row>
-    <ion-col size="2" class="ion-text-start">
-      <app-backbutton></app-backbutton>
-    </ion-col>
-    <ion-col size="10" class="ion-text-center">
-      <app-counter [counter]="allFavorites" 
-                   [text]="{ plural:'favoritos de ', single: 'favorito de ' }" 
-                   [flag]="currentCategory" *ngIf="allFavorites"></app-counter>     
+    <ion-col size="12">
+      <app-counter [counter]="allFavorites.length" [text]="{ plural:'favorites', single: 'favorite' }" *ngIf="allFavorites && allFavorites?.length > 0"></app-counter> 
     </ion-col>
   </ion-row>
   <ion-row>
-    <ion-col>
-      <ion-list class="c-list" *ngIf="allFavorites">
+    <ion-col class="u-nospace">
+      <span class="c-message  c-message--error" *ngIf="allFavorites?.length === 0">No favorites found.</span>
+      <ion-list class="c-list  c-list--columns  c-list--min-height" *ngIf="allFavorites">
         <ion-item-sliding *ngFor="let favorite of allFavorites">
           <ion-item-options side="start">
-            <ion-item-option color="secondary" [title]="'Edit ' + favorite.title" [routerLink]="'/favorites/edit/' + favorite.slug">
+            <ion-item-option color="secondary" [title]="'Edit ' + favorite.title" [routerLink]="'/favorites/edit/' + favorite.slug" [queryParams]="{ id: favorite.id }">
               <ion-icon name="create-outline"></ion-icon>
             </ion-item-option>
           </ion-item-options>
-          <ion-item lines="none" [title]="favorite.title" [href]="favorite.url" target="_blank">
-            <ion-avatar slot="start" [title]="favorite.category.slug">
-              <img [src]="'assets/logos/' + favorite.category.slug + '.jpg'" [alt]="favorite.category.slug">
+          <ion-item lines="none" [title]="favorite.title" [href]="favorite.url" (click)="incrementCounter(favorite)" target="_blank">
+            <ion-avatar slot="start">
+              <img [src]="'assets/logos/' + category + '.jpg'" [alt]="category" appImageFallback>
             </ion-avatar>
             <ion-label>
               <h2>{{ favorite.title }}</h2>
-              <p>{{ favorite.description  | truncate: [64] }}</p>
+              <p>{{ favorite.description  | truncate: [55] }}</p>
             </ion-label>
             <ion-icon name="chevron-forward-outline"></ion-icon>
           </ion-item>
@@ -36,7 +32,7 @@
         </ion-item-sliding>
       </ion-list>
 
-      <ion-list *ngIf="!allFavorites">
+      <ion-list class="c-list--skeleton" *ngIf="!allFavorites">
         <ion-item *ngFor="let i of numItemsSkeleton | fill">
           <ion-avatar slot="start">
             <ion-skeleton-text animated></ion-skeleton-text>
@@ -53,4 +49,4 @@
       </ion-list>
     </ion-col>
   </ion-row>
-</ion-grid>-->
+</ion-grid>

@@ -39,7 +39,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   signIn(): void {
     if (this.loginForm.invalid) { return }
     if (this.loginForm.valid) {
-      this.loginFormValues.emit({ userData: this.loginForm.value })
+      this.loginFormValues.emit({ userData: this.loginForm.value });
+      this.loginForm.reset();
     }
   }
 

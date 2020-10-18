@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 
 import { CategoryService } from '@services/category/category.service';
@@ -14,6 +15,7 @@ export class FavoritesCreatePage implements OnInit {
   public categories$: Observable<any>;
 
   constructor(
+    private toastController: ToastController,
     private categoryService: CategoryService,
     private favoriteService: FavoriteService
   ) { }
@@ -34,8 +36,17 @@ export class FavoritesCreatePage implements OnInit {
   saveFavorite(event: any): void {
     this.favoriteService
         .save(event.favorite)
-        .then(resp => resp)
-        .catch(err => console.error(err));
+        .then(resp => this.presentToast('The favorite has been created.'))
+        .catch(err => this.presentToast('Opps! The favorite could not be created.'));
+  }
+
+  async presentToast(msg: string) {
+    const toast = await this.toastController.create({
+      message: msg,
+      duration: 2000,
+      cssClass: 'is-success'
+    });
+    toast.present();
   }
 
 }

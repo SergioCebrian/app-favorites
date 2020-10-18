@@ -3,8 +3,9 @@
 /*==========================================================================*/
 
 .c-list {
-  margin: 0 .4rem;
+  margin: 0 .4rem 4rem;
   padding-top: 0;
+  background: transparent;
 
   ion-avatar {
     --border-radius: 0;
@@ -15,20 +16,48 @@
     cursor: pointer;
   }
 
+  em {
+    font-size: .76rem;
+    color: #858282;
+
+    ion-icon {
+      position: relative !important;
+      right: auto !important;
+      vertical-align: sub;
+      font-size: .98rem;
+      margin-right: 5px;
+    }
+  }
+
   ion-label {
-    padding-right: 10px;
+    padding-right: 17px;
     box-sizing: border-box;
+
+    h2 {
+      font-size: .98rem;
+      line-height: 19px;
+      margin-bottom: 10px;
+      color: black;
+    }
 
     h2, 
     p {
       text-overflow: initial;
       white-space: initial;
     }
+
+    p {
+      font-size: .88rem;
+      color: var(--ion-color-step-600, #666666);
+    }
   }
 
   ion-item {
     position: relative;
     --background: var(--ion-color-primary-contrast);
+    --background-activated: var(--ion-color-primary-contrast);
+    --background-focused: var(--ion-color-primary-contrast);
+    --background-hover: var(--ion-color-primary-contrast);
 
     ion-icon {
       position: absolute;
@@ -37,7 +66,6 @@
   }
 
   ion-item-sliding {
-    box-shadow: var(--ion-color-grey-light) 1px 1px 1px;
 
     &:not(:last-child) {
       margin-bottom: .7rem;
@@ -62,18 +90,76 @@
     }
   }
 
+  &--light {
+
+    ion-item {
+      box-shadow: var(--ion-color-grey-light) 1px 1px 1px;
+      background-color: var(--ion-color-primary-contrast);
+
+      &:not(:last-child) {
+        margin-bottom: .4rem;
+      }
+    }
+
+    ion-label {
+      text-overflow: unset !important;
+      white-space: initial !important;
+    }
+
+  }
+
+  &--skeleton {
+    background-color: transparent;
+
+    ion-item {
+      --background: transparent;
+    }
+  }
+
 }
 
 @media only screen and (min-width: 768px) {
 
-  .c-list--columns {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-  
-    ion-item-sliding {
-      width: 49%;
+  .c-list {
+
+    &--columns {
+      
+      display: grid;
+      grid-gap: 10px;
+      grid-template-columns: repeat(auto-fill, 49.2%);
+      justify-content: space-between;
+      grid-auto-rows: auto;
+      grid-auto-flow: row dense;
+      width: 100%;
+      margin: 0 0 3.8rem;
+    
+      ion-item-sliding {
+        height: max-content;
+        width: 100%;
+        margin-bottom: 0 !important;
+      }
     }
+
+    &--min-height {
+
+      ion-item {
+        --min-height: 112px;
+      }
+  
+      ion-item-sliding {
+        height: 112px;
+      }
+  
+    }
+    
+  }
+
+}
+
+@media only screen and (min-width: 1025px) {
+
+  .c-list--columns {
+    grid-template-columns: repeat(auto-fill, 32.7%);
   }
 
 }

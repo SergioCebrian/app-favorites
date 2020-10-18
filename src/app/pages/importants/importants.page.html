@@ -1,0 +1,8 @@
+<app-header title="Importants"></app-header>
+
+<ion-content [fullscreen]="true">
+  <section class="container-fluid">
+    <app-importants-list [allCategories]="categories$" [allFavorites]="favorites$" (OnDeleteImportant)="deleteImportant($event)"></app-importants-list>
+  </section>
+  <app-tabs [active]="'importants'"></app-tabs>
+</ion-content>

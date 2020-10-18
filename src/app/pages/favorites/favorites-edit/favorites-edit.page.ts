@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 
 import { CategoryService } from '@services/category/category.service';
@@ -18,14 +18,14 @@ export class FavoritesEditPage implements OnInit {
   public currentID: string;
 
   constructor(
-    private router: Router,
+    private toastController: ToastController,
     private categoryService: CategoryService,
     private favoriteService: FavoriteService,
     private httpService: HttpService
   ) { }
 
   ngOnInit() {
-    this.currentID = this.httpService.getParam('id');
+    this.currentID = this.httpService.getQueryParam('id');
 
     this.favoriteService
         .getOne(this.currentID)
@@ -47,7 +47,16 @@ export class FavoritesEditPage implements OnInit {
 
   async editFavorite(event) {
     await this.favoriteService.edit(event.favorite);
-    await setTimeout(() => this.router.navigate(['/']), 2000);
+    await this.presentToast();
+  }
+
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'The favorite has been updated.',
+      duration: 2000,
+      cssClass: 'is-success'
+    });
+    toast.present();
   }
 
 }

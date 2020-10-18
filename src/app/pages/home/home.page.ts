@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 
@@ -52,23 +52,25 @@ export class HomePage implements OnInit {
     this.deleteAlert('Finished!', `The favorite ${ title } has been removed.`);
   }
 
-  openModal(favorite: { [key: string]: number | string }) {
-    // this.presentAlert('¿Are you sure?', `Press the confirm button to delete the favorite : ${ favorite.favorite.title }.`, favorite);
-    this.presentAlert('¿Are you sure?', `Press the confirm button to delete the favorite : .`, favorite);
+  openModal(favorite: { [key: string]: number | string | any }) {
+    const { title } = favorite.favorite;
+    this.presentAlert('¿Are you sure?', `Press the confirm button to delete the favorite: ${ title }.`, favorite);
   }
 
   async presentAlert(title: string, msg: string, favorite: { [key: string]: number | string }) {
     const alertComponent = await this.alertController.create({
       cssClass: 'c-alert  c-alert--warning  has-before',
       header: title,
-      subHeader: msg,
+      message: msg,
       buttons: [
         {
           text: 'Cancel',
-          role: 'cancel'
+          role: 'cancel',
+          cssClass: 'is-error'
         }, {
           text: 'Confirm',
           role: 'confirm',
+          cssClass: 'is-success',
           handler: () => {
             this.favoriteDelete(favorite);
           }
@@ -81,13 +83,24 @@ export class HomePage implements OnInit {
 
   async deleteAlert(title: string, msg: string) {
     const alertComponent = await this.alertController.create({
-      cssClass: 'c-alert  c-alert--success  has-before',
+      cssClass: 'c-alert  c-alert--success  has-before  has-only-button',
       header: title,
-      subHeader: msg,
-      buttons: ['Close']
+      message: msg,
+      buttons: [
+        {
+          text: 'Close',
+          role: 'cancel',
+          cssClass: 'is-success'
+        }
+      ]
     });
 
     await alertComponent.present();
+  }
+
+  incrementCounter(event): void {
+    const { ...favorite } = event.favorite;
+    this.favoriteService.editPartial(favorite.id, favorite);
   }
 
 }
