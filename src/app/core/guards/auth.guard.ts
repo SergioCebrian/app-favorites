@@ -1,30 +1,42 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router, CanLoad } from '@angular/router';
-import { Storage } from '@ionic/storage';
+import { CanActivate, Router, CanLoad } from '@angular/router';
 import { Observable } from 'rxjs';
+import { AuthService } from '@auth/auth.service';
+import { take, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class AuthGuard implements CanActivate, CanLoad {
 
   constructor(
     private router: Router,
-    private storage: Storage
+    private authService: AuthService
   ) {}
 
-  canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    
-    this.storage
-        .get('token')
-        .then((token: string | boolean | null) => {
-          if(token === null) {
-            this.router.navigate(['/login']);
-            return false;        
-          }
-        });
+  canLoad(): Observable<boolean> {
+    return this.authService
+               .isAuth()
+               .pipe(
+                 tap(state => {
+                   if (!state) {
+                    this.router.navigate(['/login']);
+                   }
+                 }),
+                 take(1)
+               );
+  }
 
-    return true;
+  canActivate(): Observable<boolean> {
+    return this.authService
+               .isAuth()
+               .pipe(
+                 tap(state => {
+                   if (!state) {
+                    this.router.navigate(['/login']);
+                   }
+                 })
+               );
   }
   
 }

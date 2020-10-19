@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 
 import { CategoryModel } from '@models/category.model';
@@ -17,6 +18,7 @@ export class ImportantsPage implements OnInit {
   public favorites$: Observable<FavoriteModel[]>;
 
   constructor(
+    private toastController: ToastController,
     private categoryService: CategoryService,
     private favoriteService: FavoriteService
   ) { }
@@ -49,6 +51,16 @@ export class ImportantsPage implements OnInit {
     const { id, ...favorite } = event.favorite;
     favorite.important = false;
     this.favoriteService.editPartial(id, favorite);
+    this.presentToast();
+  }
+
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'The status of the favorite has been updated.',
+      duration: 2000,
+      cssClass: 'is-success'
+    });
+    toast.present();
   }
 
 }

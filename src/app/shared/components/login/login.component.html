@@ -4,7 +4,6 @@
   <ion-row>
     <ion-col>
       <ion-toolbar color="none"> 
-        <!--<ion-icon class="logo" name="logo-angular"></ion-icon>-->
         <img class="logo-img" src="assets/logos/logo.png" alt="Logo MyFavorites App"> 
         <ion-title>My favorites</ion-title>
       </ion-toolbar>
@@ -13,14 +12,14 @@
   <form class="c-form  c-form--light" [formGroup]="loginForm" (ngSubmit)="signIn()">
     <ion-row>
       <ion-col class="c-form-group" [ngClass]="loginForm.get('email').valid ? 'is-valid' : ''">
-        <ion-icon color="light" name="mail"></ion-icon>
+        <ion-icon name="mail"></ion-icon>
         <ion-input type="email" color="light" id="email" formControlName="email" placeholder="Email"></ion-input>
         <ion-icon color="success" name="checkmark-circle-outline" *ngIf="loginForm.get('email').valid"></ion-icon>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="c-form-group" [ngClass]="loginForm.get('password').valid ? 'is-valid' : ''">
-        <ion-icon color="light" name="lock-closed"></ion-icon>
+        <ion-icon name="lock-closed"></ion-icon>
         <ion-input color="light" type="password" id="password" formControlName="password" placeholder="Password" placeholder="Password"></ion-input>
         <ion-icon color="success" name="checkmark-circle-outline" *ngIf="loginForm.get('password').valid"></ion-icon>
       </ion-col>

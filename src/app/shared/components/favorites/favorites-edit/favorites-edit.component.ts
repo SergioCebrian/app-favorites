@@ -41,11 +41,8 @@ export class FavoritesEditComponent implements OnInit {
   }
 
   ngOnChanges() {
-    if (this.allCategories !== undefined) {
+    if (this.allCategories !== undefined && this.favorite !== undefined) {
       this.categories = this.allCategories;
-    }
-
-    if (this.favorite !== undefined) {
       this.editFavoriteForm.controls['id'].setValue(this.favoriteID);
       this.editFavoriteForm.controls['title'].setValue(this.favorite.title);
       this.editFavoriteForm.controls['description'].setValue(this.favorite.description);

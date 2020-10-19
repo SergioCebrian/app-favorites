@@ -8,6 +8,7 @@ const routes: Routes = [
   {
     path: '',
     component: HomePage,
+    canLoad: [AuthGuard],
     canActivate: [AuthGuard]
   }
 ];

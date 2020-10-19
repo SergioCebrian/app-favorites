@@ -4,7 +4,8 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    background: transparent;
+    background: rgba(255,255,255,.1);
+    max-width: 90%;
 }
 
 .logo {
@@ -34,4 +35,12 @@ ion-progress-bar {
 
 ion-title {
     text-align: center;
+}
+
+@media only screen and (min-width: 768px) {
+
+    .o-container {
+        max-width: 500px;
+    }
+
 }
