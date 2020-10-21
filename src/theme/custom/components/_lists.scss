@@ -130,12 +130,6 @@
       overflow-y: auto;
     } 
 
-    .list__items,
-    ion-item-group {
-      min-height: 305px;
-      max-height: 305px;
-    }
-
     ion-icon {
       cursor: default !important;
     }
@@ -145,6 +139,7 @@
       display: flex;
       justify-content: space-between;
       padding: 0;
+      --inner-padding-end: 0;
 
       ion-icon {
         margin-right: 5px;
@@ -177,7 +172,7 @@
     }
 
     ion-item-group {
-      overflow: hidden;
+      overflow-y: auto;
       background: var(--ion-color-primary-contrast);
 
       &:not(:last-of-type) {
@@ -212,6 +207,37 @@
     time + div {
       max-width: 218px;
       padding: 17px 0;
+    }
+  }
+
+}
+
+@media only screen and (max-width: 767px) {
+
+  .c-list {
+
+    &--timeline {
+
+      ion-item {
+        
+        &:not(:last-of-type) {
+          border-bottom: 1px solid var(--ion-color-grey-medium);
+        }
+      }
+
+      ion-item-group {
+        max-height: 305px;
+      }
+
+      .list__line,
+      .list__line + ion-icon {
+        display: none;
+      }
+
+      time {
+        font-size: .76rem;
+        width: 90px;
+      }
     }
   }
 
