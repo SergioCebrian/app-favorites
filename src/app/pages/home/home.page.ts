@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { FavoriteModel } from '@models/favorite.model';
 import { FavoriteService } from '@services/favorite/favorite.service';
 import { CategoryService } from '@services/category/category.service';
+import { LoggerService } from '@services/logger/logger.service';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +20,8 @@ export class HomePage implements OnInit {
   constructor(
     private alertController: AlertController,
     private categoryService: CategoryService,
-    private favoriteService: FavoriteService
+    private favoriteService: FavoriteService,
+    private loggerService: LoggerService
   ) { }
 
   ngOnInit() {
@@ -49,6 +51,7 @@ export class HomePage implements OnInit {
   favoriteDelete(event) {
     const { id, title } = event.favorite;
     this.favoriteService.delete(id);
+    this.loggerService.register(`has removed the favorite: ${ title }.`);
     this.deleteAlert('Finished!', `The favorite ${ title } has been removed.`);
   }
 

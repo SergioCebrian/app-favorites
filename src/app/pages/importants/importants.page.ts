@@ -6,6 +6,7 @@ import { CategoryModel } from '@models/category.model';
 import { FavoriteModel } from '@models/favorite.model';
 import { CategoryService } from '@services/category/category.service';
 import { FavoriteService } from '@services/favorite/favorite.service';
+import { LoggerService } from '@services/logger/logger.service';
 
 @Component({
   selector: 'app-importants',
@@ -20,7 +21,8 @@ export class ImportantsPage implements OnInit {
   constructor(
     private toastController: ToastController,
     private categoryService: CategoryService,
-    private favoriteService: FavoriteService
+    private favoriteService: FavoriteService,
+    private loggerService: LoggerService
   ) { }
 
   ngOnInit() {
@@ -51,6 +53,7 @@ export class ImportantsPage implements OnInit {
     const { id, ...favorite } = event.favorite;
     favorite.important = false;
     this.favoriteService.editPartial(id, favorite);
+    this.loggerService.register(`has changed the state of favorite: ${ favorite.title }.`);
     this.presentToast();
   }
 

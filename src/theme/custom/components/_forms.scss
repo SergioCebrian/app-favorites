@@ -23,6 +23,7 @@ ion-input[type="hidden"] {
         margin-right: 6px !important;
         --background: transparent;
         --background-checked: var(--ion-color-orange);
+        --border-color: #888;
         --border-color-checked: var(--ion-color-orange);
     }
     
@@ -33,7 +34,6 @@ ion-input[type="hidden"] {
     }
 
     ion-item {
-        
         --background: var(--ion-color-primary-contrast);
         --background-activated: var(--ion-color-primary-contrast);
         --background-focused: var(--ion-color-primary-contrast);

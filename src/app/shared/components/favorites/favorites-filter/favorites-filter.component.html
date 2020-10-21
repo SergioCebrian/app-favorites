@@ -33,7 +33,7 @@
       </ion-list>
 
       <ion-list class="c-list--skeleton" *ngIf="!allFavorites">
-        <ion-item *ngFor="let i of numItemsSkeleton | fill">
+        <ion-item lines="none" *ngFor="let i of numItemsSkeleton | fill">
           <ion-avatar slot="start">
             <ion-skeleton-text animated></ion-skeleton-text>
           </ion-avatar>

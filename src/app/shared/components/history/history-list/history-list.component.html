@@ -42,7 +42,31 @@
         </ion-item>
       </ion-list>
       <div *ngIf="currentTabActive === 'logs'">
-        <span class="c-message  c-message--error">Logs empty.</span>
+        <span class="c-message  c-message--error" *ngIf="!logsList">Logs empty.</span>
+        <ion-list class="c-list  c-list--timeline" *ngIf="currentTabActive === 'logs' && logsList">
+          <ion-item-group *ngFor="let log of logsList | keyvalue">
+            <ion-item-divider>
+              <ion-icon name="calendar-outline"></ion-icon>
+              <ion-label>{{ log.key }}</ion-label>
+            </ion-item-divider>
+            <div class="list__items">
+              <ion-item lines="none" *ngFor="let logVal of log.value">
+                <div class="list__line"></div>
+                <ion-icon name="ellipse-outline"></ion-icon>
+                <time [dateTime]="logVal.date.hours + ':' + logVal.date.minutes + ':' + logVal.date.seconds">
+                  {{ logVal.date.hours }}:{{ logVal.date.minutes }}:{{ logVal.date.seconds }}
+                </time>
+                <div>
+                  <p class="ion-no-margin">The user <ion-text>Sergio</ion-text> {{ logVal.user.message }}</p>
+                  <a [routerLink]="logVal.url.pathname" *ngIf="logVal.url.params === null">{{ logVal.url.pathname }}</a>
+                  <a [routerLink]="logVal.url.pathname" [queryParams]="{ id: logVal.url.params.split('?id=')[1] }" *ngIf="logVal.url.params !== null">
+                    {{ logVal.url.pathname }}{{ logVal.url.params }}
+                  </a>
+                </div>
+              </ion-item>
+            </div>
+          </ion-item-group>
+        </ion-list>
       </div>
     </ion-col>
   </ion-row>

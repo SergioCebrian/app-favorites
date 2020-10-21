@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { CategoryService } from '@services/category/category.service';
 import { HttpService } from '@http/http.service';
+import { LoggerService } from '@services/logger/logger.service';
 
 @Component({
   selector: 'app-categories-edit-page',
@@ -18,7 +19,8 @@ export class CategoriesEditPage implements OnInit {
   constructor(
     private toastController: ToastController,
     private categoryService: CategoryService,
-    private httpService: HttpService
+    private httpService: HttpService,
+    private loggerService: LoggerService
   ) { }
 
   ngOnInit() {
@@ -31,6 +33,7 @@ export class CategoriesEditPage implements OnInit {
 
   async editCategory(event) {
     await this.categoryService.edit(event.category);
+    await this.loggerService.register(`has updated the category: ${ event.category.title }.`);
     await this.presentToast();
   }
 

@@ -10,7 +10,7 @@ ion-tabs {
     ion-tab-bar {
         border-top: 1px solid rgba(0,0,0,.07);
         --background: #F4EEF0;
-        --color-focused: var(--ion-color-primary-contrast);
+        // --color-focused: var(--ion-color-primary-contrast);
         
         &:hover {
             color: var(--ion-color-primary-contrast);

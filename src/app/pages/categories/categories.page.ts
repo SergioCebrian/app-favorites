@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { CategoryModel } from '@models/category.model';
 import { CategoryService } from '@services/category/category.service';
+import { LoggerService } from '@services/logger/logger.service';
 
 @Component({
   selector: 'app-categories',
@@ -16,7 +17,8 @@ export class CategoriesPage implements OnInit {
 
   constructor(
     private alertController: AlertController,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private loggerService: LoggerService
   ) { }
 
   ngOnInit() {
@@ -35,6 +37,7 @@ export class CategoriesPage implements OnInit {
   categoryDelete(event: any): void {
     const { id, title } = event.category;
     this.categoryService.delete(id);
+    this.loggerService.register(`has deleted the category: ${ title }.`);
     this.deleteAlert('Finished!', `The category ${ title } has been removed.`);
   }
 

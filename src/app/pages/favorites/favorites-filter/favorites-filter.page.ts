@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { FavoriteModel } from '@models/favorite.model';
 import { FavoriteService } from '@services/favorite/favorite.service';
 import { HttpService } from '@http/http.service';
+import { LoggerService } from '@services/logger/logger.service';
 
 @Component({
   selector: 'app-favorites-filter-page',
@@ -20,9 +21,10 @@ export class FavoritesFilterPage implements OnInit {
 
   constructor(
     private alertController: AlertController,
+    private router: ActivatedRoute,
     private favoriteService: FavoriteService,
     private httpService: HttpService,
-    private router: ActivatedRoute
+    private loggerService: LoggerService
   ) { }
 
   ngOnInit() {
@@ -46,6 +48,7 @@ export class FavoritesFilterPage implements OnInit {
   favoriteDelete(event) {
     const { id, title } = event.favorite;
     this.favoriteService.delete(id);
+    this.loggerService.register(`has removed the favorite: ${ title }.`);
     this.deleteAlert('Finished!', `The favorite ${ title } has been removed.`);
   }
 

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { CategoryService } from '@services/category/category.service';
 import { FavoriteService } from '@services/favorite/favorite.service';
+import { LoggerService } from '@services/logger/logger.service';
 
 @Component({
   selector: 'app-favorites-create-page',
@@ -17,7 +18,8 @@ export class FavoritesCreatePage implements OnInit {
   constructor(
     private toastController: ToastController,
     private categoryService: CategoryService,
-    private favoriteService: FavoriteService
+    private favoriteService: FavoriteService,
+    private loggerService: LoggerService
   ) { }
 
   ngOnInit() {
@@ -36,7 +38,10 @@ export class FavoritesCreatePage implements OnInit {
   saveFavorite(event: any): void {
     this.favoriteService
         .save(event.favorite)
-        .then(resp => this.presentToast('The favorite has been created.'))
+        .then(resp => {
+          this.presentToast('The favorite has been created.');
+          this.loggerService.register(`has created the favorite: ${ event.favorite.title }.`)
+        })
         .catch(err => this.presentToast('Opps! The favorite could not be created.'));
   }
 

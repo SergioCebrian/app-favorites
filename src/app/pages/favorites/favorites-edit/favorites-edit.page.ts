@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { CategoryService } from '@services/category/category.service';
 import { FavoriteService } from '@services/favorite/favorite.service';
 import { HttpService } from '@http/http.service';
+import { LoggerService } from '@services/logger/logger.service';
 
 @Component({
   selector: 'app-favorites-edit-page',
@@ -21,7 +22,8 @@ export class FavoritesEditPage implements OnInit {
     private toastController: ToastController,
     private categoryService: CategoryService,
     private favoriteService: FavoriteService,
-    private httpService: HttpService
+    private httpService: HttpService,
+    private loggerService: LoggerService
   ) { }
 
   ngOnInit() {
@@ -47,6 +49,7 @@ export class FavoritesEditPage implements OnInit {
 
   async editFavorite(event) {
     await this.favoriteService.edit(event.favorite);
+    await this.loggerService.register(`has updated the favorite: ${ event.favorite.title }.`);
     await this.presentToast();
   }
 

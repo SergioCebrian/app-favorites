@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 
 import { CategoryService } from '@services/category/category.service';
 import { FavoriteService } from '@services/favorite/favorite.service';
+import { LoggerService } from '@services/logger/logger.service';
 
 @Component({
   selector: 'app-history',
@@ -13,10 +14,12 @@ export class HistoryPage implements OnInit {
 
   public categories$: Observable<any[]>;
   public favorites$: Observable<any[]>;
+  public logs$: Observable<any[]>;
 
   constructor(
     private categoryService: CategoryService,
-    private favoriteService: FavoriteService
+    private favoriteService: FavoriteService,
+    private loggerService: LoggerService
   ) { }
 
   ngOnInit() {
@@ -39,6 +42,17 @@ export class HistoryPage implements OnInit {
               id: category.payload.doc.id,
               ...category.payload.doc.data()
             };
+          });
+        });
+
+    this.loggerService
+        .getAll()
+        .subscribe(resp => {
+          this.logs$ = resp.map(log => {
+            return {
+              id: log.payload.doc.id,
+              ...log.payload.doc.data()
+            }
           });
         });
   }
