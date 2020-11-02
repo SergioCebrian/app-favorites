@@ -1,0 +1,20 @@
+<app-header title="Categories"></app-header>
+
+<ion-content [fullscreen]="true">
+  <section class="container-fluid">
+    <ion-grid class="o-grid">
+      <ion-row>
+        <ion-col size="12" class="ion-text-start">
+          <app-counter [counter]="categories.length" [text]="{ plural:'categories', single: 'category' }"></app-counter>
+        </ion-col>   
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <app-categories-list [allCategories]="categories" (OnDeleteCategory)="openModal($event)" *ngIf="categories && categories.length > 0"></app-categories-list>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </section>
+  <ion-icon class="c-icon--bigger" name="add-outline" title="New category" routerLink="/categories/new"></ion-icon>
+  <app-tabs [active]="'categories'"></app-tabs>
+</ion-content>

@@ -14,8 +14,6 @@ export class CategoriesListComponent implements OnInit {
   @Output()
   OnDeleteCategory: EventEmitter<any> = new EventEmitter<any>();
 
-  public numItemsSkeleton: number = 8;
-
   constructor() { }
 
   ngOnInit() { }
@@ -24,7 +22,7 @@ export class CategoriesListComponent implements OnInit {
     this.OnDeleteCategory.emit({ category });
   }
 
-  trackByFn(index, item) {
+  trackByFn(index: number, item: any): string | number {
     return item.id;
   }
 

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { select, Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { AppState } from '@store/state/app.state';
 import * as FAVORITE_ACTIONS from '@modules/favorites/store/actions/favorites.actions';
@@ -17,8 +17,9 @@ import { LoggerService } from '@services/logger/logger.service';
 })
 export class HomePage implements OnInit, OnDestroy {
 
+  private favoritesSubscription: Subscription;
   public favorites: FavoriteModel[];
-  public favoritesSubscription: Subscription;
+  public favoritesAll: FavoriteModel[];
 
   constructor(
     private alertController: AlertController,
@@ -31,7 +32,10 @@ export class HomePage implements OnInit, OnDestroy {
     this.store.dispatch(FAVORITE_ACTIONS.loadFavorites());
     this.favoritesSubscription = this.store
                                      .pipe(select(selectFavoritesAll))
-                                     .subscribe((favorites: FavoriteModel[]) => this.favorites = favorites);
+                                     .subscribe((favorites: FavoriteModel[]) => {
+                                       this.favorites = favorites;
+                                       this.favoritesAll = favorites;
+                                     });
   }
 
   async favoriteDelete(event): Promise<void> {
@@ -45,6 +49,20 @@ export class HomePage implements OnInit, OnDestroy {
     const { ...favorite } = event.favorite;
     this.favoriteService.editPartial(favorite.id, favorite);
   }
+
+  // TODO: Usar pipes y mensaje de 'No hay resultados'
+  search(event: string | any): void {
+    const { term } = event;
+    setTimeout(() => {
+      if (term.length >= 3) {
+        this.favorites = this.favorites.filter(favorite => {
+          return favorite.title.toLowerCase().includes(term.toLowerCase());
+        });
+      } else {
+        this.favorites = this.favoritesAll;
+      }
+    }, 200);
+}
 
   openModal(favorite: { [key: string]: number | string | any }): void {
     const { title } = favorite.favorite;

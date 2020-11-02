@@ -1,0 +1,20 @@
+<ion-list class="c-list  c-list--columns">
+  <ion-item-sliding [id]="category.id" *ngFor="let category of allCategories; trackBy: trackByFn">
+    <ion-item lines="none" [title]="category.title" [routerLink]="category.slug">
+      <ion-avatar slot="start" [title]="category.slug">
+        <img [src]="'assets/logos/' + category.slug + '.jpg'" [alt]="category.slug" appImageFallback>
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ category.title }}</h2>
+      </ion-label>
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </ion-item>
+    <ion-item-options side="end">
+      <ion-item-option color="danger" [title]="'Delete ' + category.title" (click)="categoryDelete(category)">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-item-option>
+    </ion-item-options>
+  </ion-item-sliding>
+</ion-list>
+
+<app-skeleton *ngIf="allCategories?.length === 0"></app-skeleton>

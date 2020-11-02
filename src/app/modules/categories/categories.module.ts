@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { CategoriesPageRoutingModule } from './categories-routing.module';
-import { CategoriesPage } from './categories.page';
-import { CategoriesListComponent } from './categories-list/components/categories-list.component';
+import { CategoriesPage } from './page/categories.page';
+import { CategoriesListComponent } from './components/categories-list/categories-list.component';
 import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
@@ -19,6 +19,9 @@ import { SharedModule } from '@shared/shared.module';
   declarations: [
     CategoriesListComponent,
     CategoriesPage
+  ],
+  exports: [
+    CategoriesListComponent
   ]
 })
 export class CategoriesPageModule {}

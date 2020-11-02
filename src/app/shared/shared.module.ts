@@ -6,8 +6,10 @@ import { CounterComponent } from '@components/counter/counter.component';
 import { HeaderComponent } from '@components/header/header.component';
 import { SearchComponent } from '@components/search/search.component';
 import { TabsComponent } from '@components/tabs/tabs.component';
+import { SegmentComponent } from '@components/segment/segment.component';
+import { SkeletonComponent } from '@components/skeleton/skeleton.component';
 
-import { ImageFallbackDirective } from './directives/image-fallback/image-fallback.directive';
+import { ImageFallbackDirective } from '@directives/image-fallback/image-fallback.directive';
 import { TruncatePipe } from '@pipes/truncate/truncate.pipe';
 import { FillPipe } from '@pipes/fill/fill.pipe';
 
@@ -17,6 +19,8 @@ import { FillPipe } from '@pipes/fill/fill.pipe';
     SearchComponent,
     CounterComponent,
     TabsComponent,
+    SegmentComponent,
+    SkeletonComponent,
     FillPipe,
     TruncatePipe,
     ImageFallbackDirective
@@ -30,6 +34,8 @@ import { FillPipe } from '@pipes/fill/fill.pipe';
     SearchComponent,
     CounterComponent,
     TabsComponent,
+    SegmentComponent,
+    SkeletonComponent,
     FillPipe,
     TruncatePipe,
     ImageFallbackDirective

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 
@@ -19,9 +19,15 @@ import { FavoriteModel } from '@models/favorite.model';
 })
 export class HistoryPage implements OnInit, OnDestroy {
 
+  @Input()
+  currentTabActive: any;
+
+  private favoritesSubscription: Subscription;
+  private logsSubscription: Subscription;
   public favorites: FavoriteModel[];
-  public favoritesSubscription: Subscription;
-  public logs$;
+  public logs;
+  public tabsList: string[] = ['visits', 'logs'];
+  public defaultTabActive: string = this.tabsList[0];
 
   constructor(
     private favoriteService: FavoriteService,
@@ -35,20 +41,20 @@ export class HistoryPage implements OnInit, OnDestroy {
                                      .pipe(select(selectFavoritesHistory, { min: 10 }))
                                      .subscribe((favorites: FavoriteModel[]) => this.favorites = favorites);
 
-    this.store.dispatch(LOGGER_ACTIONS.loadLogger());
+    /*this.store.dispatch(LOGGER_ACTIONS.loadLogger());
     this.store.pipe(select(selectLogger))
-              .subscribe(logger =>  console.log(logger));
-
-    this.loggerService
-        .getAll2()
-        .subscribe(resp => {
-          this.logs$ = resp.map(log => {
-            return {
-              id: log.payload.doc.id,
-              ...log.payload.doc.data()
-            }
-          });
-        });
+              .subscribe(logger =>  console.log(logger));*/
+    // TODO: Migrar a Redux          
+    this.logsSubscription = this.loggerService
+                                .getAll2()
+                                .subscribe(resp => {
+                                  this.logs = resp.map(log => {
+                                    return {
+                                      id: log.payload.doc.id,
+                                      ...log.payload.doc.data()
+                                    }
+                                  });
+                                });
   }
 
   incrementCounter(event): void {
@@ -56,9 +62,13 @@ export class HistoryPage implements OnInit, OnDestroy {
     this.favoriteService.editPartial(favorite.id, favorite);
   }
 
+  getCurrentTabActive(event): void {
+    this.defaultTabActive = event.tab;
+  }
+
   ngOnDestroy() {
     this.favoritesSubscription.unsubscribe();
-    // this.logs$.unsubscribe();
+    this.logsSubscription.unsubscribe();
   }
 
 }

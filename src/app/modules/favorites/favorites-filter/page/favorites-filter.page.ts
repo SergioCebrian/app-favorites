@@ -18,9 +18,9 @@ import { LoggerService } from '@services/logger/logger.service';
 })
 export class FavoritesFilterPage implements OnInit, OnDestroy {
 
-  public currentCategory: string;
+  private favoritesSubscription: Subscription;
   public favorites: FavoriteModel[];
-  public favoritesSubscription: Subscription;
+  public currentCategory: string;
 
   constructor(
     private alertController: AlertController,

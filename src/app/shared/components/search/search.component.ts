@@ -9,14 +9,14 @@ import { Component, OnInit, Output, EventEmitter, ChangeDetectionStrategy } from
 export class SearchComponent implements OnInit {
 
   @Output()
-  notifySearchTerm = new EventEmitter();
+  OnSearch = new EventEmitter();
 
   constructor() { }
 
   ngOnInit() {}
 
   search(val: number | string): void {
-    this.notifySearchTerm.emit({ term: val });
+    this.OnSearch.emit({ term: val });
   }
 
 }

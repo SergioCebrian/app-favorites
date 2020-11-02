@@ -5,7 +5,7 @@ import { select, Store } from '@ngrx/store';
 
 import { AppState } from '@store/state/app.state';
 import * as CATEGORY_ACTIONS from '@modules/categories/store/actions/categories.actions';
-import { selectCategoriesAll } from './store/selectors/categories.selectors';
+import { selectCategoriesAll } from '../store/selectors/categories.selectors';
 import { CategoryModel } from '@models/category.model';
 import { CategoryService } from '@services/category/category.service';
 import { LoggerService } from '@services/logger/logger.service';
@@ -17,8 +17,8 @@ import { LoggerService } from '@services/logger/logger.service';
 })
 export class CategoriesPage implements OnInit, OnDestroy {
 
+  private categoriesSubscription: Subscription;
   public categories: CategoryModel[];
-  public categoriesSubscription: Subscription;
 
   constructor(
     private alertController: AlertController,

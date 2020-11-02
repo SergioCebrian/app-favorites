@@ -2,18 +2,15 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 import { FavoriteModel } from '@models/favorite.model';
 
 @Component({
-  selector: 'app-favorites-list',
+  selector: 'app-history-list',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './favorites-list.component.html',
-  styleUrls: ['./favorites-list.component.scss'],
+  templateUrl: './history-list.component.html',
+  styleUrls: ['./history-list.component.scss'],
 })
-export class FavoritesListComponent implements OnInit {
+export class HistoryListComponent implements OnInit {
 
   @Input()
   allFavorites: FavoriteModel[];
-
-  @Output()
-  OnDeleteFavorite: EventEmitter<any> = new EventEmitter<any>();
 
   @Output()
   OnIncrementCounterFavorite: EventEmitter<any> = new EventEmitter<any>();
@@ -22,13 +19,9 @@ export class FavoritesListComponent implements OnInit {
 
   ngOnInit() { }
 
-  favoriteDelete(favorite: { [key: string]: number | string }) {
-    this.OnDeleteFavorite.emit({ favorite });
-  }
-
   incrementCounter(favorite): void {
-    favorite.visits = favorite.visits + 1;
-    this.OnIncrementCounterFavorite.emit({ favorite });
+    const favoriteIncrement = { ...favorite, visits: favorite.visits + 1 };
+    this.OnIncrementCounterFavorite.emit({ favorite: favoriteIncrement });
   }
 
   trackByFn(index: number, item: any): string | number {

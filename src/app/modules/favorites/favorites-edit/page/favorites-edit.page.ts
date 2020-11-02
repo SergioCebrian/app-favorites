@@ -1,12 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
+
 import { AppState } from '@store/state/app.state';
 import * as FAVORITE_ACTIONS from '@modules/favorites/store/actions/favorites.actions';
 import * as CATEGORY_ACTIONS from '@modules/categories/store/actions/categories.actions';
 import { CategoryModel } from '@models/category.model';
 import { CategoryService } from '@services/category/category.service';
+import { FavoriteModel } from '@models/favorite.model';
 import { FavoriteService } from '@services/favorite/favorite.service';
 import { HttpService } from '@http/http.service';
 import { LoggerService } from '@services/logger/logger.service';
@@ -18,10 +20,10 @@ import { LoggerService } from '@services/logger/logger.service';
 })
 export class FavoritesEditPage implements OnInit, OnDestroy {
 
-  // public categories: CategoryModel[];
-  // public favorite$: Observable<any>;
-  public categories$;
-  public favorite$;
+  private categoriesSubscription: Subscription;
+  private favoriteSubscription: Subscription;
+  public categories: CategoryModel[];
+  public favorite: FavoriteModel[];
   public currentID: string;
 
   constructor(
@@ -35,15 +37,15 @@ export class FavoritesEditPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.currentID = this.httpService.getQueryParam('id');
-
-    this.favoriteService
+    // TODO: Migrar a Redux
+    this.favoriteSubscription = this.favoriteService
         .getOne(this.currentID)
         .subscribe(favorite => { 
-          this.favorite$ = favorite.payload.data();
+          this.favorite = favorite.payload.data();
         });
 
-    this.store.select('categories').subscribe(({ categories }) => {
-      this.categories$ = categories;
+    this.categoriesSubscription = this.store.select('categories').subscribe(({ categories }) => {
+      this.categories = categories;
     });
 
     this.store.dispatch(CATEGORY_ACTIONS.loadCategories());
@@ -66,8 +68,8 @@ export class FavoritesEditPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // this.categories$.unsubscribe();
-    // this.favorite$.unsubscribe();
+    this.categoriesSubscription.unsubscribe();
+    this.favoriteSubscription.unsubscribe();
   }
 
 }

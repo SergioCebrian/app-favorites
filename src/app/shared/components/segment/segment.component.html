@@ -1,0 +1,5 @@
+<ion-segment [value]="defaultTabActive" (ionChange)="segmentChanged($event)">
+  <ion-segment-button [value]="tab" *ngFor="let tab of allTabs">
+    <ion-label>{{ tab }}</ion-label>
+  </ion-segment-button>
+</ion-segment>

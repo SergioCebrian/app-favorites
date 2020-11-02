@@ -1,0 +1,19 @@
+<ion-list class="c-list  c-list--columns  c-list--light">
+  <ion-item lines="none" [title]="favorite.title" 
+                         [href]="favorite.url" 
+                         (click)="incrementCounter(favorite)" 
+                         target="_blank" 
+                         *ngFor="let favorite of allFavorites; trackBy: trackByFn">
+    <ion-avatar slot="start" [title]="favorite.category.title">
+      <img [src]="'assets/logos/' + favorite.category.slug + '.jpg'" [alt]="'Logo ' + favorite.category.slug" appImageFallback>
+    </ion-avatar>
+    <ion-label>
+      <h2>{{ favorite.title }}</h2>
+      <em><ion-icon name="eye-outline"></ion-icon> <strong>{{ favorite.visits }}</strong> visits</em>
+    </ion-label>
+    <ion-icon name="chevron-forward-outline"></ion-icon>
+  </ion-item>
+</ion-list>
+
+<!--<span class="c-message  c-message--error" *ngIf="currentTabActive === 'visits' && allFavorites?.length === 0">History empty.</span>-->
+<app-skeleton *ngIf="allFavorites?.length === 0"></app-skeleton>

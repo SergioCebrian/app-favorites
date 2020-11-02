@@ -2,7 +2,22 @@
 
 <ion-content [fullscreen]="true">
   <section class="container-fluid">
-    <app-favorites-filter [allFavorites]="favorites" [category]="currentCategory" (OnDeleteFavorite)="openModal($event)" (OnIncrementCounterFavorite)="incrementCounter($event)"></app-favorites-filter>
+    <ion-grid class="o-grid  u-nospace">
+      <ion-row>
+        <ion-col size="12">
+          <app-counter [counter]="favorites.length" 
+                       [text]="{ plural:'favorites', single: 'favorite' }" 
+                       *ngIf="favorites && favorites?.length > 0"></app-counter> 
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="u-nospace">
+          <app-favorites-filter [allFavorites]="favorites" [category]="currentCategory" 
+                                (OnDeleteFavorite)="openModal($event)" 
+                                (OnIncrementCounterFavorite)="incrementCounter($event)"></app-favorites-filter>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </section>
   <ion-icon class="c-icon--bigger" name="add-outline" title="New favorite" routerLink="/favorites/new"></ion-icon>
   <app-tabs [active]="'categories'"></app-tabs>

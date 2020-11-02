@@ -1,0 +1,14 @@
+<ion-list class="c-list  c-list--columns  c-list--light">
+  <ion-item lines="none" color="transparent" [title]="favorite.title" *ngFor="let favorite of allFavorites; trackBy: trackByFn">
+    <ion-avatar slot="start" [title]="favorite.category.title">
+      <img [src]="'assets/logos/' + favorite.category.slug + '.jpg'" [alt]="'Logo ' + favorite.category.slug" appImageFallback>
+    </ion-avatar>
+    <ion-label>
+      <h2>{{ favorite.title }}</h2>
+    </ion-label>
+    <ion-icon name="heart-outline" (click)="deleteLike(favorite)"></ion-icon>
+  </ion-item>
+</ion-list>
+
+<!--<span class="c-message  c-message--error" *ngIf="allFavorites.length === 0">No favorites found.</span>-->
+<app-skeleton *ngIf="allFavorites?.length === 0"></app-skeleton>

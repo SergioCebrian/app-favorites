@@ -17,8 +17,8 @@ import { LoggerService } from '@services/logger/logger.service';
 })
 export class LikesPage implements OnInit, OnDestroy {
 
+  private favoritesSubscription: Subscription;
   public favorites: FavoriteModel[];
-  public favoritesSubscription: Subscription;
 
   constructor(
     private toastController: ToastController,

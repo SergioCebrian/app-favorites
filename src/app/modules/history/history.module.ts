@@ -5,7 +5,8 @@ import { IonicModule } from '@ionic/angular';
 
 import { HistoryPageRoutingModule } from './history-routing.module';
 import { HistoryPage } from './page/history.page';
-import { HistoryListComponent } from './history-list/components/history-list.component';
+import { HistoryListComponent } from './components/history-list/history-list.component';
+import { LogsListComponent } from './components/logs-list/logs-list.component';
 import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
@@ -18,10 +19,12 @@ import { SharedModule } from '@shared/shared.module';
   ],
   declarations: [
     HistoryPage,
-    HistoryListComponent
+    HistoryListComponent,
+    LogsListComponent
   ],
   exports: [
-    HistoryListComponent
+    HistoryListComponent,
+    LogsListComponent
   ]
 })
 export class HistoryPageModule {}

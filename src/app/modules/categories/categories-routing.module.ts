@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { CategoriesPage } from './categories.page';
+import { CategoriesPage } from './page/categories.page';
 import { AuthGuard } from '@guards/auth.guard';
 
 const routes: Routes = [

@@ -15,17 +15,15 @@ export class LikesListComponent implements OnInit {
   @Output()
   OnDeleteLike: EventEmitter<any> = new EventEmitter<any>();
 
-  public numItemsSkeleton: number = 8;
-
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   deleteLike(favorite: { [ key : string] : any }): void {
     this.OnDeleteLike.emit({ favorite });
   }
 
-  trackByFn(index, item) {
+  trackByFn(index: number, item: any): string | number {
     return item.id;
   }
 

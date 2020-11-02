@@ -1,13 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 
-import { CategoryService } from '@services/category/category.service';
-import { HttpService } from '@http/http.service';
-import { LoggerService } from '@services/logger/logger.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '@shared/store/state/app.state';
 import * as CATEGORY_ACTIONS from '@modules/categories/store/actions/categories.actions';
+import { CategoryModel } from '@models/category.model';
+import { CategoryService } from '@services/category/category.service';
+import { HttpService } from '@http/http.service';
+import { LoggerService } from '@services/logger/logger.service';
 
 @Component({
   selector: 'app-categories-edit-page',
@@ -16,7 +17,8 @@ import * as CATEGORY_ACTIONS from '@modules/categories/store/actions/categories.
 })
 export class CategoriesEditPage implements OnInit, OnDestroy {
 
-  public category$; // : Observable<any>
+  private categorySubscription: Subscription;
+  public category: CategoryModel[];
   public currentID: string;
 
   constructor(
@@ -30,9 +32,10 @@ export class CategoriesEditPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.currentID = this.httpService.getQueryParam('id');
 
-    this.categoryService
-        .getOne(this.currentID)
-        .subscribe(category => this.category$ = category.payload.data());
+    // TODO: Migrar a Redux
+    this.categorySubscription = this.categoryService
+                                    .getOne(this.currentID)
+                                    .subscribe(category => this.category = category.payload.data());
   }
 
   async editCategory(event) {
@@ -52,7 +55,7 @@ export class CategoriesEditPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.category$.unsubscribe();
+    this.categorySubscription.unsubscribe();
   }
 
 }

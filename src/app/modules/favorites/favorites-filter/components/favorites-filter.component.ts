@@ -36,7 +36,7 @@ export class FavoritesFilterComponent implements OnInit {
     this.OnIncrementCounterFavorite.emit({ favorite });
   }
 
-  trackByFn(index, item) {
+  trackByFn(index: number, item: any): string | number {
     return item.id;
   }
 
