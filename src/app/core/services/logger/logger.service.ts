@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { DaysConfig } from '@configs/days.config';
 import { MonthsConfig } from '@configs/months.config';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -61,7 +62,21 @@ export class LoggerService {
   }
 
   getAll(): Observable<any> {
-    return this.db.collection(this.collectionName).snapshotChanges();
+    return this.db.collection(this.collectionName)
+                  .snapshotChanges()
+                  .pipe(
+                    map(actions => actions.map(values => {
+                     return {
+                       id: values.payload.doc.id,
+                      ...values.payload.doc.data
+                     }
+                    }))
+                  );
+  }
+
+  getAll2(): Observable<any> {
+    return this.db.collection(this.collectionName)
+                  .snapshotChanges();
   }
 
 }

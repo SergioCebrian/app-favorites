@@ -1,0 +1,9 @@
+<app-header [title]="'Favorites with ' + currentCategory"></app-header>
+
+<ion-content [fullscreen]="true">
+  <section class="container-fluid">
+    <app-favorites-filter [allFavorites]="favorites" [category]="currentCategory" (OnDeleteFavorite)="openModal($event)" (OnIncrementCounterFavorite)="incrementCounter($event)"></app-favorites-filter>
+  </section>
+  <ion-icon class="c-icon--bigger" name="add-outline" title="New favorite" routerLink="/favorites/new"></ion-icon>
+  <app-tabs [active]="'categories'"></app-tabs>
+</ion-content>

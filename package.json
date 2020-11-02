@@ -29,6 +29,7 @@
     "@ionic/storage": "^2.3.0",
     "@ngrx/effects": "^9.1.2",
     "@ngrx/store": "^9.1.2",
+    "@ngrx/store-devtools": "^10.0.1",
     "firebase": "^7.13.2",
     "rxjs": "~6.5.1",
     "tslib": "^1.10.0",

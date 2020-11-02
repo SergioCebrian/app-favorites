@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
+import { AngularFirestore, DocumentData, DocumentReference, QuerySnapshot } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-
+import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { AppState } from '@store/state/app.state';
 import * as loadingActions from '@store/actions/loading.actions';
-
+import * as ACTIONS_CATEGORY from '@modules/categories/store/actions/categories.actions';
 import { Category } from '@interfaces/category';
 import { CategoryModel } from '@models/category.model';
 import { SlugService } from '@helpers/slug/slug.service';
@@ -23,15 +23,26 @@ export class CategoryService {
     private slugService: SlugService
   ) { }
 
-  getAll(): Observable<any> { // Observable<firebase.firestore.QuerySnapshot>
-    return this.db.collection<Category>(this.collectionName, ref => ref.orderBy('lastModifiedDate', 'desc')).snapshotChanges(); //.get()
+  getAll(): Observable<Category[]> {
+    return this.db
+               .collection<Category>(this.collectionName, ref => ref.orderBy('lastModifiedDate', 'desc'))
+               .snapshotChanges()
+               .pipe(
+                 map(actions => actions.map(values => {
+                  return {
+                    id: values.payload.doc.id,
+                    ...values.payload.doc.data()
+                  }
+                 }))
+               );
   }
 
   getOne(documentID: string): Observable<any> { // Observable<firebase.firestore.QuerySnapshot>
     return this.db.collection<Category>(this.collectionName).doc(documentID).snapshotChanges(); //.get()
   }
 
-  delete(id: string): Promise<void>{
+  delete(id: string): Promise<void> {
+    this.store.dispatch(ACTIONS_CATEGORY.deleteCategorySuccess({ id }));
     return this.db.collection(this.collectionName).doc(id).delete();
   }
 
@@ -40,10 +51,12 @@ export class CategoryService {
     category.lastModifiedDate = new Date();
     category.slug = this.slugService.create(category.title);
     delete category.id;
+    this.store.dispatch(ACTIONS_CATEGORY.updateCategorySuccess({ category }));
     return this.db.collection(this.collectionName).doc(categoryID).update(category);
   }
 
-  editPartial(id: string, category: Object): Promise<void> {
+  editPartial(id: string, category: CategoryModel): Promise<void> {
+    this.store.dispatch(ACTIONS_CATEGORY.updateCategorySuccess({ category }));
     return this.db.collection(this.collectionName).doc(id).update(category);
   }
 
@@ -51,6 +64,7 @@ export class CategoryService {
     category.createdDate = new Date();
     category.lastModifiedDate = new Date();
     category.slug = this.slugService.create(category.title);
+    this.store.dispatch(ACTIONS_CATEGORY.createCategorySuccess({ category }));
     this.store.dispatch(loadingActions.isLoading());
     return this.db
                .collection(this.collectionName)

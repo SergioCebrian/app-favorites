@@ -21,6 +21,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { PreloaderModule } from './modules/preloader/preloader.module';
 
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { appEffects } from '@store/effects/app.effects';
 import { appReducers } from '@store/reducers/app.reducers';
@@ -42,6 +43,10 @@ import { appReducers } from '@store/reducers/app.reducers';
     IonicStorageModule.forRoot(), 
     EffectsModule.forRoot(appEffects),
     StoreModule.forRoot(appReducers),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production,
+    }),
     PreloaderModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })

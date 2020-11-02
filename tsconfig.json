@@ -28,9 +28,10 @@
       "@interfaces/*": ["app/shared/interfaces/*"],
       "@mocks/*": ["app/core/mocks/*"],
       "@models/*": ["app/shared/models/*"],
-      "@modules/*": ["app/core/modules/*"],
+      "@modules/*": ["app/modules/*"],
       "@pipes/*": ["app/shared/pipes/*"],
       "@services/*": ["app/core/services/*"],
+      "@shared/*": ["app/shared/*"],
       "@store/*": ["app/shared/store/*"]
     }
   },

@@ -1,0 +1,69 @@
+<ion-segment [value]="tabsList[0]" (ionChange)="segmentChanged($event)">
+  <ion-segment-button [value]="tab" *ngFor="let tab of tabsList">
+    <ion-label>{{ tab }}</ion-label>
+  </ion-segment-button>
+</ion-segment>
+
+<ion-grid class="o-grid  u-nospace">
+  <ion-row>
+    <ion-col class="u-nospace">
+      <!--<span class="c-message  c-message--error" *ngIf="currentTabActive === 'visits' && allFavorites?.length === 0">History empty.</span>-->
+      <ion-list class="c-list  c-list--columns  c-list--light" *ngIf="currentTabActive === 'visits' && allFavorites">
+        <ion-item lines="none" [title]="favorite.title" [href]="favorite.url" (click)="incrementCounter(favorite)" target="_blank" *ngFor="let favorite of allFavorites; trackBy: trackByFn">
+          <ion-avatar slot="start" [title]="favorite.category.title">
+            <img [src]="'assets/logos/' + favorite.category.slug + '.jpg'" [alt]="'Logo ' + favorite.category.slug" appImageFallback>
+          </ion-avatar>
+          <ion-label>
+            <h2>{{ favorite.title }}</h2>
+            <em><ion-icon name="eye-outline"></ion-icon> <strong>{{ favorite.visits }}</strong> visits</em>
+          </ion-label>
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </ion-item>
+      </ion-list>
+
+      <ion-list class="c-list--skeleton" *ngIf="currentTabActive === 'visits' && allFavorites?.length === 0">
+        <ion-item lines="none" *ngFor="let i of numItemsSkeleton | fill">
+          <ion-avatar slot="start">
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-avatar>
+          <ion-label>
+            <h2>
+              <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+            </h2>
+            <p>
+              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+            </p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      <div *ngIf="currentTabActive === 'logs'">
+        <span class="c-message  c-message--error" *ngIf="!logsList">Logs empty.</span>
+        <ion-list class="c-list  c-list--timeline" *ngIf="currentTabActive === 'logs' && logsList">
+          <ion-item-group *ngFor="let log of logsList | keyvalue">
+            <ion-item-divider>
+              <ion-icon name="calendar-outline"></ion-icon>
+              <ion-label>{{ log.key }}</ion-label>
+            </ion-item-divider>
+            <div class="list__items">
+              <ion-item lines="none" *ngFor="let logVal of log.value">
+                <div class="list__line"></div>
+                <ion-icon name="ellipse-outline"></ion-icon>
+                <time [dateTime]="logVal.date.hours + ':' + logVal.date.minutes + ':' + logVal.date.seconds">
+                  {{ logVal.date.hours }}:{{ logVal.date.minutes }}:{{ logVal.date.seconds }}
+                </time>
+                <div>
+                  <p class="ion-no-margin">The user <ion-text>Sergio</ion-text> {{ logVal.user.message }}</p>
+                  <a [routerLink]="logVal.url.pathname" *ngIf="logVal.url.params === null">{{ logVal.url.pathname }}</a>
+                  <a [routerLink]="logVal.url.pathname" [queryParams]="{ id: logVal.url.params.split('?id=')[1] }" *ngIf="logVal.url.params !== null">
+                    {{ logVal.url.pathname }}{{ logVal.url.params }}
+                  </a>
+                </div>
+              </ion-item>
+            </div>
+          </ion-item-group>
+        </ion-list>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+

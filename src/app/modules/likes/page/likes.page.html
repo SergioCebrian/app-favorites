@@ -1,0 +1,8 @@
+<app-header title="Likes"></app-header>
+
+<ion-content [fullscreen]="true">
+  <section class="container-fluid">
+    <app-likes-list [allFavorites]="favorites" (OnDeleteLike)="deleteLike($event)"></app-likes-list>
+  </section>
+  <app-tabs [active]="'likes'"></app-tabs>
+</ion-content>

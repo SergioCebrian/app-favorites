@@ -1,13 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 
-import { FavoriteModel } from '@models/favorite.model';
-import { CategoryModel } from '@models/category.model';
-import { FavoriteService } from '@services/favorite/favorite.service';
-import { CategoryService } from '@services/category/category.service';
+import { AppState } from '@store/state/app.state';
+import * as CATEGORY_ACTIONS from '@modules/categories/store/actions/categories.actions';
+import * as FAVORITE_ACTIONS from '@modules/favorites/store/actions/favorites.actions';
+import { selectCategoriesCount } from '@modules/categories/store/selectors/categories.selectors';
+import { 
+  selectFavoritesCount, 
+  selectFavoritesHistory, 
+  selectFavoritesLikes } from '@modules/favorites/store/selectors/favorites.selectors';
 import { HttpService } from '@http/http.service';
 
 @Component({
   selector: 'app-tabs',
+  // changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.scss'],
 })
@@ -16,66 +22,30 @@ export class TabsComponent implements OnInit {
   @Input()
   active: string;
 
-  public totalCategories: CategoryModel[];
-  public totalFavorites: FavoriteModel[];
-  public totalFavoritesHistory: FavoriteModel[];
-  public totalFavoritesImportants: FavoriteModel[];
+  public totalCategories: number;
+  public totalFavorites: number;
+  public totalFavoritesHistory: number;
+  public totalFavoritesLikes: number;
 
   constructor(
-    private categoryService: CategoryService,
-    private favoriteService: FavoriteService,
-    private httpService: HttpService
+    private httpService: HttpService,
+    private store: Store<AppState>
   ) { }
 
   ngOnInit() {
-    this.favoriteService
-        .getAll()
-        .subscribe(resp => {
-          this.totalFavorites = resp.map(favorite => {
-            return {
-              id: favorite.payload.doc.id,
-              ...favorite.payload.doc.data()
-            };          
-          }).length;
-        });
+    this.store.dispatch(FAVORITE_ACTIONS.loadFavorites());
+    this.store.pipe(select(selectFavoritesCount))
+              .subscribe(favorites => this.totalFavorites = favorites);
 
-    this.favoriteService
-        .getAllByVisits()
-        .subscribe(resp => {
-          this.totalFavoritesHistory = resp.map(favorite => {
-            return {
-              id: favorite.payload.doc.id,
-              ...favorite.payload.doc.data()
-            };          
-          }).length;
-        });
-
-    this.favoriteService
-        .getAllByImportants()
-        .subscribe(resp => {
-          this.totalFavoritesImportants = resp.map(favorite => {
-            return {
-              id: favorite.payload.doc.id,
-              ...favorite.payload.doc.data()
-            };          
-          }).length;
-        });
-
-    this.categoryService
-        .getAll()
-        .subscribe(resp => {
-          this.totalCategories = resp.map(category => {
-            return {
-              id: category.payload.doc.id,
-              ...category.payload.doc.data()
-            };
-          }).length;
-        });
-
-    this.totalCategories = null;
-    this.totalFavorites = null;
-    this.totalFavoritesHistory = null;
-    this.totalFavoritesImportants = null;
+    this.store.pipe(select(selectFavoritesHistory, { min: 10 }))
+              .subscribe(favorites => this.totalFavoritesHistory = favorites.length);
+              
+    this.store.pipe(select(selectFavoritesLikes))
+              .subscribe(favorites => this.totalFavoritesLikes = favorites.length);
+    
+    this.store.dispatch(CATEGORY_ACTIONS.loadCategories());
+    this.store.pipe(select(selectCategoriesCount))
+              .subscribe(categories => this.totalCategories = categories);
   }
 
   redirectUrl(url: string): void {

@@ -1,0 +1,10 @@
+<app-header title="History"></app-header>
+
+<ion-content [fullscreen]="true">
+  <section class="container-fluid">
+    <app-history-list [allFavorites]="favorites" 
+                      [allLogs]="logs$" 
+                      (OnIncrementCounterFavorite)="incrementCounter($event)"></app-history-list>
+  </section>
+  <app-tabs [active]="'history'"></app-tabs>
+</ion-content>

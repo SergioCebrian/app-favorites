@@ -5,7 +5,7 @@ import { AuthGuard } from '@guards/auth.guard';
 const routes: Routes = [
   {
     path: 'home',
-    loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule),
+    loadChildren: () => import('./modules/home/home.module').then( m => m.HomePageModule),
     canLoad: [AuthGuard],
     canActivate: [AuthGuard]
   },
@@ -18,29 +18,29 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
+    loadChildren: () => import('./modules/login/login.module').then( m => m.LoginPageModule)
   },
   {
     path: 'categories',
-    loadChildren: () => import('./pages/categories/categories.module').then( m => m.CategoriesPageModule),
+    loadChildren: () => import('./modules/categories/categories.module').then( m => m.CategoriesPageModule),
     canLoad: [AuthGuard],
     canActivate: [AuthGuard]
   },
   {
     path: 'favorites',
-    loadChildren: () => import('./pages/favorites/favorites.module').then( m => m.FavoritesPageModule),
+    loadChildren: () => import('./modules/favorites/favorites.module').then( m => m.FavoritesPageModule),
     canLoad: [AuthGuard],
     canActivate: [AuthGuard]
   },
   {
     path: 'history',
-    loadChildren: () => import('./pages/history/history.module').then( m => m.HistoryPageModule),
+    loadChildren: () => import('./modules/history/history.module').then( m => m.HistoryPageModule),
     canLoad: [AuthGuard],
     canActivate: [AuthGuard]
   },
   {
-    path: 'importants',
-    loadChildren: () => import('./pages/importants/importants.module').then( m => m.ImportantsPageModule),
+    path: 'likes',
+    loadChildren: () => import('./modules/likes/likes.module').then( m => m.LikesPageModule),
     canLoad: [AuthGuard],
     canActivate: [AuthGuard]
   }

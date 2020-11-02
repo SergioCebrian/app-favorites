@@ -2,11 +2,14 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
+
 import { AppState } from '@store/state/app.state';
 import * as loadingActions from '@store/actions/loading.actions';
 import { ErrorService } from '@services/error/error.service';
+import { IUser } from '@interfaces/user';
 
 @Injectable({
   providedIn: 'root'
@@ -21,15 +24,15 @@ export class AuthService {
     private errorService: ErrorService
   ) { }
 
-  isAuth() {
+  isAuth(): Observable<boolean> {
     return this.authFB
                .authState
                .pipe(
-                 map(userFB => userFB !== null)
+                 map((userFB: any) => userFB !== null)
                );
   }
 
-  signIn(data: { [key: string]: string }): Promise<any> {
+  signIn(data: IUser): Promise<void> {
     const { email, password } = data;
     this.store.dispatch(loadingActions.isLoading());
     return this.authFB
@@ -47,12 +50,12 @@ export class AuthService {
                });
   }
 
-  signUp(data: { [key: string]: string }): Promise<any> {
+  signUp(data: IUser): Promise<firebase.auth.UserCredential> {
     const { email, password } = data;
     return this.authFB.createUserWithEmailAndPassword(email, password);
   }
 
-  logOut() {
+  logOut(): Promise<void> {
     return this.authFB.signOut();
   }
 
