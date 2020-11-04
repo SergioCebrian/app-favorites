@@ -1,7 +1,6 @@
-import { Component, Input, OnInit, OnChanges, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { updateCategory } from '@modules/categories/store/actions/categories.actions';
 
 @Component({
   selector: 'app-favorites-edit',
@@ -15,9 +14,6 @@ export class FavoritesEditComponent implements OnInit {
   allCategories: [{ [key: string]: string }];
 
   @Input()
-  favoriteID: string;
-
-  @Input()
   favorite: { [key: string]: string };
 
   @Output()
@@ -28,30 +24,19 @@ export class FavoritesEditComponent implements OnInit {
   public isLoading: boolean = false;
 
   constructor(private fb: FormBuilder,
-              private activatedRouter: ActivatedRoute) { 
-  }
+              private activatedRouter: ActivatedRoute) { }
 
   ngOnInit() {
-    this.editFavoriteForm = this.fb.group({
-      id: ['', Validators.required],
-      title: ['', Validators.required],
-      description: ['', [ Validators.minLength(4), Validators.required ]],
-      category: ['', [ Validators.required ]],
-      url: ['', [ Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?'), Validators.required ]],
-      important: ['', [ ]]
-    });
-  }
+    this.categories = this.allCategories;
 
-  ngOnChanges() {
-    if (this.allCategories !== undefined && this.favorite !== undefined) {
-      this.categories = this.allCategories;
-      this.editFavoriteForm.controls['id'].setValue(this.favoriteID);
-      this.editFavoriteForm.controls['title'].setValue(this.favorite.title);
-      this.editFavoriteForm.controls['description'].setValue(this.favorite.description);
-      this.editFavoriteForm.controls['category'].setValue(this.favorite.category_id);
-      this.editFavoriteForm.controls['url'].setValue(this.favorite.url);
-      this.editFavoriteForm.controls['important'].setValue(this.favorite.important);
-    }
+    this.editFavoriteForm = this.fb.group({
+      id: [this.favorite.id, Validators.required],
+      title: [this.favorite.title, Validators.required],
+      description: [this.favorite.description, [ Validators.minLength(4), Validators.required ]],
+      category: [this.favorite.category_id, [ Validators.required ]],
+      url: [this.favorite.url, [ Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?'), Validators.required ]],
+      important: [this.favorite.important, [ ]]
+    });
   }
 
   updateFavorite() {

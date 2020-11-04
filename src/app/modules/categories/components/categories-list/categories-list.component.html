@@ -1,5 +1,10 @@
 <ion-list class="c-list  c-list--columns">
   <ion-item-sliding [id]="category.id" *ngFor="let category of allCategories; trackBy: trackByFn">
+    <!--<ion-item-options side="start">
+      <ion-item-option color="secondary" [title]="'Edit ' + category.title" [routerLink]="'/categories/edit/' + category.slug">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-item-option>
+    </ion-item-options>-->
     <ion-item lines="none" [title]="category.title" [routerLink]="category.slug">
       <ion-avatar slot="start" [title]="category.slug">
         <img [src]="'assets/logos/' + category.slug + '.jpg'" [alt]="category.slug" appImageFallback>

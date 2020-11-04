@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '@store/state/app.state';
 import * as FAVORITE_ACTIONS from '@modules/favorites/store/actions/favorites.actions';
 import * as CATEGORY_ACTIONS from '@modules/categories/store/actions/categories.actions';
@@ -9,6 +9,7 @@ import { CategoryModel } from '@models/category.model';
 import { CategoryService } from '@services/category/category.service';
 import { FavoriteService } from '@services/favorite/favorite.service';
 import { LoggerService } from '@services/logger/logger.service';
+import { selectCategoriesAll } from '@modules/categories/store/selectors/categories.selectors';
 
 @Component({
   selector: 'app-favorites-create-page',
@@ -29,12 +30,9 @@ export class FavoritesCreatePage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    // TODO: Refactorizar
-    this.categoriesSubscription = this.store.select('categories').subscribe(({ categories }) => {
-      this.categories = categories;
-    });
-
     this.store.dispatch(CATEGORY_ACTIONS.loadCategories());
+    this.categoriesSubscription = this.store.pipe(select(selectCategoriesAll))
+                                            .subscribe(categories => this.categories = categories);
   }
 
   saveFavorite(event: any): void {

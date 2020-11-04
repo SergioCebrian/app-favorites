@@ -1,16 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 
 import { AppState } from '@store/state/app.state';
-import * as FAVORITE_ACTIONS from '@modules/favorites/store/actions/favorites.actions';
+import { selectCategoriesAll } from '@modules/categories/store/selectors/categories.selectors';
+import { selectFavorite } from '@modules/favorites/store/selectors/favorites.selectors';
 import * as CATEGORY_ACTIONS from '@modules/categories/store/actions/categories.actions';
+import * as FAVORITE_ACTIONS from '@modules/favorites/store/actions/favorites.actions';
 import { CategoryModel } from '@models/category.model';
-import { CategoryService } from '@services/category/category.service';
 import { FavoriteModel } from '@models/favorite.model';
+import { CategoryService } from '@services/category/category.service';
 import { FavoriteService } from '@services/favorite/favorite.service';
-import { HttpService } from '@http/http.service';
 import { LoggerService } from '@services/logger/logger.service';
 
 @Component({
@@ -23,32 +25,30 @@ export class FavoritesEditPage implements OnInit, OnDestroy {
   private categoriesSubscription: Subscription;
   private favoriteSubscription: Subscription;
   public categories: CategoryModel[];
-  public favorite: FavoriteModel[];
-  public currentID: string;
+  public favorite: FavoriteModel;
+  public currentFavorite: string;
 
   constructor(
     private toastController: ToastController,
+    private router: ActivatedRoute,
     private categoryService: CategoryService,
     private favoriteService: FavoriteService,
-    private httpService: HttpService,
     private loggerService: LoggerService,
     private store: Store<AppState>
   ) { }
 
   ngOnInit() {
-    this.currentID = this.httpService.getQueryParam('id');
-    // TODO: Migrar a Redux
-    this.favoriteSubscription = this.favoriteService
-        .getOne(this.currentID)
-        .subscribe(favorite => { 
-          this.favorite = favorite.payload.data();
-        });
+    this.currentFavorite = this.router.snapshot.params.slug;
 
-    this.categoriesSubscription = this.store.select('categories').subscribe(({ categories }) => {
-      this.categories = categories;
-    });
+    this.store.dispatch(FAVORITE_ACTIONS.loadFavorites());
+    this.favoriteSubscription = this.store
+                                    .pipe(select(selectFavorite, { slug: this.currentFavorite }))
+                                    .subscribe((favorite: FavoriteModel) => this.favorite = favorite);
 
     this.store.dispatch(CATEGORY_ACTIONS.loadCategories());
+    this.categoriesSubscription = this.store
+                                      .pipe(select(selectCategoriesAll))
+                                      .subscribe((categories: CategoryModel[]) => this.categories = categories);
   }
 
   async editFavorite(event) {

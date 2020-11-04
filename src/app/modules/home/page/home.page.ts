@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AlertController, IonInfiniteScroll } from '@ionic/angular';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
 import { AppState } from '@store/state/app.state';
 import * as FAVORITE_ACTIONS from '@modules/favorites/store/actions/favorites.actions';
-import { selectFavoritesAll } from '@modules/favorites/store/selectors/favorites.selectors';
+import { selectFavoritesAll, selectFavoritesCount } from '@modules/favorites/store/selectors/favorites.selectors';
 import { FavoriteModel } from '@models/favorite.model';
 import { FavoriteService } from '@services/favorite/favorite.service';
 import { LoggerService } from '@services/logger/logger.service';
@@ -17,9 +17,17 @@ import { LoggerService } from '@services/logger/logger.service';
 })
 export class HomePage implements OnInit, OnDestroy {
 
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+
   private favoritesSubscription: Subscription;
   public favorites: FavoriteModel[];
   public favoritesAll: FavoriteModel[];
+  public favoritesTotal: number = 0;
+  public infiniteScrollingConfig: { [key: string]: number } = {
+    start: 0,
+    end: 10,
+    increment: 10
+  }
 
   constructor(
     private alertController: AlertController,
@@ -30,20 +38,51 @@ export class HomePage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(FAVORITE_ACTIONS.loadFavorites());
+    this.store
+        .pipe(select(selectFavoritesCount))
+        .subscribe(favorites => this.favoritesTotal = favorites);
+
     this.favoritesSubscription = this.store
-                                     .pipe(select(selectFavoritesAll))
+                                     .pipe(
+                                       select(selectFavoritesAll, 
+                                        { 
+                                          start: this.infiniteScrollingConfig.start, 
+                                          end: this.infiniteScrollingConfig.end 
+                                        })
+                                      )
                                      .subscribe((favorites: FavoriteModel[]) => {
                                        this.favorites = favorites;
                                        this.favoritesAll = favorites;
                                      });
   }
 
-  async favoriteDelete(event): Promise<void> {
-    const { id, title } = event.favorite;
-    await this.favoriteService.delete(id);
-    await this.loggerService.register(`has removed the favorite: ${ title }.`);
-    await this.deleteAlert('Finished!', `The favorite ${ title } has been removed.`);
+  /* =========================================================================
+     +++++ Infinite Scrolling +++++
+     ========================================================================= */
+
+  loadData(event: any): void {
+    this.infiniteScrollingConfig.start += this.infiniteScrollingConfig.increment;
+    this.infiniteScrollingConfig.end += this.infiniteScrollingConfig.increment;
+
+    setTimeout(() => {
+      this.favoritesSubscription = this.store.pipe(select(selectFavoritesAll, { start: this.infiniteScrollingConfig.start, end: this.infiniteScrollingConfig.end }))
+      .subscribe((favorites: FavoriteModel[]) => {
+        this.favorites = [
+          ...this.favorites,
+          ...favorites
+        ]
+      });
+      event.target.complete();
+
+      if (this.favorites.length === this.favoritesTotal) {
+        event.target.disabled = true;
+      }
+    }, 500);
   }
+
+  /* =========================================================================
+     +++++ Other functions +++++
+     ========================================================================= */
 
   incrementCounter(event: { [key: string]: number | string | any }): void {
     const { ...favorite } = event.favorite;
@@ -62,7 +101,11 @@ export class HomePage implements OnInit, OnDestroy {
         this.favorites = this.favoritesAll;
       }
     }, 200);
-}
+  }
+
+  /* =========================================================================
+     +++++ Modals +++++
+     ========================================================================= */
 
   openModal(favorite: { [key: string]: number | string | any }): void {
     const { title } = favorite.favorite;
@@ -108,6 +151,13 @@ export class HomePage implements OnInit, OnDestroy {
     });
 
     await alertComponent.present();
+  }
+
+  async favoriteDelete(event): Promise<void> {
+    const { id, title } = event.favorite;
+    await this.favoriteService.delete(id);
+    await this.loggerService.register(`has removed the favorite: ${ title }.`);
+    await this.deleteAlert('Finished!', `The favorite ${ title } has been removed.`);
   }
 
   ngOnDestroy() {

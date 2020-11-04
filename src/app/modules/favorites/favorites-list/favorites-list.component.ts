@@ -27,8 +27,8 @@ export class FavoritesListComponent implements OnInit {
   }
 
   incrementCounter(favorite): void {
-    favorite.visits = favorite.visits + 1;
-    this.OnIncrementCounterFavorite.emit({ favorite });
+    const favoriteIncrement = { ...favorite, visits: favorite.visits + 1 };
+    this.OnIncrementCounterFavorite.emit({ favorite: favoriteIncrement });
   }
 
   trackByFn(index: number, item: any): string | number {

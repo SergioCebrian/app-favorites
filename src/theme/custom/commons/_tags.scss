@@ -27,3 +27,13 @@ ion-title {
   font-weight: 600;
   color: var(--ion-color-primary-contrast);
 }
+
+app-home {
+  ion-back-button {
+    display: none;
+  }
+}
+
+ion-infinite-scroll {
+  --color: var(--ion-color-orange);
+}

@@ -8,4 +8,8 @@ app-login {
 
 .has-bgimage {
     --background: url('/assets/bg.jpg') center / cover no-repeat;
+
+    ion-toolbar {
+        margin-bottom: 3rem;
+    }
 }

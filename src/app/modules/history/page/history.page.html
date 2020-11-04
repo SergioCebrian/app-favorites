@@ -4,11 +4,19 @@
   <section class="container-fluid">
     <app-segment [allTabs]="tabsList" [defaultTabActive]="defaultTabActive" (OnCurrentTabActive)="getCurrentTabActive($event)"></app-segment>
     <ion-grid class="o-grid  u-nospace">
+      <ion-row *ngIf="(defaultTabActive === 'visits') && favorites.length > 0">
+        <ion-col size="12" class="ion-text-start">
+          <app-counter [counter]="favoritesTotal" [text]="{ plural:'favorites', single: 'favorite' }"></app-counter>
+        </ion-col>
+      </ion-row>
       <ion-row>
         <ion-col class="u-nospace">
           <app-history-list [allFavorites]="favorites" 
                             (OnIncrementCounterFavorite)="incrementCounter($event)" 
                             *ngIf="(defaultTabActive === 'visits')"></app-history-list>
+          <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" *ngIf="(defaultTabActive === 'visits')">
+            <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
+          </ion-infinite-scroll>
           <app-logs-list [allLogs]="logs" *ngIf="(defaultTabActive === 'logs')"></app-logs-list>
         </ion-col>
       </ion-row>

@@ -8,7 +8,9 @@ import { selectCategoriesCount } from '@modules/categories/store/selectors/categ
 import { 
   selectFavoritesCount, 
   selectFavoritesHistory, 
-  selectFavoritesLikes } from '@modules/favorites/store/selectors/favorites.selectors';
+  selectFavoritesHistoryCount, 
+  selectFavoritesLikes, 
+  selectFavoritesLikesCount} from '@modules/favorites/store/selectors/favorites.selectors';
 import { HttpService } from '@http/http.service';
 
 @Component({
@@ -37,11 +39,11 @@ export class TabsComponent implements OnInit {
     this.store.pipe(select(selectFavoritesCount))
               .subscribe(favorites => this.totalFavorites = favorites);
 
-    this.store.pipe(select(selectFavoritesHistory, { min: 10 }))
-              .subscribe(favorites => this.totalFavoritesHistory = favorites.length);
+    this.store.pipe(select(selectFavoritesHistoryCount, { min: 1 }))
+              .subscribe(favorites => this.totalFavoritesHistory = favorites);
               
-    this.store.pipe(select(selectFavoritesLikes))
-              .subscribe(favorites => this.totalFavoritesLikes = favorites.length);
+    this.store.pipe(select(selectFavoritesLikesCount))
+              .subscribe(favorites => this.totalFavoritesLikes = favorites);
     
     this.store.dispatch(CATEGORY_ACTIONS.loadCategories());
     this.store.pipe(select(selectCategoriesCount))

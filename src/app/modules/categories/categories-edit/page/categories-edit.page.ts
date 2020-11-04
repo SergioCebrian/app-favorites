@@ -1,13 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '@shared/store/state/app.state';
+import { selectCategory } from '@modules/categories/store/selectors/categories.selectors';
 import * as CATEGORY_ACTIONS from '@modules/categories/store/actions/categories.actions';
 import { CategoryModel } from '@models/category.model';
 import { CategoryService } from '@services/category/category.service';
-import { HttpService } from '@http/http.service';
 import { LoggerService } from '@services/logger/logger.service';
 
 @Component({
@@ -18,24 +19,24 @@ import { LoggerService } from '@services/logger/logger.service';
 export class CategoriesEditPage implements OnInit, OnDestroy {
 
   private categorySubscription: Subscription;
-  public category: CategoryModel[];
-  public currentID: string;
+  public category: CategoryModel;
+  public currentCategory: string;
 
   constructor(
     private toastController: ToastController,
+    private router: ActivatedRoute,
     private categoryService: CategoryService,
-    private httpService: HttpService,
     private loggerService: LoggerService,
     private store: Store<AppState>
   ) { }
 
   ngOnInit() {
-    this.currentID = this.httpService.getQueryParam('id');
+    this.currentCategory = this.router.snapshot.params.slug;
 
-    // TODO: Migrar a Redux
-    this.categorySubscription = this.categoryService
-                                    .getOne(this.currentID)
-                                    .subscribe(category => this.category = category.payload.data());
+    this.store.dispatch(CATEGORY_ACTIONS.loadCategories())
+    this.categorySubscription = this.store
+                                    .pipe(select(selectCategory, { slug: this.currentCategory }))
+                                    .subscribe((category: CategoryModel) => this.category = category);
   }
 
   async editCategory(event) {

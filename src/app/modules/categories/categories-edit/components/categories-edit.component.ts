@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, OnChanges, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -13,9 +13,6 @@ export class CategoriesEditComponent implements OnInit {
   @Input()
   category: { [key: string]: string };
 
-  @Input()
-  categoryID: string;
-
   @Output()
   OnEditCategory: EventEmitter<any> = new EventEmitter<any>();
 
@@ -28,16 +25,9 @@ export class CategoriesEditComponent implements OnInit {
 
   ngOnInit() {
     this.editCategoryForm = this.fb.group({
-      id: ['', Validators.required],
-      title: ['', Validators.required]
+      id: [this.category.id, Validators.required],
+      title: [this.category.title, Validators.required]
     });
-  }
-
-  ngOnChanges() {
-      if (this.category !== undefined) {
-        this.editCategoryForm.controls['id'].setValue(this.categoryID);
-        this.editCategoryForm.controls['title'].setValue(this.category.title);
-      }
   }
 
   updateCategory() {

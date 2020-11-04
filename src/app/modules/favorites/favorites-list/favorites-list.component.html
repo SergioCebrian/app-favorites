@@ -1,7 +1,7 @@
 <ion-list class="c-list  c-list--columns  c-list--min-height">
   <ion-item-sliding *ngFor="let favorite of allFavorites; trackBy: trackByFn">
     <ion-item-options side="start">
-      <ion-item-option color="secondary" [title]="'Edit ' + favorite.title" [routerLink]="'/favorites/edit/' + favorite.slug" [queryParams]="{ id: favorite.id }">
+      <ion-item-option color="secondary" [title]="'Edit ' + favorite.title" [routerLink]="'/favorites/edit/' + favorite.slug">
         <ion-icon name="create-outline"></ion-icon>
       </ion-item-option>
     </ion-item-options>
