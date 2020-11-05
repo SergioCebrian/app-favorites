@@ -62,12 +62,7 @@ export class HistoryPage implements OnInit, OnDestroy {
     this.store.dispatch(LOGGER_ACTIONS.loadLogger());
     this.logsSubscription = this.store
                                 .pipe(select(selectLoggerAll))
-                                .subscribe((logs: any) => {
-                                  this.logs = logs;
-                                  console.log('logs', logs)
-                                });
-    // TODO: Migrar a Redux  
-    // this.loggerService.getAll().subscribe(resp => console.log(resp));       
+                                .subscribe((logs: any) => this.logs = logs);     
   }
 
   /* =========================================================================

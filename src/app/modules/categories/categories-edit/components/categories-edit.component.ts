@@ -26,7 +26,9 @@ export class CategoriesEditComponent implements OnInit {
   ngOnInit() {
     this.editCategoryForm = this.fb.group({
       id: [this.category.id, Validators.required],
-      title: [this.category.title, Validators.required]
+      title: [this.category.title, Validators.required],
+      description: [this.category.description, Validators.required],
+      type: [this.category.type, Validators.required]
     });
   }
 
@@ -38,6 +40,8 @@ export class CategoriesEditComponent implements OnInit {
       const updateCategory = { 
         id: this.editCategoryForm.value.id,
         title: this.editCategoryForm.value.title,
+        description: this.editCategoryForm.value.description,
+        type: this.editCategoryForm.value.type
       }
       this.OnEditCategory.emit({ category: updateCategory });
       setTimeout(() => this.isLoading = false, 3000);

@@ -4,7 +4,6 @@ import * as favorites from '@modules/favorites/store/reducers/favorites.reducers
 import * as logger from '@modules/logger/store/reducers/logger.reducers';
 import * as loading from './loading.reducers';
 import { AppState } from '../state/app.state';
-import { loggerReducer } from '@modules/logger/store/reducers/logger.reducers';
 
 export const appReducers: ActionReducerMap<AppState> = {
   loading: loading.loadingReducer,

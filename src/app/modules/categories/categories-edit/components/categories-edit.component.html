@@ -8,6 +8,20 @@
       </ion-col>
     </ion-row>
     <ion-row>
+      <ion-col class="c-form-group" [ngClass]="editCategoryForm.get('description').valid ? 'is-valid' : ''">
+        <ion-label for="description" position="fixed">Description: <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input id="description" name="description" formControlName="description"></ion-input>
+        <ion-icon name="checkmark-circle-outline" *ngIf="editCategoryForm.get('description').valid"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="c-form-group" [ngClass]="editCategoryForm.get('type').valid ? 'is-valid' : ''">
+        <ion-label for="type" position="fixed">Type: <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input id="type" name="type" formControlName="type"></ion-input>
+        <ion-icon name="checkmark-circle-outline" *ngIf="editCategoryForm.get('type').valid"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row>
       <ion-col>
         <ion-input type="hidden" id="id" formControlName="id" readonly></ion-input>
         <ion-button expand="block" [disabled]="editCategoryForm.invalid" title="Update category" 

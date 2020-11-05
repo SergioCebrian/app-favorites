@@ -23,14 +23,6 @@ ion-item-option {
     }
 }
 
-.has-bgimage {
-    ion-icon {
-        &:not([name^="checkmark"]) {
-            color: white !important;
-        }
-    }
-}
-
 [name^="add-circle"],
 [name^="chevron-back"],
 [name^="ellipsis"] {

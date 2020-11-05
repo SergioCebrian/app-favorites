@@ -27,6 +27,12 @@ ion-img {
     width: 25%;
 }
 
+ion-icon {
+    &:not([name^="checkmark"]) {
+        color: white !important;
+    }
+}
+
 ion-progress-bar {
     position: fixed;
     left: 0;
@@ -35,6 +41,10 @@ ion-progress-bar {
 
 ion-title {
     text-align: center;
+}
+
+.c-form {
+    margin-top: 25px;
 }
 
 @media only screen and (min-width: 768px) {

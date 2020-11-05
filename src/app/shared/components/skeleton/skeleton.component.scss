@@ -1,0 +1,9 @@
+.c-list {
+    &--skeleton {
+        background-color: transparent;
+    
+        ion-item {
+          --background: transparent;
+        }
+    }
+}

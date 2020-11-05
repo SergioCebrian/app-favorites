@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 
 import { AppState } from '@store/state/app.state';
 import * as FAVORITE_ACTIONS from '@modules/favorites/store/actions/favorites.actions';
-import { selectFavoritesAll, selectFavoritesCount } from '@modules/favorites/store/selectors/favorites.selectors';
+import { selectFavoritesAll, selectFavoritesCount, selectFavoritesSearch } from '@modules/favorites/store/selectors/favorites.selectors';
 import { FavoriteModel } from '@models/favorite.model';
 import { FavoriteService } from '@services/favorite/favorite.service';
 import { LoggerService } from '@services/logger/logger.service';
@@ -48,8 +48,7 @@ export class HomePage implements OnInit, OnDestroy {
                                         { 
                                           start: this.infiniteScrollingConfig.start, 
                                           end: this.infiniteScrollingConfig.end 
-                                        })
-                                      )
+                                        }))
                                      .subscribe((favorites: FavoriteModel[]) => {
                                        this.favorites = favorites;
                                        this.favoritesAll = favorites;
@@ -93,6 +92,9 @@ export class HomePage implements OnInit, OnDestroy {
   search(event: string | any): void {
     const { term } = event;
     setTimeout(() => {
+      /*this.favoritesSubscription = this.store
+                                       .pipe(select(selectFavoritesSearch, { min: 3, term }))
+                                       .subscribe((favorites: any) => this.favorites = favorites)*/
       if (term.length >= 3) {
         this.favorites = this.favorites.filter(favorite => {
           return favorite.title.toLowerCase().includes(term.toLowerCase());

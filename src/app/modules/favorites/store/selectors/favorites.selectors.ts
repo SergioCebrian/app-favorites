@@ -14,14 +14,20 @@ const selectFavoritesAll = createSelector(
     (state: FavoritesState, { start, end }) => state.favorites.slice(start, end)
 );
 
-const selectFavoritesByCategory = createSelector(
-    selectFavorites,
-    (state: FavoritesState, { category }) => state.favorites.filter(favorite => favorite.category.slug === category)
-);
-
 const selectFavoritesCount = createSelector(
     selectFavorites,
     (state: FavoritesState) => state.favorites.length
+);
+
+const selectFavoritesByCategory = createSelector(
+    selectFavorites,
+    (state: FavoritesState, { category, start, end }) => state.favorites.filter(favorite => favorite.category.slug === category)
+                                                                        .slice(start, end)
+);
+
+const selectFavoritesByCategoryCount = createSelector(
+    selectFavorites,
+    (state: FavoritesState, { category }) => state.favorites.filter(favorite => favorite.category.slug === category).length
 );
 
 const selectFavoritesHistory = createSelector(
@@ -47,14 +53,26 @@ const selectFavoritesLikesCount = createSelector(
     (state: FavoritesState) => state.favorites.filter(like => like.important === true).length
 );
 
+const selectFavoritesSearch = createSelector(
+    selectFavorites,
+    (state: FavoritesState, { min, term }) => {
+        if (term.length >= min) {
+          state.favorites
+               .filter(favorite => favorite.title.toLowerCase().includes( term.toLowerCase() ));
+        }
+    }
+);
+
 export {
     selectFavorite,
     selectFavorites,
     selectFavoritesAll,
-    selectFavoritesByCategory,
     selectFavoritesCount,
+    selectFavoritesByCategory,
+    selectFavoritesByCategoryCount,
     selectFavoritesHistory,
     selectFavoritesHistoryCount,
     selectFavoritesLikes,
-    selectFavoritesLikesCount
+    selectFavoritesLikesCount,
+    selectFavoritesSearch
 }

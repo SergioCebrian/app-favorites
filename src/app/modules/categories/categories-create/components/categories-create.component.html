@@ -8,6 +8,20 @@
       </ion-col>
     </ion-row>
     <ion-row>
+      <ion-col class="c-form-group" [ngClass]="createCategoryForm.get('description').valid ? 'is-valid' : ''">
+        <ion-label for="description" position="fixed">Description: <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input id="description" name="description" formControlName="description"></ion-input>
+        <ion-icon name="checkmark-circle-outline" *ngIf="createCategoryForm.get('description').valid"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="c-form-group" [ngClass]="createCategoryForm.get('type').valid ? 'is-valid' : ''">
+        <ion-label for="type" position="fixed">Type: <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input id="type" name="type" formControlName="type"></ion-input>
+        <ion-icon name="checkmark-circle-outline" *ngIf="createCategoryForm.get('type').valid"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row>
       <ion-col>
         <ion-button expand="block" [disabled]="createCategoryForm.invalid" title="New category" 
                     type="submit" class="ion-no-margin" *ngIf="isLoading === false">Create</ion-button>

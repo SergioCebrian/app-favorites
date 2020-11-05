@@ -1,18 +1,24 @@
-<ion-list class="c-list  c-list--columns">
+<ion-list class="c-list  c-list--columns  c-list--cards">
   <ion-item-sliding [id]="category.id" *ngFor="let category of allCategories; trackBy: trackByFn">
-    <!--<ion-item-options side="start">
+    <ion-item-options side="start">
       <ion-item-option color="secondary" [title]="'Edit ' + category.title" [routerLink]="'/categories/edit/' + category.slug">
         <ion-icon name="create-outline"></ion-icon>
       </ion-item-option>
-    </ion-item-options>-->
+    </ion-item-options>
     <ion-item lines="none" [title]="category.title" [routerLink]="category.slug">
-      <ion-avatar slot="start" [title]="category.slug">
-        <img [src]="'assets/logos/' + category.slug + '.jpg'" [alt]="category.slug" appImageFallback>
-      </ion-avatar>
-      <ion-label>
-        <h2>{{ category.title }}</h2>
-      </ion-label>
-      <ion-icon name="chevron-forward-outline"></ion-icon>
+      <ion-card class="ion-no-margin">
+        <img [src]="'assets/images/categories/' + category.slug + '.jpg'" [alt]="category.title" appImageFallback>
+        <ion-card-header>
+          <ion-card-subtitle>{{ category.type }}</ion-card-subtitle>
+          <ion-card-title> {{ category.title }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-avatar slot="start">
+            <img [src]="'assets/logos/' + category.slug + '.jpg'" [alt]="category.title" appImageFallback>
+          </ion-avatar>
+          {{ category.description }}
+        </ion-card-content>
+      </ion-card>
     </ion-item>
     <ion-item-options side="end">
       <ion-item-option color="danger" [title]="'Delete ' + category.title" (click)="categoryDelete(category)">
@@ -22,4 +28,5 @@
   </ion-item-sliding>
 </ion-list>
 
-<app-skeleton *ngIf="allCategories?.length === 0"></app-skeleton>
+<span class="c-message  c-message--error" *ngIf="!allCategories && allCategories.length === 0">No categories found.</span>
+<app-skeleton *ngIf="allCategories.length === 0"></app-skeleton>

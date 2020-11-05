@@ -28,6 +28,8 @@ export class CategoriesCreateComponent implements OnInit, OnDestroy {
   ) { 
     this.createCategoryForm = this.fb.group({
       title: ['', [ Validators.minLength(3), Validators.required ]],
+      description: ['', [ Validators.minLength(3), Validators.required ]],
+      type: ['', [ Validators.minLength(3), Validators.required ]]
     });
   }
 

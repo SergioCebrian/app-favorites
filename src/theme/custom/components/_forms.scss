@@ -53,14 +53,13 @@ ion-input[type="hidden"] {
     }
 
     &.c-form--light {
-
         ion-input {
             border-bottom-color: var(--ion-color-primary-contrast);
             color: var(--ion-color-primary-contrast);
             --placeholder-color: #F4F5F8 !important;
             --padding-start: 1.7rem !important;
+            --padding-end: 2rem !important;
         }
-
     }
 
     &:not(.c-form--light) {

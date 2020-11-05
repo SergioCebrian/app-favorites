@@ -15,5 +15,5 @@
   </ion-item>
 </ion-list>
 
-<!--<span class="c-message  c-message--error" *ngIf="currentTabActive === 'visits' && allFavorites?.length === 0">History empty.</span>-->
-<app-skeleton *ngIf="allFavorites?.length === 0"></app-skeleton>
+<span class="c-message  c-message--error" *ngIf="!allFavorites && allFavorites.length === 0">History empty.</span>
+<app-skeleton *ngIf="allFavorites.length === 0"></app-skeleton>

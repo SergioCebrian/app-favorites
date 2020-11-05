@@ -7,7 +7,7 @@ import * as ACTIONS from '../actions/logger.actions';
 import { LoggerService } from '@services/logger/logger.service';
 
 @Injectable()
-export class CategoriesEffects {
+export class LoggerEffects {
 
     loadLogger$ = createEffect(
         () => this.actions$.pipe(

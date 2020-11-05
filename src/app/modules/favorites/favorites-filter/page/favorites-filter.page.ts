@@ -1,12 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, IonInfiniteScroll } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
 import { select, Store } from '@ngrx/store';
 import { AppState } from '@shared/store/state/app.state';
 import * as FAVORITE_ACTIONS from '@modules/favorites/store/actions/favorites.actions';
-import { selectFavoritesByCategory } from '@modules/favorites/store/selectors/favorites.selectors';
+import { selectFavoritesByCategory, selectFavoritesByCategoryCount } from '@modules/favorites/store/selectors/favorites.selectors';
 import { FavoriteModel } from '@models/favorite.model';
 import { FavoriteService } from '@services/favorite/favorite.service';
 import { LoggerService } from '@services/logger/logger.service';
@@ -18,9 +18,17 @@ import { LoggerService } from '@services/logger/logger.service';
 })
 export class FavoritesFilterPage implements OnInit, OnDestroy {
 
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+
   private favoritesSubscription: Subscription;
   public favorites: FavoriteModel[];
+  public favoritesTotal: number = 0;
   public currentCategory: string;
+  public infiniteScrollingConfig: { [key: string]: number } = {
+    start: 0,
+    end: 10,
+    increment: 10
+  }
 
   constructor(
     private alertController: AlertController,
@@ -34,11 +42,52 @@ export class FavoritesFilterPage implements OnInit, OnDestroy {
     this.currentCategory = this.router.snapshot.params.category;
 
     this.store.dispatch(FAVORITE_ACTIONS.loadFavorites());
+    this.store
+        .pipe(select(selectFavoritesByCategoryCount, { category: this.currentCategory }))
+        .subscribe(favorites => this.favoritesTotal = favorites);
     this.favoritesSubscription = this.store
-                                     .pipe(select(selectFavoritesByCategory, { category: this.currentCategory }))
+                                     .pipe(select(selectFavoritesByCategory, 
+                                      { 
+                                        category: this.currentCategory,
+                                        start: this.infiniteScrollingConfig.start, 
+                                        end: this.infiniteScrollingConfig.end 
+                                      }))
                                      .subscribe((favorites: FavoriteModel[]) => this.favorites = favorites);
 
   }
+
+  /* =========================================================================
+     +++++ Infinite Scrolling +++++
+     ========================================================================= */
+
+     loadData(event: any): void {
+      this.infiniteScrollingConfig.start += this.infiniteScrollingConfig.increment;
+      this.infiniteScrollingConfig.end += this.infiniteScrollingConfig.increment;
+  
+      setTimeout(() => {
+        this.favoritesSubscription = this.store.pipe(select(selectFavoritesByCategory, 
+                                                      { 
+                                                        category: this.currentCategory,
+                                                        start: this.infiniteScrollingConfig.start, 
+                                                        end: this.infiniteScrollingConfig.end 
+                                                      }))
+        .subscribe((favorites: FavoriteModel[]) => {
+          this.favorites = [
+            ...this.favorites,
+            ...favorites
+          ]
+        });
+        event.target.complete();
+  
+        if (this.favorites.length === this.favoritesTotal) {
+          event.target.disabled = true;
+        }
+      }, 500);
+    }
+  
+  /* =========================================================================
+     +++++ Other functions +++++
+     ========================================================================= */
 
   favoriteDelete(event) {
     const { id, title } = event.favorite;

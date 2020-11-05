@@ -3,14 +3,14 @@
 <ion-content [fullscreen]="true">
   <section class="container-fluid">
     <app-segment [allTabs]="tabsList" [defaultTabActive]="defaultTabActive" (OnCurrentTabActive)="getCurrentTabActive($event)"></app-segment>
-    <ion-grid class="o-grid  u-nospace">
+    <ion-grid class="o-grid">
       <ion-row *ngIf="(defaultTabActive === 'visits') && favorites.length > 0">
         <ion-col size="12" class="ion-text-start">
           <app-counter [counter]="favoritesTotal" [text]="{ plural:'favorites', single: 'favorite' }"></app-counter>
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col class="u-nospace">
+        <ion-col>
           <app-history-list [allFavorites]="favorites" 
                             (OnIncrementCounterFavorite)="incrementCounter($event)" 
                             *ngIf="(defaultTabActive === 'visits')"></app-history-list>

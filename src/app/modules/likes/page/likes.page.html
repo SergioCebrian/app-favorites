@@ -2,7 +2,7 @@
 
 <ion-content [fullscreen]="true">
   <section class="container-fluid">
-    <ion-grid class="o-grid  u-nospace">
+    <ion-grid class="o-grid">
       <ion-row>
         <ion-col size="12">
           <app-counter [counter]="favoritesTotal" 
@@ -11,7 +11,7 @@
         </ion-col>
       </ion-row>
       <ion-row *ngIf="favorites">
-        <ion-col class="u-nospace">
+        <ion-col>
           <app-likes-list [allFavorites]="favorites" (OnDeleteLike)="deleteLike($event)"></app-likes-list>
           <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
             <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>

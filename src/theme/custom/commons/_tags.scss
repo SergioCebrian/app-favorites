@@ -37,3 +37,7 @@ app-home {
 ion-infinite-scroll {
   --color: var(--ion-color-orange);
 }
+
+ ion-infinite-scroll-content {
+  justify-content: flex-start;
+}
