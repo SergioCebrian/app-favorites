@@ -32,7 +32,10 @@ export class FavoritesCreatePage implements OnInit, OnDestroy {
   ngOnInit() {
     this.store.dispatch(CATEGORY_ACTIONS.loadCategories());
     this.categoriesSubscription = this.store.pipe(select(selectCategoriesAll))
-                                            .subscribe(categories => this.categories = categories);
+                                            .subscribe((categories: CategoryModel[]) => {
+                                              this.categories = categories
+                                              console.log(this.categories)
+                                            });
   }
 
   saveFavorite(event: any): void {

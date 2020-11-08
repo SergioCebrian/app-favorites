@@ -1,4 +1,4 @@
-<app-header [title]="'Favorites with ' + currentCategory"></app-header>
+<app-header-transparent [customClass]="'o-header--transparent'" [data]="{ category: currentCategory }" [title]="currentCategory"></app-header-transparent>
 
 <ion-content [fullscreen]="true">
   <section class="container-fluid">

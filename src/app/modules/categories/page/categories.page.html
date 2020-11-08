@@ -5,12 +5,15 @@
     <ion-grid class="o-grid">
       <ion-row>
         <ion-col size="12" class="ion-text-start">
-          <app-counter [counter]="categories.length" [text]="{ plural:'categories', single: 'category' }"></app-counter>
+          <app-counter [counter]="categoriesTotal" [text]="{ plural:'categories', single: 'category' }"></app-counter>
         </ion-col>   
       </ion-row>
       <ion-row>
         <ion-col>
           <app-categories-list [allCategories]="categories" (OnDeleteCategory)="openModal($event)" *ngIf="categories && categories.length > 0"></app-categories-list>
+          <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+            <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
+          </ion-infinite-scroll>
         </ion-col>
       </ion-row>
     </ion-grid>

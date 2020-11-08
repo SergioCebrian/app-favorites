@@ -2,6 +2,16 @@
   +++ Utilities +++
 /*==========================================================================*/
 
+.u-bg-opacity {
+  position: absolute;
+  z-index: 2;
+  bottom: 13px;
+  display: block;
+  height: 23px;
+  width: 100%;
+  background: linear-gradient(to right, transparent 0%, var(--ion-color-primary-contrast) 70%);
+}
+
 .u-nospace {
     padding: 0;
 }

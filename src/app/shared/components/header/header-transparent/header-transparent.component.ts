@@ -4,15 +4,18 @@ import { Router } from '@angular/router';
 import { AuthService } from '@auth/auth.service';
 
 @Component({
-  selector: 'app-header',
+  selector: 'app-header-transparent',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+  templateUrl: './header-transparent.component.html',
+  styleUrls: ['./header-transparent.component.scss'],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderTransparentComponent implements OnInit {
 
   @Input()
   customClass?: string;
+
+  @Input()
+  data?: any;
 
   @Input()
   title: string;

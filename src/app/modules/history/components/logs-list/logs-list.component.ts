@@ -21,6 +21,10 @@ export class LogsListComponent implements OnInit {
     }, Object.create(null));
   }
 
+  expandItem(log): void {
+    log.expanded = !log.expanded;
+  }
+
   trackByFn(index: number, item: any): string | number {
     return item.id;
   }

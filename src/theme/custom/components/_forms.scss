@@ -54,11 +54,14 @@ ion-input[type="hidden"] {
 
     &.c-form--light {
         ion-input {
-            border-bottom-color: var(--ion-color-primary-contrast);
+            background: rgba(0,0,0,.2);
+            height: 50px;
+            border-bottom-color: transparent; // var(--ion-color-primary-contrast)
             color: var(--ion-color-primary-contrast);
             --placeholder-color: #F4F5F8 !important;
-            --padding-start: 1.7rem !important;
+            --padding-start: 3rem !important;
             --padding-end: 2rem !important;
+            --padding-top: 22px;
         }
     }
 
@@ -132,14 +135,15 @@ ion-input[type="hidden"] {
 
     ion-icon {
         position: absolute;
-        top: 4px;
+        top: 18px;
+        font-size: 1.25rem;
         
         &[name^="checkmark"] {
-            right: 6px;
+            right: 18px;
         }
 
         &:not([name^="checkmark"]) {
-            left: 0;
+            left: 22px;
         }
     }
 

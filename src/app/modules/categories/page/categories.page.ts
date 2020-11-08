@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AlertController, IonInfiniteScroll } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 
 import { AppState } from '@store/state/app.state';
 import * as CATEGORY_ACTIONS from '@modules/categories/store/actions/categories.actions';
-import { selectCategoriesAll } from '../store/selectors/categories.selectors';
+import { selectCategoriesCount, selectCategoriesRange } from '../store/selectors/categories.selectors';
 import { CategoryModel } from '@models/category.model';
 import { CategoryService } from '@services/category/category.service';
 import { LoggerService } from '@services/logger/logger.service';
@@ -17,8 +17,16 @@ import { LoggerService } from '@services/logger/logger.service';
 })
 export class CategoriesPage implements OnInit, OnDestroy {
 
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+
   private categoriesSubscription: Subscription;
   public categories: CategoryModel[];
+  public categoriesTotal: number = 0;
+  public infiniteScrollingConfig: { [key: string]: number } = {
+    start: 0,
+    end: 4,
+    increment: 4
+  }
 
   constructor(
     private alertController: AlertController,
@@ -29,10 +37,46 @@ export class CategoriesPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(CATEGORY_ACTIONS.loadCategories());
+    this.store
+        .pipe(select(selectCategoriesCount))
+        .subscribe(favorites => this.categoriesTotal = favorites);
+
     this.categoriesSubscription = this.store
-                                      .pipe(select(selectCategoriesAll))
+                                      .pipe(select(selectCategoriesRange, 
+                                        { 
+                                          start: this.infiniteScrollingConfig.start, 
+                                          end: this.infiniteScrollingConfig.end 
+                                        }))
                                       .subscribe((categories: CategoryModel[]) => this.categories = categories);
   }
+
+ /* =========================================================================
+     +++++ Infinite Scrolling +++++
+     ========================================================================= */
+
+     loadData(event: any): void {
+      this.infiniteScrollingConfig.start += this.infiniteScrollingConfig.increment;
+      this.infiniteScrollingConfig.end += this.infiniteScrollingConfig.increment;
+  
+      setTimeout(() => {
+        this.categoriesSubscription = this.store.pipe(select(selectCategoriesRange, { start: this.infiniteScrollingConfig.start, end: this.infiniteScrollingConfig.end }))
+        .subscribe((categories: any) => {
+          this.categories = [
+            ...this.categories,
+            ...categories
+          ]
+        });
+        event.target.complete();
+  
+        if (this.categories.length === this.categoriesTotal) {
+          event.target.disabled = true;
+        }
+      }, 500);
+    }
+  
+    /* =========================================================================
+       +++++ Other functions +++++
+       ========================================================================= */
 
   categoryDelete(event: any): void {
     const { id, title } = event.category;

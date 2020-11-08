@@ -14,6 +14,11 @@ const selectCategoriesAll = createSelector(
     (state: CategoriesState) => state.categories
 );
 
+const selectCategoriesRange = createSelector(
+    selectCategories,
+    (state: CategoriesState, { start, end }) => state.categories.slice(start, end)
+);
+
 const selectCategoriesCount = createSelector(
     selectCategories,
     (state: CategoriesState) => state.categories.length
@@ -23,5 +28,6 @@ export {
     selectCategory,
     selectCategories,
     selectCategoriesAll,
-    selectCategoriesCount
+    selectCategoriesCount,
+    selectCategoriesRange
 }

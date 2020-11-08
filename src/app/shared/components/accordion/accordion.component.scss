@@ -1,0 +1,27 @@
+.expand-wrapper {
+    transition: max-height 0.4s ease-in-out;
+    overflow: hidden;
+    height: auto;
+
+    &:not(.collapsed) {
+        display: inherit;
+        width: 100%;
+        overflow-y: auto;
+    }
+}
+  
+.collapsed {
+    display: none;
+    max-height: 0 !important;
+}
+
+@media only screen and (min-width: 1025px) {
+    .expand-wrapper {
+        &:not(.collapsed) {
+            position: absolute;
+            z-index: 2;
+            left: 0;
+            top: 42px;
+        }
+    }
+}
