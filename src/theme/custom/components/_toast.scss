@@ -3,12 +3,13 @@
 /*==========================================================================*/
 
 ion-toast {
+  --color: var(--ion-color-primary-contrast);
 
-    &.is-error {
-      --background: var(--ion-color-danger-tint);
-    }
+  &.is-error {
+    --background: var(--ion-color-danger-tint);
+  }
 
-    &.is-success {
-      --background: var(--ion-color-success-tint);
-    }
+  &.is-success {
+    --background: var(--ion-color-success-tint);
+  }
 }

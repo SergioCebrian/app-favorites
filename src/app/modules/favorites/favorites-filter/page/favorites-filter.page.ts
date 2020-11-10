@@ -1,14 +1,16 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController, IonInfiniteScroll } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-
 import { select, Store } from '@ngrx/store';
+
 import { AppState } from '@shared/store/state/app.state';
 import * as FAVORITE_ACTIONS from '@modules/favorites/store/actions/favorites.actions';
 import { selectFavoritesByCategory, selectFavoritesByCategoryCount } from '@modules/favorites/store/selectors/favorites.selectors';
 import { FavoriteModel } from '@models/favorite.model';
 import { FavoriteService } from '@services/favorite/favorite.service';
+import { AlertService } from '@services/alert/alert.service';
+import { InfiniteScrollService } from '@services/infinite-scroll/infinite-scroll.service';
 import { LoggerService } from '@services/logger/logger.service';
 
 @Component({
@@ -18,22 +20,17 @@ import { LoggerService } from '@services/logger/logger.service';
 })
 export class FavoritesFilterPage implements OnInit, OnDestroy {
 
-  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
-
   private favoritesSubscription: Subscription;
   public favorites: FavoriteModel[];
   public favoritesTotal: number = 0;
   public currentCategory: string;
-  public infiniteScrollingConfig: { [key: string]: number } = {
-    start: 0,
-    end: 10,
-    increment: 10
-  }
 
   constructor(
-    private alertController: AlertController,
+    private toastController: ToastController,
     private router: ActivatedRoute,
+    private alertService: AlertService,
     private favoriteService: FavoriteService,
+    private infiniteScrollService: InfiniteScrollService,
     private loggerService: LoggerService,
     private store: Store<AppState>
   ) { }
@@ -49,8 +46,7 @@ export class FavoritesFilterPage implements OnInit, OnDestroy {
                                      .pipe(select(selectFavoritesByCategory, 
                                       { 
                                         category: this.currentCategory,
-                                        start: this.infiniteScrollingConfig.start, 
-                                        end: this.infiniteScrollingConfig.end 
+                                        ...this.infiniteScrollService.infiniteScrollConfig
                                       }))
                                      .subscribe((favorites: FavoriteModel[]) => this.favorites = favorites);
 
@@ -60,76 +56,58 @@ export class FavoritesFilterPage implements OnInit, OnDestroy {
      +++++ Infinite Scrolling +++++
      ========================================================================= */
 
-     loadData(event: any): void {
-      this.infiniteScrollingConfig.start += this.infiniteScrollingConfig.increment;
-      this.infiniteScrollingConfig.end += this.infiniteScrollingConfig.increment;
-  
-      setTimeout(() => {
-        this.favoritesSubscription = this.store.pipe(select(selectFavoritesByCategory, 
-                                                      { 
-                                                        category: this.currentCategory,
-                                                        start: this.infiniteScrollingConfig.start, 
-                                                        end: this.infiniteScrollingConfig.end 
-                                                      }))
-        .subscribe((favorites: FavoriteModel[]) => {
-          this.favorites = [
-            ...this.favorites,
-            ...favorites
-          ]
-        });
-        event.target.complete();
-  
-        if (this.favorites.length === this.favoritesTotal) {
-          event.target.disabled = true;
-        }
-      }, 500);
+  getData(event: any): void {
+    this.favoritesSubscription = this.store
+                                      .pipe(select(selectFavoritesByCategory, {
+                                        category: this.currentCategory,
+                                        ...this.infiniteScrollService.infiniteScrollConfig
+                                      }))
+                                      .subscribe((favorites: FavoriteModel[]) => {
+                                        this.favorites = [ ...this.favorites, ...favorites ]
+                                      });
+    event.target.complete();
+    if (this.favorites.length === this.favoritesTotal) {
+      event.target.disabled = true;
     }
+  }
+
+  loadData(event: any): void {
+    this.infiniteScrollService.incrementRangeData();
+    setTimeout(() => { 
+      this.infiniteScrollService.loadData(this.getData(event));
+      // this.infiniteScrollService.loadFinalize(event, { itemsLoad: this.favorites, itemsTotal: this.favoritesTotal });
+    }, 500);
+  }
   
   /* =========================================================================
      +++++ Other functions +++++
      ========================================================================= */
 
+  async changeLikeState(data: { [key: string]: number | string | any }): Promise<void> {
+    const { favorite } = data;
+    await this.favoriteService.edit(favorite);
+    await this.store.dispatch(FAVORITE_ACTIONS.updateFavoriteSuccess({ favorite }));
+    await this.loggerService.register(`has changed the property 'important' of favorite: ${ favorite.title }.`);
+    await this.presentToast({ title: favorite.title, like: favorite.important });
+  }
+    
+  async presentToast(data: { [key: string]: string | boolean }): Promise<void> {
+    const toast = await this.toastController.create({
+      message: `${data.title} has been ` + ((data.like) ? 'marked' : 'unmarked') + ' as a favorite.',
+      duration: 2000,
+      cssClass: 'is-success'
+    });
+    toast.present();
+  }
+
   favoriteDelete(event) {
     const { id, title } = event.favorite;
     this.favoriteService.delete(id);
     this.loggerService.register(`has removed the favorite: ${ title }.`);
-    this.deleteAlert('Finished!', `The favorite ${ title } has been removed.`);
-  }
-
-  openModal(favorite: { [key: string]: number | string | any }) {
-    const { title } = favorite.favorite;
-    this.presentAlert('¿Are you sure?', `Press the confirm button to delete the favorite:  ${ title }.`, favorite);
-  }
-
-  async presentAlert(title: string, msg: string, favorite: { [key: string]: number | string }) {
-    const alertComponent = await this.alertController.create({
-      cssClass: 'c-alert  c-alert--warning  has-before',
-      header: title,
-      message: msg,
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'is-error'
-        }, {
-          text: 'Confirm',
-          role: 'confirm',
-          cssClass: 'is-success',
-          handler: () => {
-            this.favoriteDelete(favorite);
-          }
-        }
-      ]
-    });
-
-    await alertComponent.present();
-  }
-
-  async deleteAlert(title: string, msg: string) {
-    const alertComponent = await this.alertController.create({
-      cssClass: 'c-alert  c-alert--success  has-before  has-only-button',
-      header: title,
-      message: msg,
+    this.alertService.presentAlert({
+      cssClass: 'c-alert--success  has-before  has-only-button',
+      header: 'Finished!',
+      message: `The favorite ${ title } has been removed.`,
       buttons: [
         {
           text: 'Close',
@@ -138,8 +116,30 @@ export class FavoritesFilterPage implements OnInit, OnDestroy {
         }
       ]
     });
+  }
 
-    await alertComponent.present();
+  openModal(favorite: { [key: string]: number | string | any }) {
+    const { title } = favorite.favorite;
+    this.alertService.presentAlert({
+      cssClass: 'c-alert--warning  has-before',
+      header: 'Are you sure?',
+      message: `Press the confirm button to delete the favorite:  ${ title }.`,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'is-error'
+        }, 
+        {
+          text: 'Confirm',
+          role: 'confirm',
+          cssClass: 'is-success',
+          handler: () => {
+            this.favoriteDelete(favorite);
+          }
+        } 
+      ]
+    });
   }
 
   incrementCounter(event): void {
@@ -148,6 +148,7 @@ export class FavoritesFilterPage implements OnInit, OnDestroy {
   } 
 
   ngOnDestroy() {
+    this.infiniteScrollService.resetConfig();
     this.favoritesSubscription.unsubscribe();
   }
 

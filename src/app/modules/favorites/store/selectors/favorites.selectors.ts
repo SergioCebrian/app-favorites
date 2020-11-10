@@ -55,10 +55,12 @@ const selectFavoritesLikesCount = createSelector(
 
 const selectFavoritesSearch = createSelector(
     selectFavorites,
-    (state: FavoritesState, { min, term }) => {
+    (state: FavoritesState, { min, start, end, term }) => { 
         if (term.length >= min) {
-          state.favorites
-               .filter(favorite => favorite.title.toLowerCase().includes( term.toLowerCase() ));
+            return state.favorites.filter(favorite => favorite.title.toLowerCase().includes( term.toLowerCase() ))
+                                  //.slice(start, end);
+        } else {
+            return state.favorites//.slice(start, end);
         }
     }
 );

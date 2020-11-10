@@ -1,17 +1,18 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 
 import { AppState } from '@store/state/app.state';
-import { FavoritesState } from '@modules/favorites/store/state/favorites.state';
 import * as FAVORITE_ACTIONS from '@modules/favorites/store/actions/favorites.actions';
-import { selectFavorites, selectFavoritesHistory, selectFavoritesHistoryCount } from '@modules/favorites/store/selectors/favorites.selectors';
+import { selectFavoritesHistory, selectFavoritesHistoryCount } from '@modules/favorites/store/selectors/favorites.selectors';
 import * as LOGGER_ACTIONS from '@modules/logger/store/actions/logger.actions';
 import { selectLoggerAll } from '@modules/logger/store/selectors/logger.selectors';
 import { FavoriteModel } from '@models/favorite.model';
 import { FavoriteService } from '@services/favorite/favorite.service';
+import { AlertService } from '@services/alert/alert.service';
 import { LoggerService } from '@services/logger/logger.service';
-import { IonInfiniteScroll } from '@ionic/angular';
+import { InfiniteScrollService } from '@services/infinite-scroll/infinite-scroll.service';
 
 @Component({
   selector: 'app-history',
@@ -23,8 +24,6 @@ export class HistoryPage implements OnInit, OnDestroy {
   @Input()
   currentTabActive: any;
 
-  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
-
   private favoritesSubscription: Subscription;
   private logsSubscription: Subscription;
   public favorites: FavoriteModel[];
@@ -32,14 +31,12 @@ export class HistoryPage implements OnInit, OnDestroy {
   public logs;
   public tabsList: string[] = ['visits', 'logs'];
   public defaultTabActive: string = this.tabsList[0];
-  public infiniteScrollingConfig: { [key: string]: number } = {
-    start: 0,
-    end: 10,
-    increment: 10
-  }
 
   constructor(
+    private toastController: ToastController,
+    private alertService: AlertService,
     private favoriteService: FavoriteService,
+    private infiniteScrollService: InfiniteScrollService,
     private loggerService: LoggerService,
     private store: Store<AppState>
   ) { }
@@ -51,12 +48,8 @@ export class HistoryPage implements OnInit, OnDestroy {
                                      .subscribe(favorites => this.favoritesTotal = favorites) 
     this.favoritesSubscription = this.store
                                      .pipe(select(selectFavoritesHistory, 
-                                        { 
-                                          min: 1,
-                                          start: this.infiniteScrollingConfig.start, 
-                                          end: this.infiniteScrollingConfig.end 
-                                        })
-                                      )
+                                        { min: 1, ...this.infiniteScrollService.infiniteScrollConfig }
+                                      ))
                                      .subscribe((favorites: FavoriteModel[]) => this.favorites = favorites);
 
     this.store.dispatch(LOGGER_ACTIONS.loadLogger());
@@ -69,37 +62,90 @@ export class HistoryPage implements OnInit, OnDestroy {
      +++++ Infinite Scrolling +++++
      ========================================================================= */
 
-  loadData(event: any): void {
-    this.infiniteScrollingConfig.start += this.infiniteScrollingConfig.increment;
-    this.infiniteScrollingConfig.end += this.infiniteScrollingConfig.increment;
-
-    setTimeout(() => {
-      this.favoritesSubscription = this.store
-                                       .pipe(
-                                         select(selectFavoritesHistory, 
-                                          { 
-                                            min: 1, 
-                                            start: this.infiniteScrollingConfig.start, 
-                                            end: this.infiniteScrollingConfig.end 
-                                          })
-                                       )
+  getData(event: any): void {
+    this.favoritesSubscription = this.store
+                                      .pipe(select(selectFavoritesHistory, 
+                                        { min: 1, ...this.infiniteScrollService.infiniteScrollConfig }
+                                      ))
                                       .subscribe((favorites: FavoriteModel[]) => {
-                                        this.favorites = [
-                                          ...this.favorites,
-                                          ...favorites
-                                        ]
+                                        this.favorites = [ ...this.favorites, ...favorites ]
                                       });
-      event.target.complete();
+    event.target.complete();
+    if (this.favorites.length === this.favoritesTotal) {
+      event.target.disabled = true;
+    }
+  }
 
-      if (this.favorites.length === 106) {
-        event.target.disabled = true;
-      }
+  loadData(event: any): void {
+    this.infiniteScrollService.incrementRangeData();
+    setTimeout(() => { 
+      this.infiniteScrollService.loadData(this.getData(event));
+      // this.infiniteScrollService.loadFinalize(event, { itemsLoad: this.favorites, itemsTotal: this.favoritesTotal });
     }, 500);
   }
   
   /* =========================================================================
      +++++ Other functions +++++
      ========================================================================= */
+
+  async changeLikeState(data: { [key: string]: number | string | any }): Promise<void> {
+    const { favorite } = data;
+    await this.favoriteService.edit(favorite);
+    await this.store.dispatch(FAVORITE_ACTIONS.updateFavoriteSuccess({ favorite }));
+    await this.loggerService.register(`has changed the property 'important' of favorite: ${ favorite.title }.`);
+    await this.presentToast({ title: favorite.title, like: favorite.important });
+  }
+    
+  async presentToast(data: { [key: string]: string | boolean }): Promise<void> {
+    const toast = await this.toastController.create({
+      message: `${data.title} has been ` + ((data.like) ? 'marked' : 'unmarked') + ' as a favorite.',
+      duration: 2000,
+      cssClass: 'is-success'
+    });
+    toast.present();
+  }
+
+  favoriteDelete(event) {
+    const { id, title } = event.favorite;
+    this.favoriteService.delete(id);
+    this.loggerService.register(`has removed the favorite: ${ title }.`);
+    this.alertService.presentAlert({
+      cssClass: 'c-alert--success  has-before  has-only-button',
+      header: 'Finished!',
+      message: `The favorite ${ title } has been removed.`,
+      buttons: [
+        {
+          text: 'Close',
+          role: 'cancel',
+          cssClass: 'is-success'
+        }
+      ]
+    });
+  }
+
+  openModal(favorite: { [key: string]: number | string | any }) {
+    const { title } = favorite.favorite;
+    this.alertService.presentAlert({
+      cssClass: 'c-alert--warning  has-before',
+      header: 'Are you sure?',
+      message: `Press the confirm button to delete the favorite:  ${ title }.`,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'is-error'
+        }, 
+        {
+          text: 'Confirm',
+          role: 'confirm',
+          cssClass: 'is-success',
+          handler: () => {
+            this.favoriteDelete(favorite);
+          }
+        } 
+      ]
+    });
+  }
 
   incrementCounter(event): void {
     const { ...favorite } = event.favorite;
@@ -111,6 +157,7 @@ export class HistoryPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.infiniteScrollService.resetConfig();
     this.favoritesSubscription.unsubscribe();
     this.logsSubscription.unsubscribe();
   }

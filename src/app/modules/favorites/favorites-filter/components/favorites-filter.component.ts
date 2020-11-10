@@ -19,9 +19,10 @@ export class FavoritesFilterComponent implements OnInit {
   OnDeleteFavorite: EventEmitter<any> = new EventEmitter<any>();
 
   @Output()
-  OnIncrementCounterFavorite: EventEmitter<any> = new EventEmitter<any>();
+  OnChangeLikeStateFavorite: EventEmitter<any> = new EventEmitter<any>();
 
-  public numItemsSkeleton: number = 10;
+  @Output()
+  OnIncrementCounterFavorite: EventEmitter<any> = new EventEmitter<any>();
 
   constructor() { }
 
@@ -34,6 +35,14 @@ export class FavoritesFilterComponent implements OnInit {
   incrementCounter(favorite): void {
     const favoriteIncrement = { ...favorite, visits: favorite.visits + 1 };
     this.OnIncrementCounterFavorite.emit({ favorite: favoriteIncrement });
+  }
+
+  toggleLike(favorite): void {
+    const favoriteUpdate = {
+      ...favorite,
+      important: !favorite.important
+    };
+    this.OnChangeLikeStateFavorite.emit({ favorite: favoriteUpdate });
   }
 
   trackByFn(index: number, item: any): string | number {

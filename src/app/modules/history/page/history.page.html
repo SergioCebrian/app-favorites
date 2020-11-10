@@ -12,6 +12,8 @@
       <ion-row>
         <ion-col>
           <app-history-list [allFavorites]="favorites" 
+                            (OnChangeLikeStateFavorite)="changeLikeState($event)" 
+                            (OnDeleteFavorite)="openModal($event)" 
                             (OnIncrementCounterFavorite)="incrementCounter($event)" 
                             *ngIf="(defaultTabActive === 'visits')"></app-history-list>
           <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" *ngIf="(defaultTabActive === 'visits')">

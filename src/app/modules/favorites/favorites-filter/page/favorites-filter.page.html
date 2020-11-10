@@ -12,7 +12,9 @@
       </ion-row>
       <ion-row>
         <ion-col>
-          <app-favorites-filter [allFavorites]="favorites" [category]="currentCategory" 
+          <app-favorites-filter [allFavorites]="favorites" 
+                                [category]="currentCategory" 
+                                (OnChangeLikeStateFavorite)="changeLikeState($event)"  
                                 (OnDeleteFavorite)="openModal($event)" 
                                 (OnIncrementCounterFavorite)="incrementCounter($event)"></app-favorites-filter>
           <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">

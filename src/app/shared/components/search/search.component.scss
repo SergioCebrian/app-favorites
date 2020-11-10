@@ -1,0 +1,43 @@
+.c-search {
+    height: 40px;
+    position: relative;
+    border-radius: 10px;
+    --padding-end: 0px;
+    --inner-padding-end: 0px;
+    --background: var(--ion-color-primary-contrast);
+    --highlight-height: 0;
+
+    ion-icon {
+        position: absolute;
+        right: 10px;
+        z-index: 2;
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: var(--ion-color-orange);
+    }
+
+    ion-icon,
+    ion-input {
+        margin-top: -8px;
+    }
+
+    ion-input {
+        height: 100%;
+        font-size: .87rem;
+        border-radius: 3px;
+        --background: var(--ion-color-primary-contrast);
+        --color: var(--ion-color-grey-dark);
+        --padding-end: 42px;
+        --padding-start: 10px !important;
+
+        &:focus {
+            border-bottom: 0;
+        }
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .c-search {
+        margin-top: 13px;
+    }
+}

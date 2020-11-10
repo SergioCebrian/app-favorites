@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AlertController, IonInfiniteScroll } from '@ionic/angular';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
@@ -8,7 +8,9 @@ import * as FAVORITE_ACTIONS from '@modules/favorites/store/actions/favorites.ac
 import { selectFavoritesAll, selectFavoritesCount, selectFavoritesSearch } from '@modules/favorites/store/selectors/favorites.selectors';
 import { FavoriteModel } from '@models/favorite.model';
 import { FavoriteService } from '@services/favorite/favorite.service';
+import { AlertService } from '@services/alert/alert.service';
 import { LoggerService } from '@services/logger/logger.service';
+import { InfiniteScrollService } from '@services/infinite-scroll/infinite-scroll.service';
 
 @Component({
   selector: 'app-home',
@@ -17,21 +19,15 @@ import { LoggerService } from '@services/logger/logger.service';
 })
 export class HomePage implements OnInit, OnDestroy {
 
-  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
-
   private favoritesSubscription: Subscription;
   public favorites: FavoriteModel[];
-  public favoritesAll: FavoriteModel[];
   public favoritesTotal: number = 0;
-  public infiniteScrollingConfig: { [key: string]: number } = {
-    start: 0,
-    end: 10,
-    increment: 10
-  }
 
   constructor(
-    private alertController: AlertController,
+    private toastController: ToastController,
+    private alertService: AlertService,
     private favoriteService: FavoriteService,
+    private infiniteScrollService: InfiniteScrollService,
     private loggerService: LoggerService,
     private store: Store<AppState>
   ) { }
@@ -44,87 +40,92 @@ export class HomePage implements OnInit, OnDestroy {
 
     this.favoritesSubscription = this.store
                                      .pipe(
-                                       select(selectFavoritesAll, 
-                                        { 
-                                          start: this.infiniteScrollingConfig.start, 
-                                          end: this.infiniteScrollingConfig.end 
-                                        }))
-                                     .subscribe((favorites: FavoriteModel[]) => {
-                                       this.favorites = favorites;
-                                       this.favoritesAll = favorites;
-                                     });
+                                       select(selectFavoritesAll, this.infiniteScrollService.infiniteScrollConfig))
+                                     .subscribe((favorites: FavoriteModel[]) => this.favorites = favorites);
   }
 
   /* =========================================================================
      +++++ Infinite Scrolling +++++
      ========================================================================= */
 
+  getData(event: any): void {
+    this.favoritesSubscription = this.store
+                                      .pipe(select(selectFavoritesAll, this.infiniteScrollService.infiniteScrollConfig))
+                                      .subscribe((favorites: FavoriteModel[]) => {
+                                        this.favorites = [ ...this.favorites, ...favorites ]
+                                      });
+    event.target.complete();
+    if (this.favorites.length === this.favoritesTotal) {
+      event.target.disabled = true;
+    }
+  }
+
   loadData(event: any): void {
-    this.infiniteScrollingConfig.start += this.infiniteScrollingConfig.increment;
-    this.infiniteScrollingConfig.end += this.infiniteScrollingConfig.increment;
-
-    setTimeout(() => {
-      this.favoritesSubscription = this.store.pipe(select(selectFavoritesAll, { start: this.infiniteScrollingConfig.start, end: this.infiniteScrollingConfig.end }))
-      .subscribe((favorites: FavoriteModel[]) => {
-        this.favorites = [
-          ...this.favorites,
-          ...favorites
-        ]
-      });
-      event.target.complete();
-
-      if (this.favorites.length === this.favoritesTotal) {
-        event.target.disabled = true;
-      }
+    this.infiniteScrollService.incrementRangeData();
+    setTimeout(() => { 
+      this.infiniteScrollService.loadData(this.getData(event));
+      // this.infiniteScrollService.loadFinalize(event, { itemsLoad: this.favorites, itemsTotal: this.favoritesTotal });
     }, 500);
   }
 
   /* =========================================================================
      +++++ Other functions +++++
      ========================================================================= */
+  
+  async changeLikeState(data: { [key: string]: number | string | any }): Promise<void> {
+    const { favorite } = data;
+    await this.favoriteService.edit(favorite);
+    await this.store.dispatch(FAVORITE_ACTIONS.updateFavoriteSuccess({ favorite }));
+    await this.loggerService.register(`has changed the property 'important' of favorite: ${ favorite.title }.`);
+    await this.presentToast({ title: favorite.title, like: favorite.important });
+  }
+   
+  async presentToast(data: { [key: string]: string | boolean }): Promise<void> {
+    const toast = await this.toastController.create({
+      message: `${data.title} has been ` + ((data.like) ? 'marked' : 'unmarked') + ' as a favorite.',
+      duration: 2000,
+      cssClass: 'is-success'
+    });
+    toast.present();
+  }
 
   incrementCounter(event: { [key: string]: number | string | any }): void {
     const { ...favorite } = event.favorite;
     this.favoriteService.editPartial(favorite.id, favorite);
   }
 
-  // TODO: Usar pipes y mensaje de 'No hay resultados'
+  // TODO: Mensaje de 'No hay resultados'
   search(event: string | any): void {
     const { term } = event;
     setTimeout(() => {
-      /*this.favoritesSubscription = this.store
-                                       .pipe(select(selectFavoritesSearch, { min: 3, term }))
-                                       .subscribe((favorites: any) => this.favorites = favorites)*/
-      if (term.length >= 3) {
-        this.favorites = this.favorites.filter(favorite => {
-          return favorite.title.toLowerCase().includes(term.toLowerCase());
-        });
-      } else {
-        this.favorites = this.favoritesAll;
-      }
+      this.favoritesSubscription = this.store
+                                       .pipe(select(selectFavoritesSearch, 
+                                          { min: 3, term, ...this.infiniteScrollService.infiniteScrollConfig }
+                                        ))
+                                       .subscribe((favorites: any) => {
+                                         this.favorites = favorites;
+                                         this.favoritesTotal = favorites.length;
+                                       });
     }, 200);
   }
 
   /* =========================================================================
-     +++++ Modals +++++
+     +++++ Alerts +++++
      ========================================================================= */
 
   openModal(favorite: { [key: string]: number | string | any }): void {
     const { title } = favorite.favorite;
-    this.presentAlert('¿Are you sure?', `Press the confirm button to delete the favorite: ${ title }.`, favorite);
-  }
-
-  async presentAlert(title: string, msg: string, favorite: { [key: string]: number | string }) {
-    const alertComponent = await this.alertController.create({
-      cssClass: 'c-alert  c-alert--warning  has-before',
-      header: title,
-      message: msg,
+    this.alertService.presentAlert({
+      cssClass: 'c-alert--warning  has-before',
+      header: 'Are you sure?',
+      message: `Press the confirm button to delete the favorite: ${ title }.`,
       buttons: [
         {
           text: 'Cancel',
           role: 'cancel',
           cssClass: 'is-error'
-        }, {
+        }, 
+        {
           text: 'Confirm',
           role: 'confirm',
           cssClass: 'is-success',
@@ -134,15 +135,16 @@ export class HomePage implements OnInit, OnDestroy {
         }
       ]
     });
-
-    await alertComponent.present();
   }
 
-  async deleteAlert(title: string, msg: string): Promise<void> {
-    const alertComponent = await this.alertController.create({
+  async favoriteDelete(event): Promise<void> {
+    const { id, title } = event.favorite;
+    await this.favoriteService.delete(id);
+    await this.loggerService.register(`has removed the favorite: ${ title }.`);
+    this.alertService.presentAlert({
       cssClass: 'c-alert  c-alert--success  has-before  has-only-button',
-      header: title,
-      message: msg,
+      header: 'Finished!',
+      message: `The favorite ${ title } has been removed.`,
       buttons: [
         {
           text: 'Close',
@@ -151,18 +153,10 @@ export class HomePage implements OnInit, OnDestroy {
         }
       ]
     });
-
-    await alertComponent.present();
-  }
-
-  async favoriteDelete(event): Promise<void> {
-    const { id, title } = event.favorite;
-    await this.favoriteService.delete(id);
-    await this.loggerService.register(`has removed the favorite: ${ title }.`);
-    await this.deleteAlert('Finished!', `The favorite ${ title } has been removed.`);
   }
 
   ngOnDestroy() {
+    this.infiniteScrollService.resetConfig();
     this.favoritesSubscription.unsubscribe();
   }
 

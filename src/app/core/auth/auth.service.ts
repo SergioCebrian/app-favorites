@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
 import { AppState } from '@store/state/app.state';
 import * as loadingActions from '@store/actions/loading.actions';
-import { ErrorService } from '@services/error/error.service';
 import { IUser } from '@interfaces/user';
+import { AlertService } from '@services/alert/alert.service';
+import { ErrorService } from '@services/error/error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,10 +17,10 @@ import { IUser } from '@interfaces/user';
 export class AuthService {
 
   constructor(
-    private alertController: AlertController,
     private authFB: AngularFireAuth,
     private router: Router,
     private store: Store<AppState>,
+    private alertService: AlertService,
     private errorService: ErrorService
   ) { }
 
@@ -44,9 +44,20 @@ export class AuthService {
                   }, 2000);
                })
                .catch(err => {
-                  this.presentAlert(this.errorService.get(err));
+                  this.alertService.presentAlert({
+                    cssClass: 'c-alert--error  has-before  has-only-button',
+                    header: 'Opps!',
+                    message: this.errorService.get(err).message,
+                    buttons: [
+                      {
+                        text: 'Close',
+                        role: 'cancel',
+                        cssClass: 'is-error'
+                      }
+                    ]
+                  });
                   this.store.dispatch(loadingActions.stopLoading());
-                  console.error(err);
+                  // console.error(err);
                });
   }
 
@@ -57,23 +68,6 @@ export class AuthService {
 
   logOut(): Promise<void> {
     return this.authFB.signOut();
-  }
-
-  async presentAlert(msg: any) {
-    const alertComponent = await this.alertController.create({
-      cssClass: 'c-alert  c-alert--error  has-before  has-only-button',
-      header: 'Opps!',
-      message: msg.message,
-      buttons: [
-        {
-          text: 'Close',
-          role: 'cancel',
-          cssClass: 'is-error'
-        }
-      ]
-    });
-
-    await alertComponent.present();
   }
 
 }

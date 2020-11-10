@@ -8,7 +8,7 @@ export class ErrorService {
 
   constructor() { }
 
-  get({ code }): object {
+  get({ code }): any {
     return {
       code : [code],
       message : ErrorConfig[code]
