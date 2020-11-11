@@ -1,0 +1,33 @@
+<app-header title="Search"></app-header>
+
+<ion-content [fullscreen]="true">
+  <section class="container-fluid">
+    <ion-grid class="o-grid">
+      <ion-row>
+        <ion-col>
+          <app-search (OnSearch)="search($event)"></app-search>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <app-counter [counter]="favoritesTotal" 
+                       [text]="{ plural: 'results found', single: 'result found' }" 
+                       *ngIf="favorites && favorites.length > 0"></app-counter> 
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col *ngIf="favorites">
+          <app-favorites-results [allFavorites]="favorites" 
+                              (OnChangeLikeStateFavorite)="changeLikeState($event)"  
+                              (OnDeleteFavorite)="openModal($event)" 
+                              (OnIncrementCounterFavorite)="incrementCounter($event)"></app-favorites-results>
+          <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+            <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
+          </ion-infinite-scroll>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </section>
+  <ion-icon class="c-icon--bigger" name="add-outline" title="New favorite" routerLink="/favorites/new"></ion-icon>
+  <app-tabs [active]="'favorites'"></app-tabs>
+</ion-content>

@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private loadingSubscription: Subscription;
   public isLoading: boolean = false;
+  public isPasswordVisible: boolean = false;
   public loginForm: FormGroup;
   
   constructor(
@@ -41,8 +42,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.loginForm.invalid) { return }
     if (this.loginForm.valid) {
       this.loginFormValues.emit({ userData: this.loginForm.value });
-      this.loginForm.reset();
+      this.loginForm.controls['password'].reset();
     }
+  }
+
+  toggleVisibility(): void {
+    this.isPasswordVisible = !this.isPasswordVisible;
   }
 
   ngOnDestroy() {

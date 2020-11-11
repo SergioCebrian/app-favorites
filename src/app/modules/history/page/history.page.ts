@@ -1,5 +1,5 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { IonInfiniteScroll, ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 
@@ -12,7 +12,7 @@ import { FavoriteModel } from '@models/favorite.model';
 import { FavoriteService } from '@services/favorite/favorite.service';
 import { AlertService } from '@services/alert/alert.service';
 import { LoggerService } from '@services/logger/logger.service';
-import { InfiniteScrollService } from '@services/infinite-scroll/infinite-scroll.service';
+import { IInfiniteScroll } from '@interfaces/infinite-scroll';
 
 @Component({
   selector: 'app-history',
@@ -20,6 +20,8 @@ import { InfiniteScrollService } from '@services/infinite-scroll/infinite-scroll
   styleUrls: ['./history.page.scss'],
 })
 export class HistoryPage implements OnInit, OnDestroy {
+
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   @Input()
   currentTabActive: any;
@@ -31,12 +33,16 @@ export class HistoryPage implements OnInit, OnDestroy {
   public logs;
   public tabsList: string[] = ['visits', 'logs'];
   public defaultTabActive: string = this.tabsList[0];
+  public infiniteScrollConfig: IInfiniteScroll = {
+    start: 0,
+    end: 10,
+    increment: 10
+  }
 
   constructor(
     private toastController: ToastController,
     private alertService: AlertService,
     private favoriteService: FavoriteService,
-    private infiniteScrollService: InfiniteScrollService,
     private loggerService: LoggerService,
     private store: Store<AppState>
   ) { }
@@ -45,11 +51,11 @@ export class HistoryPage implements OnInit, OnDestroy {
     this.store.dispatch(FAVORITE_ACTIONS.loadFavorites())
     this.favoritesSubscription = this.store
                                      .pipe(select(selectFavoritesHistoryCount, { min: 1 }))
-                                     .subscribe(favorites => this.favoritesTotal = favorites) 
+                                     .subscribe(favorites => this.favoritesTotal = favorites);
+    
     this.favoritesSubscription = this.store
                                      .pipe(select(selectFavoritesHistory, 
-                                        { min: 1, ...this.infiniteScrollService.infiniteScrollConfig }
-                                      ))
+                                        { min: 1, ...this.infiniteScrollConfig }))
                                      .subscribe((favorites: FavoriteModel[]) => this.favorites = favorites);
 
     this.store.dispatch(LOGGER_ACTIONS.loadLogger());
@@ -62,25 +68,22 @@ export class HistoryPage implements OnInit, OnDestroy {
      +++++ Infinite Scrolling +++++
      ========================================================================= */
 
-  getData(event: any): void {
-    this.favoritesSubscription = this.store
-                                      .pipe(select(selectFavoritesHistory, 
-                                        { min: 1, ...this.infiniteScrollService.infiniteScrollConfig }
-                                      ))
-                                      .subscribe((favorites: FavoriteModel[]) => {
-                                        this.favorites = [ ...this.favorites, ...favorites ]
-                                      });
-    event.target.complete();
-    if (this.favorites.length === this.favoritesTotal) {
-      event.target.disabled = true;
-    }
-  }
-
   loadData(event: any): void {
-    this.infiniteScrollService.incrementRangeData();
+    this.infiniteScrollConfig.start += this.infiniteScrollConfig.increment;
+    this.infiniteScrollConfig.end += this.infiniteScrollConfig.increment;
+
     setTimeout(() => { 
-      this.infiniteScrollService.loadData(this.getData(event));
-      // this.infiniteScrollService.loadFinalize(event, { itemsLoad: this.favorites, itemsTotal: this.favoritesTotal });
+      this.favoritesSubscription = this.store
+                                        .pipe(select(selectFavoritesHistory, 
+                                          { min: 1, ...this.infiniteScrollConfig }
+                                        ))
+                                        .subscribe((favorites: FavoriteModel[]) => {
+                                          this.favorites = [ ...this.favorites, ...favorites ]
+                                        });
+      event.target.complete();
+      if (this.favorites.length === this.favoritesTotal) {
+        event.target.disabled = true;
+      }
     }, 500);
   }
   
@@ -157,7 +160,6 @@ export class HistoryPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.infiniteScrollService.resetConfig();
     this.favoritesSubscription.unsubscribe();
     this.logsSubscription.unsubscribe();
   }

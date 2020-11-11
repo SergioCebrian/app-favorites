@@ -20,7 +20,8 @@
     <ion-row>
       <ion-col class="c-form-group" [ngClass]="loginForm.get('password').valid ? 'is-valid' : ''">
         <ion-icon name="lock-closed"></ion-icon>
-        <ion-input color="light" type="password" id="password" formControlName="password" placeholder="Password" placeholder="Password"></ion-input>
+        <ion-input color="light" [type]="isPasswordVisible ? 'text' : 'password'" id="password" formControlName="password" placeholder="Password" placeholder="Password"></ion-input>
+        <ion-icon class="icon-password-display" [name]="isPasswordVisible ? 'eye-off-outline' : 'eye-outline'" (click)="toggleVisibility()" *ngIf="loginForm.get('password').invalid"></ion-icon>
         <ion-icon color="success" name="checkmark-circle-outline" *ngIf="loginForm.get('password').valid"></ion-icon>
       </ion-col>
     </ion-row>

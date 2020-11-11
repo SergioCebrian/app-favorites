@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { IonInfiniteScroll, ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 
@@ -8,8 +8,8 @@ import * as FAVORITE_ACTIONS from '@modules/favorites/store/actions/favorites.ac
 import { selectFavoritesLikes, selectFavoritesLikesCount } from '@modules/favorites/store/selectors/favorites.selectors';
 import { FavoriteModel } from '@models/favorite.model';
 import { FavoriteService } from '@services/favorite/favorite.service';
-import { InfiniteScrollService } from '@services/infinite-scroll/infinite-scroll.service';
 import { LoggerService } from '@services/logger/logger.service';
+import { IInfiniteScroll } from '@interfaces/infinite-scroll';
 
 @Component({
   selector: 'app-likes',
@@ -18,14 +18,20 @@ import { LoggerService } from '@services/logger/logger.service';
 })
 export class LikesPage implements OnInit, OnDestroy {
 
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+
   private favoritesSubscription: Subscription;
   public favorites: FavoriteModel[];
   public favoritesTotal: number = 0;
+  public infiniteScrollConfig: IInfiniteScroll = {
+    start: 0,
+    end: 10,
+    increment: 10
+  }
 
   constructor(
     private toastController: ToastController,
     private favoriteService: FavoriteService,
-    private infiniteScrollService: InfiniteScrollService,
     private loggerService: LoggerService,
     private store: Store<AppState>
   ) { }
@@ -34,9 +40,10 @@ export class LikesPage implements OnInit, OnDestroy {
     this.store.dispatch(FAVORITE_ACTIONS.loadFavorites());
     this.favoritesSubscription = this.store
                                      .pipe(select(selectFavoritesLikesCount))
-                                     .subscribe(favorites => this.favoritesTotal = favorites) 
+                                     .subscribe(favorites => this.favoritesTotal = favorites);
+
     this.favoritesSubscription = this.store
-                                     .pipe(select(selectFavoritesLikes, this.infiniteScrollService.infiniteScrollConfig))
+                                     .pipe(select(selectFavoritesLikes, this.infiniteScrollConfig))
                                      .subscribe((favorites: FavoriteModel[]) => this.favorites = favorites);
   }
 
@@ -45,22 +52,23 @@ export class LikesPage implements OnInit, OnDestroy {
      ========================================================================= */
 
   getData(event: any): void {
-    this.favoritesSubscription = this.store
-                                      .pipe(select(selectFavoritesLikes, this.infiniteScrollService.infiniteScrollConfig))
-                                      .subscribe((favorites: FavoriteModel[]) => {
-                                        this.favorites = [ ...this.favorites, ...favorites ]
-                                      });
-    event.target.complete();
-    if (this.favorites.length === this.favoritesTotal) {
-      event.target.disabled = true;
-    }
+
   }
 
   loadData(event: any): void {
-    this.infiniteScrollService.incrementRangeData();
+    this.infiniteScrollConfig.start += this.infiniteScrollConfig.increment;
+    this.infiniteScrollConfig.end += this.infiniteScrollConfig.increment;
+
     setTimeout(() => { 
-      this.infiniteScrollService.loadData(this.getData(event));
-      // this.infiniteScrollService.loadFinalize(event, { itemsLoad: this.favorites, itemsTotal: this.favoritesTotal });
+      this.favoritesSubscription = this.store
+                                       .pipe(select(selectFavoritesLikes, { start: this.infiniteScrollConfig.start, end: this.infiniteScrollConfig.end }))
+                                       .subscribe((favorites: FavoriteModel[]) => {
+                                          this.favorites = [ ...this.favorites, ...favorites ]
+                                       });
+      event.target.complete();
+      if (this.favorites.length === this.favoritesTotal) {
+        event.target.disabled = true;
+      }
     }, 500);
   }
     
@@ -86,7 +94,6 @@ export class LikesPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.infiniteScrollService.resetConfig();
     this.favoritesSubscription.unsubscribe();
   }
 

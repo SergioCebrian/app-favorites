@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { IonInfiniteScroll, ToastController } from '@ionic/angular';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
@@ -10,7 +11,7 @@ import { FavoriteModel } from '@models/favorite.model';
 import { FavoriteService } from '@services/favorite/favorite.service';
 import { AlertService } from '@services/alert/alert.service';
 import { LoggerService } from '@services/logger/logger.service';
-import { InfiniteScrollService } from '@services/infinite-scroll/infinite-scroll.service';
+import { IInfiniteScroll } from '@interfaces/infinite-scroll';
 
 @Component({
   selector: 'app-home',
@@ -19,52 +20,59 @@ import { InfiniteScrollService } from '@services/infinite-scroll/infinite-scroll
 })
 export class HomePage implements OnInit, OnDestroy {
 
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+
   private favoritesSubscription: Subscription;
   public favorites: FavoriteModel[];
   public favoritesTotal: number = 0;
+  public infiniteScrollConfig: IInfiniteScroll = {
+    start: 0,
+    end: 10,
+    increment: 10
+  }
 
   constructor(
+    private router: Router,
     private toastController: ToastController,
     private alertService: AlertService,
     private favoriteService: FavoriteService,
-    private infiniteScrollService: InfiniteScrollService,
     private loggerService: LoggerService,
     private store: Store<AppState>
   ) { }
 
   ngOnInit() {
     this.store.dispatch(FAVORITE_ACTIONS.loadFavorites());
-    this.store
-        .pipe(select(selectFavoritesCount))
-        .subscribe(favorites => this.favoritesTotal = favorites);
+    this.store.pipe(select(selectFavoritesCount))
+              .subscribe(favorites => this.favoritesTotal = favorites);
 
     this.favoritesSubscription = this.store
-                                     .pipe(
-                                       select(selectFavoritesAll, this.infiniteScrollService.infiniteScrollConfig))
+                                     .pipe(select(selectFavoritesAll, this.infiniteScrollConfig))
                                      .subscribe((favorites: FavoriteModel[]) => this.favorites = favorites);
+  }
+
+  search(event: any): void {
+    const { term } = event;
+    this.router.navigate(['/results'], { queryParams: { search: term } });
   }
 
   /* =========================================================================
      +++++ Infinite Scrolling +++++
      ========================================================================= */
 
-  getData(event: any): void {
-    this.favoritesSubscription = this.store
-                                      .pipe(select(selectFavoritesAll, this.infiniteScrollService.infiniteScrollConfig))
-                                      .subscribe((favorites: FavoriteModel[]) => {
-                                        this.favorites = [ ...this.favorites, ...favorites ]
-                                      });
-    event.target.complete();
-    if (this.favorites.length === this.favoritesTotal) {
-      event.target.disabled = true;
-    }
-  }
-
   loadData(event: any): void {
-    this.infiniteScrollService.incrementRangeData();
+    this.infiniteScrollConfig.start += this.infiniteScrollConfig.increment;
+    this.infiniteScrollConfig.end += this.infiniteScrollConfig.increment;
+
     setTimeout(() => { 
-      this.infiniteScrollService.loadData(this.getData(event));
-      // this.infiniteScrollService.loadFinalize(event, { itemsLoad: this.favorites, itemsTotal: this.favoritesTotal });
+      this.favoritesSubscription = this.store
+                                       .pipe(select(selectFavoritesAll, { start: this.infiniteScrollConfig.start, end: this.infiniteScrollConfig.end }))
+                                       .subscribe((favorites: FavoriteModel[]) => {
+                                          this.favorites = [ ...this.favorites, ...favorites ];
+                                       });      
+      event.target.complete();
+      if (this.favorites.length === this.favoritesTotal) {
+        event.target.disabled = true;
+      }
     }, 500);
   }
 
@@ -92,21 +100,6 @@ export class HomePage implements OnInit, OnDestroy {
   incrementCounter(event: { [key: string]: number | string | any }): void {
     const { ...favorite } = event.favorite;
     this.favoriteService.editPartial(favorite.id, favorite);
-  }
-
-  // TODO: Mensaje de 'No hay resultados'
-  search(event: string | any): void {
-    const { term } = event;
-    setTimeout(() => {
-      this.favoritesSubscription = this.store
-                                       .pipe(select(selectFavoritesSearch, 
-                                          { min: 3, term, ...this.infiniteScrollService.infiniteScrollConfig }
-                                        ))
-                                       .subscribe((favorites: any) => {
-                                         this.favorites = favorites;
-                                         this.favoritesTotal = favorites.length;
-                                       });
-    }, 200);
   }
 
   /* =========================================================================
@@ -156,7 +149,6 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.infiniteScrollService.resetConfig();
     this.favoritesSubscription.unsubscribe();
   }
 

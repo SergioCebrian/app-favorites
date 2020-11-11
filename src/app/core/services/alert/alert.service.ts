@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { IAlert } from '@interfaces/alert';
 import { AlertController } from '@ionic/angular';
 
 @Injectable({
@@ -11,7 +10,7 @@ export class AlertService {
 
   constructor(private alertController: AlertController) { }
 
-  async presentAlert(options: any) { // TODO: Solucionar error con handler en IAlert
+  async presentAlert(options: any) {
     const { cssClass, header, message, buttons } = options;
     const alertComponent = await this.alertController.create({
       cssClass: `${this.baseClass}  ${cssClass}`,

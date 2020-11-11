@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 
@@ -8,8 +8,9 @@ import { selectCategoriesCount, selectCategoriesRange } from '../store/selectors
 import { CategoryModel } from '@models/category.model';
 import { CategoryService } from '@services/category/category.service';
 import { AlertService } from '@services/alert/alert.service';
-import { InfiniteScrollService } from '@services/infinite-scroll/infinite-scroll.service';
 import { LoggerService } from '@services/logger/logger.service';
+import { IonInfiniteScroll } from '@ionic/angular';
+import { IInfiniteScroll } from '@interfaces/infinite-scroll';
 
 @Component({
   selector: 'app-categories',
@@ -18,14 +19,20 @@ import { LoggerService } from '@services/logger/logger.service';
 })
 export class CategoriesPage implements OnInit, OnDestroy {
 
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+
   private categoriesSubscription: Subscription;
   public categories: CategoryModel[];
   public categoriesTotal: number = 0;
+  public infiniteScrollConfig: IInfiniteScroll = {
+    start: 0,
+    end: 4,
+    increment: 4
+  }
 
   constructor(
     private alertService: AlertService,
     private categoryService: CategoryService,
-    private infiniteScrollService: InfiniteScrollService,
     private loggerService: LoggerService,
     private store: Store<AppState>
   ) { }
@@ -37,7 +44,7 @@ export class CategoriesPage implements OnInit, OnDestroy {
         .subscribe(favorites => this.categoriesTotal = favorites);
 
     this.categoriesSubscription = this.store
-                                      .pipe(select(selectCategoriesRange, this.infiniteScrollService.setInfiniteScrollParams({ end: 4, increment: 4 })))
+                                      .pipe(select(selectCategoriesRange, this.infiniteScrollConfig))
                                       .subscribe((categories: CategoryModel[]) => this.categories = categories);
   }
 
@@ -45,26 +52,20 @@ export class CategoriesPage implements OnInit, OnDestroy {
      +++++ Infinite Scrolling +++++
      ========================================================================= */
 
-  getData(event: any): void {
-    this.categoriesSubscription = this.store
-                                      .pipe(select(selectCategoriesRange, this.infiniteScrollService.infiniteScrollConfig))
-                                      .subscribe((categories: any) => {
-                                        this.categories = [
-                                          ...this.categories,
-                                          ...categories
-                                        ]
-                                      });
-    event.target.complete();
-    if (this.categories.length === this.categoriesTotal) {
-      event.target.disabled = true;
-    }
-  }
-
   loadData(event: any): void {
-    this.infiniteScrollService.incrementRangeData();
+    this.infiniteScrollConfig.start += this.infiniteScrollConfig.increment;
+    this.infiniteScrollConfig.end += this.infiniteScrollConfig.increment;
+
     setTimeout(() => { 
-      this.infiniteScrollService.loadData(this.getData(event));
-      // this.infiniteScrollService.loadFinalize(event, { itemsLoad: this.favorites, itemsTotal: this.favoritesTotal });
+      this.categoriesSubscription = this.store
+                                        .pipe(select(selectCategoriesRange, { start: this.infiniteScrollConfig.start, end: this.infiniteScrollConfig.end }))
+                                        .subscribe((categories: any) => {
+                                          this.categories = [ ...this.categories, ...categories ]
+                                        });
+      event.target.complete();
+      if (this.categories.length === this.categoriesTotal) {
+        event.target.disabled = true;
+      }
     }, 500);
   }
   
@@ -116,7 +117,6 @@ export class CategoriesPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.infiniteScrollService.resetConfig();
     this.categoriesSubscription.unsubscribe();
   }
 

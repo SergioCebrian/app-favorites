@@ -55,7 +55,7 @@
     p {
       height: 41px; // 61px
       font-size: .88rem;
-      color: var(--ion-color-step-600, #666666);
+      color: var(--ion-color-step-600, #666666) !important;
     }
   }
 
@@ -135,6 +135,10 @@
   }
 
   &--cards {
+
+    ion-card {
+      width: 100%;
+    }
 
     ion-card > img:first-of-type {
       width: 100%;

@@ -11,12 +11,14 @@ export class SearchComponent implements OnInit {
   @Output()
   OnSearch = new EventEmitter();
 
+  public term: string = '';
+
   constructor() { }
 
   ngOnInit() {}
 
-  search(val: number | string): void {
-    this.OnSearch.emit({ term: val });
+  search(term: number | string): void {
+    this.OnSearch.emit({ term });
   }
 
 }

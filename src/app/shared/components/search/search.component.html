@@ -1,4 +1,4 @@
 <ion-item lines="none" class="c-search  ion-no-padding">
-  <ion-input type="search" placeholder="Type here..." id="term" name="term" (input)="search(searchBox.value)" #searchBox></ion-input>
-  <ion-icon title="Search" name="search-outline" (click)="search(searchBox.value)"></ion-icon>
+  <ion-input type="search" placeholder="Type here..." id="term" name="term" [(ngModel)]="term" #searchBox></ion-input>
+  <ion-icon title="Search" name="search-outline" (click)="search(term)"></ion-icon>
 </ion-item>

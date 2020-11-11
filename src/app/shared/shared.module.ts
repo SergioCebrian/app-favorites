@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
 
 import { CounterComponent } from '@components/counter/counter.component';
 import { HeaderComponent } from '@components/header/header.component';
@@ -31,7 +32,8 @@ import { FillPipe } from '@pipes/fill/fill.pipe';
   ],
   imports: [
     CommonModule,
-    IonicModule
+    IonicModule,
+    FormsModule // support directive ngModel in search component
   ],
   exports: [
     HeaderComponent,

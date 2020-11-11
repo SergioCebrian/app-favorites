@@ -11,7 +11,6 @@ import * as CATEGORY_ACTIONS from '@modules/categories/store/actions/categories.
 import * as FAVORITE_ACTIONS from '@modules/favorites/store/actions/favorites.actions';
 import { CategoryModel } from '@models/category.model';
 import { FavoriteModel } from '@models/favorite.model';
-import { CategoryService } from '@services/category/category.service';
 import { FavoriteService } from '@services/favorite/favorite.service';
 import { LoggerService } from '@services/logger/logger.service';
 
@@ -31,7 +30,6 @@ export class FavoritesEditPage implements OnInit, OnDestroy {
   constructor(
     private toastController: ToastController,
     private router: ActivatedRoute,
-    private categoryService: CategoryService,
     private favoriteService: FavoriteService,
     private loggerService: LoggerService,
     private store: Store<AppState>

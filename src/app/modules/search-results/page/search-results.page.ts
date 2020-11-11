@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IonInfiniteScroll, ToastController } from '@ionic/angular';
-import { Subscription } from 'rxjs';
 import { select, Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 
-import { AppState } from '@shared/store/state/app.state';
+import { AppState } from '@store/state/app.state';
 import * as FAVORITE_ACTIONS from '@modules/favorites/store/actions/favorites.actions';
-import { selectFavoritesByCategory, selectFavoritesByCategoryCount } from '@modules/favorites/store/selectors/favorites.selectors';
+import { selectFavoritesAll, selectFavoritesCount, selectFavoritesSearch } from '@modules/favorites/store/selectors/favorites.selectors';
 import { FavoriteModel } from '@models/favorite.model';
 import { FavoriteService } from '@services/favorite/favorite.service';
 import { AlertService } from '@services/alert/alert.service';
@@ -14,18 +14,18 @@ import { LoggerService } from '@services/logger/logger.service';
 import { IInfiniteScroll } from '@interfaces/infinite-scroll';
 
 @Component({
-  selector: 'app-favorites-filter-page',
-  templateUrl: './favorites-filter.page.html',
-  styleUrls: ['./favorites-filter.page.scss'],
+  selector: 'app-search-results',
+  templateUrl: './search-results.page.html',
+  styleUrls: ['./search-results.page.scss'],
 })
-export class FavoritesFilterPage implements OnInit, OnDestroy {
+export class SearchResultsPage implements OnInit {
 
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   private favoritesSubscription: Subscription;
   public favorites: FavoriteModel[];
   public favoritesTotal: number = 0;
-  public currentCategory: string;
+  public searchTerm: string = '';
   public infiniteScrollConfig: IInfiniteScroll = {
     start: 0,
     end: 10,
@@ -33,8 +33,9 @@ export class FavoritesFilterPage implements OnInit, OnDestroy {
   }
 
   constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
     private toastController: ToastController,
-    private router: ActivatedRoute,
     private alertService: AlertService,
     private favoriteService: FavoriteService,
     private loggerService: LoggerService,
@@ -42,44 +43,61 @@ export class FavoritesFilterPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.currentCategory = this.router.snapshot.params.category;
+    this.activatedRoute.queryParams.subscribe(params => this.searchTerm = decodeURI(params.search));
+    this.loggerService.register(`have searched results with ${ this.searchTerm }.`);
 
     this.store.dispatch(FAVORITE_ACTIONS.loadFavorites());
-    this.store.pipe(select(selectFavoritesByCategoryCount, { category: this.currentCategory }))
+    this.store.pipe(select(selectFavoritesCount))
               .subscribe(favorites => this.favoritesTotal = favorites);
+    
+    this.getData();
+  }
 
-    this.favoritesSubscription = this.store
-                                     .pipe(select(selectFavoritesByCategory, 
-                                      { category: this.currentCategory, ...this.infiniteScrollConfig }))
-                                     .subscribe((favorites: FavoriteModel[]) => this.favorites = favorites);
+  getData(): void {
+    this.favoritesSubscription = this.store.pipe(select(selectFavoritesSearch, { min: 3, term: this.searchTerm, ...this.infiniteScrollConfig }))
+                                           .subscribe((favorites: FavoriteModel[]) => {
+                                              this.favorites = favorites;
+                                              this.favoritesTotal = favorites.length;
+                                           });
+  }
 
+  search(event: any): void {
+    const { term } = event;
+    this.searchTerm = term;
+    (this.searchTerm.length > 0)
+      ? this.router.navigate(['/results'], { queryParams: { search: this.searchTerm } }) 
+      : this.router.navigate(['/']);
+    this.getData();
   }
 
   /* =========================================================================
      +++++ Infinite Scrolling +++++
      ========================================================================= */
 
+  // TODO: Mensaje de 'No hay resultados'
+
   loadData(event: any): void {
     this.infiniteScrollConfig.start += this.infiniteScrollConfig.increment;
     this.infiniteScrollConfig.end += this.infiniteScrollConfig.increment;
-    
-    setTimeout(() => { 
-      this.favoritesSubscription = this.store.pipe(select(selectFavoritesByCategory, 
-                                                { category: this.currentCategory, start: this.infiniteScrollConfig.start, end: this.infiniteScrollConfig.end }))
-                                              .subscribe((favorites: FavoriteModel[]) => {
-                                                this.favorites = [ ...this.favorites, ...favorites ]
-                                              });
+
+    setTimeout(() => {
+      this.favoritesSubscription = this.store
+                                       .pipe(select(selectFavoritesSearch, { min: 3, term: this.searchTerm, ...this.infiniteScrollConfig }))
+                                       .subscribe((favorites: FavoriteModel[]) => {
+                                          this.favorites = favorites;
+                                          this.favoritesTotal = favorites.length;
+                                       });
       event.target.complete();
       if (this.favorites.length === this.favoritesTotal) {
         event.target.disabled = true;
       }
-    }, 500);
+    }, 200);
   }
-  
+
   /* =========================================================================
      +++++ Other functions +++++
      ========================================================================= */
-
+  
   async changeLikeState(data: { [key: string]: number | string | any }): Promise<void> {
     const { favorite } = data;
     await this.favoriteService.edit(favorite);
@@ -87,7 +105,7 @@ export class FavoritesFilterPage implements OnInit, OnDestroy {
     await this.loggerService.register(`has changed the property 'important' of favorite: ${ favorite.title }.`);
     await this.presentToast({ title: favorite.title, like: favorite.important });
   }
-    
+   
   async presentToast(data: { [key: string]: string | boolean }): Promise<void> {
     const toast = await this.toastController.create({
       message: `${data.title} has been ` + ((data.like) ? 'marked' : 'unmarked') + ' as a favorite.',
@@ -97,30 +115,21 @@ export class FavoritesFilterPage implements OnInit, OnDestroy {
     toast.present();
   }
 
-  favoriteDelete(event) {
-    const { id, title } = event.favorite;
-    this.favoriteService.delete(id);
-    this.loggerService.register(`has removed the favorite: ${ title }.`);
-    this.alertService.presentAlert({
-      cssClass: 'c-alert--success  has-before  has-only-button',
-      header: 'Finished!',
-      message: `The favorite ${ title } has been removed.`,
-      buttons: [
-        {
-          text: 'Close',
-          role: 'cancel',
-          cssClass: 'is-success'
-        }
-      ]
-    });
+  incrementCounter(event: { [key: string]: number | string | any }): void {
+    const { ...favorite } = event.favorite;
+    this.favoriteService.editPartial(favorite.id, favorite);
   }
 
-  openModal(favorite: { [key: string]: number | string | any }) {
+  /* =========================================================================
+     +++++ Alerts +++++
+     ========================================================================= */
+
+  openModal(favorite: { [key: string]: number | string | any }): void {
     const { title } = favorite.favorite;
     this.alertService.presentAlert({
       cssClass: 'c-alert--warning  has-before',
       header: 'Are you sure?',
-      message: `Press the confirm button to delete the favorite:  ${ title }.`,
+      message: `Press the confirm button to delete the favorite: ${ title }.`,
       buttons: [
         {
           text: 'Cancel',
@@ -134,15 +143,28 @@ export class FavoritesFilterPage implements OnInit, OnDestroy {
           handler: () => {
             this.favoriteDelete(favorite);
           }
-        } 
+        }
       ]
     });
   }
 
-  incrementCounter(event): void {
-    const { ...favorite } = event.favorite;
-    this.favoriteService.editPartial(favorite.id, favorite);
-  } 
+  async favoriteDelete(event): Promise<void> {
+    const { id, title } = event.favorite;
+    await this.favoriteService.delete(id);
+    await this.loggerService.register(`has removed the favorite: ${ title }.`);
+    this.alertService.presentAlert({
+      cssClass: 'c-alert  c-alert--success  has-before  has-only-button',
+      header: 'Finished!',
+      message: `The favorite ${ title } has been removed.`,
+      buttons: [
+        {
+          text: 'Close',
+          role: 'cancel',
+          cssClass: 'is-success'
+        }
+      ]
+    });
+  }
 
   ngOnDestroy() {
     this.favoritesSubscription.unsubscribe();
