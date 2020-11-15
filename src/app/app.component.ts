@@ -10,14 +10,6 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 })
 export class AppComponent {
 
-  /*
-  menuItems: any[] = [
-    { title: 'Inicio', link: '/', icon: 'home', direction: 'forward' },
-    { title: 'Categorías', link: '/categories', icon: 'pricetag', direction: 'forward' },
-    { title: 'Mi perfil', link: '/profile', icon: 'person', direction: 'forward' }
-  ]
-  */
-
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
