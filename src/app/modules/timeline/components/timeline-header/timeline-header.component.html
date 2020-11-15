@@ -1,0 +1,10 @@
+<ion-header class="o-header" [ngClass]="customClass" [translucent]="true" 
+            [ngStyle]="{backgroundImage:'url(assets/images/months/' + title + '.jpg)'}">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ title }}</ion-title>
+    <ion-icon title="Logout" name="power-outline" (click)="logOut()" slot="end"></ion-icon>
+  </ion-toolbar>
+</ion-header>

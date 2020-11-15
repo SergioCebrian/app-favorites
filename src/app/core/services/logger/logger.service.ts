@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { DaysConfig } from '@configs/days.config';
 import { MonthsConfig } from '@configs/months.config';
-import { map } from 'rxjs/operators';
+import { ILogger } from '@interfaces/logger';
 
 @Injectable({
   providedIn: 'root'
@@ -25,17 +27,17 @@ export class LoggerService {
                .catch(err => console.error(err));
   }
 
-  register(msg: string) {
-    const currentLogger = {
+  register(msg: string): void {
+    const currentLogger: ILogger = {
       date: {
         day: {
           name: this.daysList[this.currentDate.getDay()],
           num: this.currentDate.getDay(),
           today: this.currentDate.getDate()
         },
-        hours: this.currentDate.getHours(),
-        minutes: this.currentDate.getMinutes(),
-        seconds: this.currentDate.getSeconds(),
+        hours: ('0' + this.currentDate.getHours()).slice(-2),
+        minutes: ('0' + this.currentDate.getMinutes()).slice(-2),
+        seconds: ('0' + this.currentDate.getSeconds()).slice(-2),
         month: {
           name: this.monthsList[this.currentDate.getMonth()],
           num: this.currentDate.getMonth()
@@ -46,7 +48,10 @@ export class LoggerService {
           start: this.currentDate.getTime()
         },
         full: this.currentDate,
-        formatted: `${ this.daysList[this.currentDate.getDay()] }, ${ this.currentDate.getDate() } ${ this.monthsList[this.currentDate.getMonth()] } ${ this.currentDate.getFullYear() }`
+        formatted: {
+          title: `${ this.daysList[this.currentDate.getDay()] }, ${ this.currentDate.getDate() } ${ this.monthsList[this.currentDate.getMonth()] } ${ this.currentDate.getFullYear() }`,
+          url: `${ this.daysList[this.currentDate.getDay()].toLowerCase() }-${ this.currentDate.getDate() }-${ this.monthsList[this.currentDate.getMonth()].toLowerCase() }-${ this.currentDate.getFullYear() }`
+        }
       },
       url: {
         pathname: window.location.pathname || '/',

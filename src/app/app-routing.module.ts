@@ -49,8 +49,13 @@ const routes: Routes = [
     loadChildren: () => import('./modules/search-results/search-results.module').then( m => m.SearchResultsPageModule),
     canLoad: [AuthGuard],
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'timeline',
+    loadChildren: () => import('./modules/timeline/timeline.module').then( m => m.TimelinePageModule),
+    canLoad: [AuthGuard],
+    canActivate: [AuthGuard]
   }
-
 ];
 
 @NgModule({

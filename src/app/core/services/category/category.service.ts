@@ -4,9 +4,9 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { AppState } from '@store/state/app.state';
-import * as loadingActions from '@store/actions/loading.actions';
+import * as loadingActions from '@modules/loading/store/actions/loading.actions';
 import * as ACTIONS_CATEGORY from '@modules/categories/store/actions/categories.actions';
-import { Category } from '@interfaces/category';
+import { ICategory } from '@interfaces/category';
 import { CategoryModel } from '@models/category.model';
 import { SlugService } from '@helpers/slug/slug.service';
 
@@ -23,9 +23,9 @@ export class CategoryService {
     private slugService: SlugService
   ) { }
 
-  getAll(): Observable<Category[]> {
+  getAll(): Observable<ICategory[]> {
     return this.db
-               .collection<Category>(this.collectionName, ref => ref.orderBy('lastModifiedDate', 'desc'))
+               .collection<ICategory>(this.collectionName, ref => ref.orderBy('lastModifiedDate', 'desc'))
                .snapshotChanges()
                .pipe(
                  map(actions => actions.map(values => {
@@ -38,7 +38,7 @@ export class CategoryService {
   }
 
   getOne(documentID: string): Observable<any> { // Observable<firebase.firestore.QuerySnapshot>
-    return this.db.collection<Category>(this.collectionName).doc(documentID).snapshotChanges(); //.get()
+    return this.db.collection<ICategory>(this.collectionName).doc(documentID).snapshotChanges(); //.get()
   }
 
   delete(id: string): Promise<void> {
@@ -60,7 +60,7 @@ export class CategoryService {
     return this.db.collection(this.collectionName).doc(id).update(category);
   }
 
-  save(category: Category): Promise<void> { // Promise<DocumentReference> 
+  save(category: ICategory): Promise<void> { // Promise<DocumentReference> 
     category.createdDate = new Date();
     category.lastModifiedDate = new Date();
     category.slug = this.slugService.create(category.title);

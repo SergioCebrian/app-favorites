@@ -1,4 +1,94 @@
 .c-list {
+  &--timeline {
+    display: flex;
+    flex-flow: row wrap;
+
+    ion-card {
+      width: 43%;
+      padding: 15px 10px;
+      border-radius: 10px;
+      box-shadow: none;
+      --background: var(--ion-color-primary-contrast);
+
+      &-header {
+        padding-bottom: 0;
+        padding-top: 8px;
+        cursor: pointer;
+      }
+
+      &-subtitle {
+        font-size: .88rem;
+        opacity: .85;
+        color: var(--ion-color-step-600, #666666);
+      }
+
+      &-subtitle,
+      &-title {
+        text-align: center;
+      }
+
+      &-title {
+        font-size: 1rem;
+        line-height: 18px;
+        text-transform: uppercase;
+        opacity: .9;
+        margin-top: 5px;
+        color: var(--ion-color-orange);
+      }
+    }
+
+    ion-text {
+      position: absolute;
+      right: -5px;
+      top: 6px;
+      opacity: .15;
+      transform: rotate(45deg);
+      font-size: 1.3rem;
+      color: var(--ion-color-step-600, #666666);
+    }
+
+    ion-icon {
+      position: relative;
+      right: 0;
+      display: block;
+      width: 100%;
+      font-size: 2.5rem;
+      opacity: .6;
+    }
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .c-list {
+    &--timeline {
+      ion-card {
+        width: 30%;
+      }
+    }
+  }  
+}
+
+@media only screen and (min-width: 1024px) {
+  .c-list {
+    &--timeline {
+      ion-card {
+        width: 21%;
+      }
+    }
+  }  
+}
+
+@media only screen and (min-width: 1200px) {
+  .c-list {
+    &--timeline {
+      ion-card {
+        width: 148px;
+      }
+    }
+  }  
+}
+
+/*.c-list {
     &--timeline {
         .list__line {
           width: 2px;
@@ -11,7 +101,11 @@
     
         .list__items {
           overflow-y: auto;
-        } 
+        }
+        
+        h2 {
+          margin-bottom: 0;
+        }
     
         ion-icon {
           cursor: default !important;
@@ -23,6 +117,10 @@
           justify-content: space-between;
           padding: 0;
           --inner-padding-end: 0;
+
+          &:not(:last-child) {
+            margin-bottom: .7rem;
+          }
     
           ion-icon {
             margin-right: 5px;
@@ -33,7 +131,9 @@
         }
     
         ion-label {
+          width: 83%;
           cursor: default;
+          padding: 0 0 0 8px;
           font-size: .92rem !important;
         }
     
@@ -163,4 +263,4 @@
       }
     }
   
-}
+}*/

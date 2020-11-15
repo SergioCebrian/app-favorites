@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-favorites-edit',
@@ -23,8 +22,7 @@ export class FavoritesEditComponent implements OnInit {
   public editFavoriteForm: FormGroup;
   public isLoading: boolean = false;
 
-  constructor(private fb: FormBuilder,
-              private activatedRouter: ActivatedRoute) { }
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
     this.categories = this.allCategories;

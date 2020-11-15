@@ -7,11 +7,12 @@ import { AppState } from '@store/state/app.state';
 import * as FAVORITE_ACTIONS from '@modules/favorites/store/actions/favorites.actions';
 import { selectFavoritesHistory, selectFavoritesHistoryCount } from '@modules/favorites/store/selectors/favorites.selectors';
 import * as LOGGER_ACTIONS from '@modules/logger/store/actions/logger.actions';
-import { selectLoggerAll } from '@modules/logger/store/selectors/logger.selectors';
+import { selectLoggerAll, selectLoggerCount } from '@modules/logger/store/selectors/logger.selectors';
 import { FavoriteModel } from '@models/favorite.model';
 import { FavoriteService } from '@services/favorite/favorite.service';
 import { AlertService } from '@services/alert/alert.service';
 import { LoggerService } from '@services/logger/logger.service';
+import { ILogger } from '@interfaces/logger';
 import { IInfiniteScroll } from '@interfaces/infinite-scroll';
 
 @Component({
@@ -30,10 +31,16 @@ export class HistoryPage implements OnInit, OnDestroy {
   private logsSubscription: Subscription;
   public favorites: FavoriteModel[];
   public favoritesTotal: number = 0;
-  public logs;
+  public logsTotal: number = 0;
+  public logs: ILogger[];
   public tabsList: string[] = ['visits', 'logs'];
   public defaultTabActive: string = this.tabsList[0];
   public infiniteScrollConfig: IInfiniteScroll = {
+    start: 0,
+    end: 10,
+    increment: 10
+  }
+  public infiniteScrollConfigLogs: IInfiniteScroll = {
     start: 0,
     end: 10,
     increment: 10
@@ -59,9 +66,13 @@ export class HistoryPage implements OnInit, OnDestroy {
                                      .subscribe((favorites: FavoriteModel[]) => this.favorites = favorites);
 
     this.store.dispatch(LOGGER_ACTIONS.loadLogger());
+    this.logsSubscription = this.store.pipe(select(selectLoggerCount))
+                                       .subscribe(logs => this.logsTotal = logs);
+
     this.logsSubscription = this.store
-                                .pipe(select(selectLoggerAll))
-                                .subscribe((logs: any) => this.logs = logs);     
+                                .pipe(select(selectLoggerAll, 
+                                  { ...this.infiniteScrollConfigLogs }))
+                                .subscribe((logs: ILogger[]) => this.logs = logs);     
   }
 
   /* =========================================================================
@@ -74,14 +85,26 @@ export class HistoryPage implements OnInit, OnDestroy {
 
     setTimeout(() => { 
       this.favoritesSubscription = this.store
-                                        .pipe(select(selectFavoritesHistory, 
-                                          { min: 1, ...this.infiniteScrollConfig }
-                                        ))
+                                        .pipe(select(selectFavoritesHistory, { min: 1, ...this.infiniteScrollConfig }))
                                         .subscribe((favorites: FavoriteModel[]) => {
                                           this.favorites = [ ...this.favorites, ...favorites ]
                                         });
       event.target.complete();
       if (this.favorites.length === this.favoritesTotal) {
+        event.target.disabled = true;
+      }
+    }, 500);
+  }
+
+  loadDataLogs(event: any): void {
+    this.infiniteScrollConfigLogs.start += this.infiniteScrollConfigLogs.increment;
+    this.infiniteScrollConfigLogs.end += this.infiniteScrollConfigLogs.increment;
+
+    setTimeout(() => { 
+      this.logsSubscription = this.store.pipe(select(selectLoggerAll, { ...this.infiniteScrollConfigLogs }))
+                                        .subscribe((logs: ILogger[]) => this.logs = [ ...this.logs, ...logs ]);
+      event.target.complete();
+      if (this.logs.length === this.logsTotal) {
         event.target.disabled = true;
       }
     }, 500);
@@ -95,7 +118,7 @@ export class HistoryPage implements OnInit, OnDestroy {
     const { favorite } = data;
     await this.favoriteService.edit(favorite);
     await this.store.dispatch(FAVORITE_ACTIONS.updateFavoriteSuccess({ favorite }));
-    await this.loggerService.register(`has changed the property 'important' of favorite: ${ favorite.title }.`);
+    await this.loggerService.register(`${favorite.title} has been ` + ((favorite.important) ? 'marked' : 'unmarked') + ' as a favorite.');
     await this.presentToast({ title: favorite.title, like: favorite.important });
   }
     

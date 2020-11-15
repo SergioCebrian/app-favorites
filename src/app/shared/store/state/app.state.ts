@@ -1,4 +1,4 @@
-import { loadingState } from './loading.state';
+import { loadingState } from '@modules/loading/store/state/loading.state';
 import { CategoriesState } from '@modules/categories/store/state/categories.state';
 import { FavoritesState } from '@modules/favorites/store/state/favorites.state';
 import { LoggerState } from '@modules/logger/store/state/logger.state';

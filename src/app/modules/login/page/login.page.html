@@ -1,3 +1,3 @@
 <ion-content class="has-bgimage">
-  <app-login (loginFormValues)="signIn($event)"></app-login>
+  <app-login [isLoading]="isLoading" (loginFormValues)="signIn($event)"></app-login>
 </ion-content>

@@ -19,6 +19,7 @@ export class SearchComponent implements OnInit {
 
   search(term: number | string): void {
     this.OnSearch.emit({ term });
+    this.term = '';
   }
 
 }

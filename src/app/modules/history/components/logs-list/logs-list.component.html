@@ -1,29 +1,16 @@
 <ion-list  class="c-list  c-list--timeline">
-    <ion-item-group (click)="expandItem(log)" *ngFor="let log of allLogs | keyvalue">
-        <ion-item-divider>
-            <ion-icon name="calendar-outline"></ion-icon>
-            <ion-label>{{ log.key }}</ion-label>
-            <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
-        </ion-item-divider>
-        <app-accordion expandHeight="300px" [expanded]="log.expanded">
-            <div class="list__items">
-                <ion-item lines="none" *ngFor="let logVal of log.value; trackBy: trackByFn">
-                <div class="list__line"></div>
-                <ion-icon name="ellipse-outline"></ion-icon>
-                <time [dateTime]="logVal.date.hours + ':' + logVal.date.minutes + ':' + logVal.date.seconds">
-                    {{ logVal.date.hours }}:{{ logVal.date.minutes }}:{{ logVal.date.seconds }}
-                </time>
-                <div>
-                    <p class="ion-no-margin">The user <ion-text>Sergio</ion-text> {{ logVal.user.message }}</p>
-                    <a [routerLink]="logVal.url.pathname" *ngIf="logVal.url.params === null">{{ logVal.url.pathname }}</a>
-                    <a [routerLink]="logVal.url.pathname" [queryParams]="{ id: logVal.url.params.split('?id=')[1] }" *ngIf="logVal.url.params !== null">
-                    {{ logVal.url.pathname }}{{ logVal.url.params }}
-                    </a>
-                </div>
-                </ion-item>
-            </div>  
-        </app-accordion>
-    </ion-item-group>
+    <ion-card lines="none" [routerLink]="'/timeline/' + log.value[0].date.formatted.url" *ngFor="let log of allLogs | keyvalue">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <ion-text>{{ log.value[0].date.year }}</ion-text>
+        <ion-card-header>
+            <ion-card-subtitle>{{ log.value[0].date.day.name }}</ion-card-subtitle>
+            <ion-card-title [title]="log.key">
+                {{ log.value[0].date.day.today }}
+                {{ shortMonth(log.value[0].date.month.name) }}
+            </ion-card-title>
+        </ion-card-header>
+    </ion-card>
 </ion-list>
 
-<!--<span class="c-message  c-message--error" *ngIf="!allLogs">Logs empty.</span>-->
+<span class="c-message  c-message--error" *ngIf="!allLogs && allLogs.length === 0">Logs empty.</span>
+<app-skeleton *ngIf="allLogs.length === 0"></app-skeleton>

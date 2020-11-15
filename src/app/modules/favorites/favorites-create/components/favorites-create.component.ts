@@ -1,11 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-
-import { Store } from '@ngrx/store';
-import { AppState } from '@store/state/app.state';
-import * as ACTIONS from '@modules/categories/store/actions/categories.actions';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-favorites-create',
@@ -27,9 +21,7 @@ export class FavoritesCreateComponent implements OnInit {
   public isLoading: boolean = false;
 
   constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private store: Store<AppState>
+    private fb: FormBuilder
   ) { 
     this.createFavoriteForm = this.fb.group({
       title: ['', [ Validators.minLength(4), Validators.required ]],

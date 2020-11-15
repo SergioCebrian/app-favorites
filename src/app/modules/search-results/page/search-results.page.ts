@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 
 import { AppState } from '@store/state/app.state';
 import * as FAVORITE_ACTIONS from '@modules/favorites/store/actions/favorites.actions';
-import { selectFavoritesAll, selectFavoritesCount, selectFavoritesSearch } from '@modules/favorites/store/selectors/favorites.selectors';
+import { selectFavoritesCount, selectFavoritesSearch } from '@modules/favorites/store/selectors/favorites.selectors';
 import { FavoriteModel } from '@models/favorite.model';
 import { FavoriteService } from '@services/favorite/favorite.service';
 import { AlertService } from '@services/alert/alert.service';
@@ -102,7 +102,7 @@ export class SearchResultsPage implements OnInit {
     const { favorite } = data;
     await this.favoriteService.edit(favorite);
     await this.store.dispatch(FAVORITE_ACTIONS.updateFavoriteSuccess({ favorite }));
-    await this.loggerService.register(`has changed the property 'important' of favorite: ${ favorite.title }.`);
+    await this.loggerService.register(`${favorite.title} has been ` + ((favorite.important) ? 'marked' : 'unmarked') + ' as a favorite.');
     await this.presentToast({ title: favorite.title, like: favorite.important });
   }
    

@@ -16,10 +16,13 @@
                             (OnDeleteFavorite)="openModal($event)" 
                             (OnIncrementCounterFavorite)="incrementCounter($event)" 
                             *ngIf="(defaultTabActive === 'visits')"></app-history-list>
+          <app-logs-list [allLogs]="logs" *ngIf="(defaultTabActive === 'logs')"></app-logs-list>
+          <!--<ion-infinite-scroll threshold="100px" (ionInfinite)="(defaultTabActive === 'visits') ? loadData($event) : loadDataLogs($event)">
+            <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
+          </ion-infinite-scroll>-->
           <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" *ngIf="(defaultTabActive === 'visits')">
             <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
           </ion-infinite-scroll>
-          <app-logs-list [allLogs]="logs" *ngIf="(defaultTabActive === 'logs')"></app-logs-list>
         </ion-col>
       </ion-row>
     </ion-grid>

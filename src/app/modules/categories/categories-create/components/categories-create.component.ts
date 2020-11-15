@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-
 import { Store } from '@ngrx/store';
 import { AppState } from '@store/state/app.state';
 
@@ -23,7 +21,6 @@ export class CategoriesCreateComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router,
     private store: Store<AppState>
   ) { 
     this.createCategoryForm = this.fb.group({

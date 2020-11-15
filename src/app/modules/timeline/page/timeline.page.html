@@ -1,0 +1,14 @@
+<app-timeline-header [customClass]="'o-header--transparent'" [data]="{ month: 'november' }" [title]="currentTimelineMonth"></app-timeline-header>
+
+<ion-content [fullscreen]="true">
+  <section class="container-fluid">
+    <ion-grid class="o-grid">
+      <ion-row>
+        <ion-col>
+          <app-timeline-list [timeline]="currentTimeline"></app-timeline-list>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </section>
+  <app-tabs [active]="'history'"></app-tabs>
+</ion-content>

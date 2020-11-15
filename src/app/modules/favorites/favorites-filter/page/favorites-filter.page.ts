@@ -84,7 +84,7 @@ export class FavoritesFilterPage implements OnInit, OnDestroy {
     const { favorite } = data;
     await this.favoriteService.edit(favorite);
     await this.store.dispatch(FAVORITE_ACTIONS.updateFavoriteSuccess({ favorite }));
-    await this.loggerService.register(`has changed the property 'important' of favorite: ${ favorite.title }.`);
+    await this.loggerService.register(`${favorite.title} has been ` + ((favorite.important) ? 'marked' : 'unmarked') + ' as a favorite.');
     await this.presentToast({ title: favorite.title, like: favorite.important });
   }
     

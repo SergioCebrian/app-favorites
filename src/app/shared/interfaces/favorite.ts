@@ -1,6 +1,6 @@
 import { CategoryModel } from '@models/category.model';
 
-export interface Favorite {
+export interface IFavorite {
     title: string,
     description: string,
     url: string,

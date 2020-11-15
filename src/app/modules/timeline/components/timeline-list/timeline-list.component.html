@@ -1,0 +1,22 @@
+<ion-list class="c-list  c-list--timeline">
+  <ion-item lines="none" *ngFor="let log of timeline">
+    <time [dateTime]="log.date.hours + ':' + log.date.minutes + ':' + log.date.seconds">
+      {{ log.date.hours }}:{{ log.date.minutes }}
+    </time>
+    <div class="separate">
+      <div></div>
+    </div>
+    <div class="bubble"></div>
+    <ion-label>
+      <h2>
+        <ion-icon name="notifications-outline"></ion-icon>
+        Admin
+      </h2>
+      <a [routerLink]="log.url.pathname" *ngIf="log.url.params === null">{{ log.url.pathname }}</a>
+      <a [routerLink]="log.url.pathname" [queryParams]="{ id: log.url.params.split('?id=')[1] }" *ngIf="log.url.params !== null">
+        {{ log.url.pathname }}{{ log.url.params }}
+      </a>
+      <p>{{ log.user.message }}</p>
+    </ion-label>
+  </ion-item>
+</ion-list>

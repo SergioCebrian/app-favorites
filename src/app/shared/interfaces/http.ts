@@ -1,3 +1,3 @@
-export interface HttpOptions {
+export interface IHttpOptions {
     headers: any;
 }

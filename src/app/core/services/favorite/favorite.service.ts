@@ -4,9 +4,9 @@ import { combineLatest, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { AppState } from '@store/state/app.state';
-import * as loadingActions from '@store/actions/loading.actions';
+import * as loadingActions from '@modules/loading/store/actions/loading.actions';
 import * as ACTIONS_FAVORITE from '@modules/favorites/store/actions/favorites.actions';
-import { Favorite } from '@interfaces/favorite';
+import { IFavorite } from '@interfaces/favorite';
 import { FavoriteModel } from '@models/favorite.model';
 import { SlugService } from '@helpers/slug/slug.service';
 import { first, flatMap, map, mergeMap, switchMap } from 'rxjs/operators';
@@ -26,7 +26,7 @@ export class FavoriteService {
 
   getAll(): Observable<any> { // Observable<firebase.firestore.QuerySnapshot>
     return this.db
-               .collection<Favorite>(this.collectionName, ref => ref.orderBy('lastModifiedDate', 'desc'))
+               .collection<IFavorite>(this.collectionName, ref => ref.orderBy('lastModifiedDate', 'desc'))
                .snapshotChanges()
                .pipe(
                  map(actions => actions.map(values => {
@@ -39,7 +39,7 @@ export class FavoriteService {
   }
 
   getOne(documentID: string): Observable<any> { // Observable<firebase.firestore.QuerySnapshot>
-    return this.db.collection<Favorite>(this.collectionName).doc(documentID).snapshotChanges();
+    return this.db.collection<IFavorite>(this.collectionName).doc(documentID).snapshotChanges();
   }
 
   delete(id: string): Promise<void> {
@@ -63,7 +63,7 @@ export class FavoriteService {
     return this.db.collection(this.collectionName).doc(favoriteID).update(favorite);
   }
 
-  save(favorite: Favorite): Promise<void> { // Promise<DocumentReference>
+  save(favorite: IFavorite): Promise<void> { // Promise<DocumentReference>
     favorite.createdDate = new Date();
     favorite.lastModifiedDate = new Date();
     favorite.slug = this.slugService.create(favorite.title);

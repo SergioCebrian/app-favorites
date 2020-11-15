@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-categories-edit',
@@ -19,8 +18,7 @@ export class CategoriesEditComponent implements OnInit {
   public editCategoryForm: FormGroup;
   public isLoading: boolean = false;
 
-  constructor(private fb: FormBuilder,
-              private activatedRouter: ActivatedRoute) { 
+  constructor(private fb: FormBuilder) { 
   }
 
   ngOnInit() {

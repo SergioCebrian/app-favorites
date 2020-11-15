@@ -1,9 +1,5 @@
-import { Component, OnInit, OnDestroy, NgZone, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { Subscription } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { AppState } from '@store/state/app.state';
+import { Component, OnInit, Output, EventEmitter, ChangeDetectionStrategy, Input } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -11,20 +7,19 @@ import { AppState } from '@store/state/app.state';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit {
+
+  @Input()
+  isLoading: boolean;
 
   @Output()
   loginFormValues: EventEmitter<{ [key: string]: string }> = new EventEmitter<{ [key: string]: string }>();
 
-  private loadingSubscription: Subscription;
-  public isLoading: boolean = false;
   public isPasswordVisible: boolean = false;
   public loginForm: FormGroup;
   
   constructor(
-    private fb: FormBuilder,
-    private store: Store<AppState>,
-    private ngZone: NgZone
+    private fb: FormBuilder
   ) { 
     this.loginForm = this.fb.group({
       email: ['', [ Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$") ]],
@@ -32,11 +27,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {
-    this.loadingSubscription = this.store
-                                   .select('loading')
-                                   .subscribe(state => this.isLoading = state.isLoading);
-  }
+  ngOnInit() { }
 
   signIn(): void {
     if (this.loginForm.invalid) { return }
@@ -48,10 +39,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   toggleVisibility(): void {
     this.isPasswordVisible = !this.isPasswordVisible;
-  }
-
-  ngOnDestroy() {
-    this.loadingSubscription.unsubscribe();
   }
 
 }

@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
 import { AppState } from '@store/state/app.state';
-import * as loadingActions from '@store/actions/loading.actions';
+import * as loadingActions from '@modules/loading/store/actions/loading.actions';
 import { IUser } from '@interfaces/user';
 import { AlertService } from '@services/alert/alert.service';
 import { ErrorService } from '@services/error/error.service';
@@ -39,8 +39,8 @@ export class AuthService {
                .signInWithEmailAndPassword(email, password)
                .then(resp => {
                   setTimeout( () => {
-                    this.router.navigate(['/']);
                     this.store.dispatch(loadingActions.stopLoading());
+                    this.router.navigate(['/']);
                   }, 2000);
                })
                .catch(err => {

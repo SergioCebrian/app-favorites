@@ -15,14 +15,14 @@ export class LogsListComponent implements OnInit {
 
   ngOnInit() { 
     this.allLogs = this.allLogs.reduce((ac,cv) => {
-      ac[cv.date.formatted] = ac[cv.date.formatted] || [];
-      ac[cv.date.formatted].push(cv);
+      ac[cv.date.formatted.title] = ac[cv.date.formatted.title] || [];
+      ac[cv.date.formatted.title].push(cv);
       return ac;
     }, Object.create(null));
   }
 
-  expandItem(log): void {
-    log.expanded = !log.expanded;
+  shortMonth(month: string): string {
+    return month.substring(0, 3);
   }
 
   trackByFn(index: number, item: any): string | number {
