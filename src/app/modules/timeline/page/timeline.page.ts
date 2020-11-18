@@ -14,6 +14,7 @@ import { ILogger } from '@interfaces/logger';
 export class TimelinePage implements OnInit {
 
   public currentTimeline: ILogger[];
+  public currentTimelineDay: string;
   public currentTimelineMonth: string;
   public currentTimelineParam: string;
 
@@ -24,6 +25,7 @@ export class TimelinePage implements OnInit {
 
   ngOnInit() {
     this.currentTimelineParam = this.activatedRouter.snapshot.params.timeline;
+    this.currentTimelineDay = this.currentTimelineParam.split('-')[1];
     this.currentTimelineMonth = this.currentTimelineParam.split('-')[2];
     this.store.pipe(select(selectOneLogger, { logger: this.currentTimelineParam }))
               .subscribe((logger: ILogger[]) => this.currentTimeline = logger);
