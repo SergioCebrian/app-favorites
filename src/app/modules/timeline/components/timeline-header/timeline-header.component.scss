@@ -26,6 +26,15 @@
                 letter-spacing: .04rem;
                 background: linear-gradient(to right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 80%);
                 color: var(--ion-color-primary-contrast);
+
+                ion-icon {
+                    cursor: default;
+                    margin-top: 0;
+                    vertical-align: bottom;
+                    margin-right: 0;
+                    font-size: 1.6rem;
+                    color: var(--ion-color-orange);
+                }
             }
             
             ion-toolbar {
