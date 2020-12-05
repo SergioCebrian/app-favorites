@@ -9,8 +9,7 @@ export class SlugService {
 
   constructor() { }
 
-  create(title: string): string {
-    
+  create(title: string): string { 
 
     for (var i = 0; i < this.specialChars.length; i++) {
         title= title.replace(new RegExp("\\" + this.specialChars[i], 'gi'), '');

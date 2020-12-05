@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 })
 export class PreloaderService {
 
-  isLoading = new Subject<boolean>();
+  isLoading: Subject<boolean> = new Subject<boolean>();
 
   show() {
     this.isLoading.next(true);

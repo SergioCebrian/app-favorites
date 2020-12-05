@@ -10,7 +10,6 @@ import { SearchComponent } from '@components/search/search.component';
 import { TabsComponent } from '@components/tabs/tabs.component';
 import { SegmentComponent } from '@components/segment/segment.component';
 import { SkeletonComponent } from '@components/skeleton/skeleton.component';
-import { AccordionComponent } from '@components/accordion/accordion.component';
 
 import { ImageFallbackDirective } from '@directives/image-fallback/image-fallback.directive';
 import { TruncatePipe } from '@pipes/truncate/truncate.pipe';
@@ -25,7 +24,6 @@ import { FillPipe } from '@pipes/fill/fill.pipe';
     TabsComponent,
     SegmentComponent,
     SkeletonComponent,
-    AccordionComponent,
     FillPipe,
     TruncatePipe,
     ImageFallbackDirective
@@ -43,7 +41,6 @@ import { FillPipe } from '@pipes/fill/fill.pipe';
     TabsComponent,
     SegmentComponent,
     SkeletonComponent,
-    AccordionComponent,
     FillPipe,
     TruncatePipe,
     ImageFallbackDirective
