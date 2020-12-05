@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '@auth/auth.service';
@@ -18,16 +17,11 @@ export class HeaderComponent implements OnInit {
   title: string;
 
   constructor(
-    private location: Location,
     private router: Router,
     private authService: AuthService
   ) { }
 
   ngOnInit() { }
-
-  goBack() {
-    this.location.back();
-  }
 
   logOut(): void {
     this.authService

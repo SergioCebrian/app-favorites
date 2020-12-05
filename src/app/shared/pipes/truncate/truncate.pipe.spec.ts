@@ -1,11 +1,13 @@
 import { TruncatePipe } from './truncate.pipe';
 
 describe('TruncatePipe', () => {
+  const pipe = new TruncatePipe();
+  
   it('create an instance', () => {
-    const pipe = new TruncatePipe();
     expect(pipe).toBeTruthy();
-    /*it('transforms "abcdefghijk" to "abcdef..."', () => {
-      expect(pipe.transform('abcdefghijk', [])).toBe('abcdef...');
-    })*/
+  });
+
+  it('transforms "Testing Truncate Pipe" to "Testing "', () => {
+    expect(pipe.transform('Testing Truncate Pipe', [7])).toBe('Testing ');
   });
 });

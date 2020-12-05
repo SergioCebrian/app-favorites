@@ -15,7 +15,7 @@ import { SlugService } from '@helpers/slug/slug.service';
 })
 export class CategoryService {
 
-  private collectionName: string = 'categories';
+  public collectionName: string = 'categories';
 
   constructor(
     private db: AngularFirestore,

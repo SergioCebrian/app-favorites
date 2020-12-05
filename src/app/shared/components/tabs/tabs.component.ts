@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 
 import { AppState } from '@store/state/app.state';
@@ -7,11 +8,8 @@ import * as FAVORITE_ACTIONS from '@modules/favorites/store/actions/favorites.ac
 import { selectCategoriesCount } from '@modules/categories/store/selectors/categories.selectors';
 import { 
   selectFavoritesCount, 
-  selectFavoritesHistory, 
   selectFavoritesHistoryCount, 
-  selectFavoritesLikes, 
   selectFavoritesLikesCount} from '@modules/favorites/store/selectors/favorites.selectors';
-import { HttpService } from '@http/http.service';
 
 @Component({
   selector: 'app-tabs',
@@ -30,7 +28,7 @@ export class TabsComponent implements OnInit {
   public totalFavoritesLikes: number;
 
   constructor(
-    private httpService: HttpService,
+    private router: Router,
     private store: Store<AppState>
   ) { }
 
@@ -51,7 +49,7 @@ export class TabsComponent implements OnInit {
   }
 
   redirectUrl(url: string): void {
-   this.httpService.redirectUrl(url);
+    this.router.navigateByUrl(url);
   }
 
 }

@@ -1,15 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
-
-import { AppState } from '@store/state/app.state';
-import * as loadingActions from '@modules/loading/store/actions/loading.actions';
 import { IUser } from '@interfaces/user';
-import { AlertService } from '@services/alert/alert.service';
-import { ErrorService } from '@services/error/error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,11 +10,7 @@ import { ErrorService } from '@services/error/error.service';
 export class AuthService {
 
   constructor(
-    private authFB: AngularFireAuth,
-    private router: Router,
-    private store: Store<AppState>,
-    private alertService: AlertService,
-    private errorService: ErrorService
+    private authFB: AngularFireAuth
   ) { }
 
   isAuth(): Observable<boolean> {
@@ -32,33 +21,9 @@ export class AuthService {
                );
   }
 
-  signIn(data: IUser): Promise<void> {
+  signIn(data: IUser): Promise<firebase.auth.UserCredential> {
     const { email, password } = data;
-    this.store.dispatch(loadingActions.isLoading());
-    return this.authFB
-               .signInWithEmailAndPassword(email, password)
-               .then(resp => {
-                  setTimeout( () => {
-                    this.store.dispatch(loadingActions.stopLoading());
-                    this.router.navigate(['/']);
-                  }, 2000);
-               })
-               .catch(err => {
-                  this.alertService.presentAlert({
-                    cssClass: 'c-alert--error  has-before  has-only-button',
-                    header: 'Opps!',
-                    message: this.errorService.get(err).message,
-                    buttons: [
-                      {
-                        text: 'Close',
-                        role: 'cancel',
-                        cssClass: 'is-error'
-                      }
-                    ]
-                  });
-                  this.store.dispatch(loadingActions.stopLoading());
-                  // console.error(err);
-               });
+    return this.authFB.signInWithEmailAndPassword(email, password);
   }
 
   signUp(data: IUser): Promise<firebase.auth.UserCredential> {

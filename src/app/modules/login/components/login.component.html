@@ -27,7 +27,7 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-button expand="block" type="submit" [disabled]="loginForm.invalid" class="ion-activatable  u-ripple-parent" title="Connect" *ngIf="isLoading === false">
+        <ion-button expand="block" type="submit" id="submit-btn" [disabled]="loginForm.invalid" class="ion-activatable  u-ripple-parent" title="Connect" *ngIf="isLoading === false">
           Connect
           <ion-ripple-effect></ion-ripple-effect>
         </ion-button>
