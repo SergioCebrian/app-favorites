@@ -18,23 +18,46 @@ describe('CounterComponent', () => {
     fixture.detectChanges();
   }));
 
-  /*/*it('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
-  
-  it('counter must be a number', () => {
-    component.counter = 10;
-    expect(component.counter).toEqual(10);
-    expect(component.counter).toEqual(jasmine.any(Number));
+
+  describe('tests counter property', () => {
+    const expectedCounter: number = 8;
+
+    it('counter is a number', () => {
+      component.counter = expectedCounter;
+      expect(component.counter).toEqual(jasmine.any(Number));
+    });
+
+    it('counter value is eight', () => {
+      component.counter = expectedCounter;
+      expect(component.counter).toBe(expectedCounter);
+    });
   });
 
-  it('counter must have two properties: single and plural', () => {
-    component.counter = 10;
-    if (component.counter > 1) {
-      component.text.plural = 'Plural';
-    } else {
-      component.text.single = 'Single';
-    }
-  });*/
+  describe('tests text property', () => {
+    const expectedPluralText: { [key: string]: string } = { plural: 'Plural' },
+          expectedSingleText: { [key: string]: string } = { single: 'single' };
+
+    it('text value is plural', () => {
+      component.text = expectedPluralText;
+      expect(component.text).toBe(expectedPluralText);
+    });
+
+    it('text value is single', () => {
+      component.text = expectedSingleText;
+      expect(component.text).toBe(expectedSingleText);
+    });
+  });
+
+  describe('tests flag property', () => {
+    const expectedFlagText: string = 'Flag';
+    
+    it('flag value is a string', () => {
+      component.flag = expectedFlagText;
+      expect(component.flag).toBe(expectedFlagText);
+    });
+  });
 
 });

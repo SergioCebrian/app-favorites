@@ -6,6 +6,7 @@ import { appReducers } from '@shared/store/reducers/app.reducers';
 import { environment } from '@environments/environment';
 
 import { AuthGuard } from './auth.guard';
+import { Observable, observable } from 'rxjs';
 
 describe('AuthGuard', () => {
   let guard: AuthGuard;

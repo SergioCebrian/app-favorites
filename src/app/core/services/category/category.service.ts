@@ -23,7 +23,7 @@ export class CategoryService {
     private slugService: SlugService
   ) { }
 
-  getAll(): Observable<ICategory[]> {
+  getAll(): Observable<any> {
     return this.db
                .collection<ICategory>(this.collectionName, ref => ref.orderBy('lastModifiedDate', 'desc'))
                .snapshotChanges()
