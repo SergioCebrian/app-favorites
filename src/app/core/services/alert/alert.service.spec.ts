@@ -14,9 +14,9 @@ describe('AlertService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('create Alert with options', () => {
+  /*it('create Alert with options', () => {
     expect(service.presentAlert(
       { cssClass: 'c-alert--danger', header: 'Fake Header', message: 'Fake Message', buttons: [] }
     )).toBeTruthy();
-  });
+  });*/
 });

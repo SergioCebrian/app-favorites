@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
-import { combineLatest, Observable } from 'rxjs';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
 import { AppState } from '@store/state/app.state';
@@ -9,7 +10,6 @@ import * as ACTIONS_FAVORITE from '@modules/favorites/store/actions/favorites.ac
 import { IFavorite } from '@interfaces/favorite';
 import { FavoriteModel } from '@models/favorite.model';
 import { SlugService } from '@helpers/slug/slug.service';
-import { first, flatMap, map, mergeMap, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

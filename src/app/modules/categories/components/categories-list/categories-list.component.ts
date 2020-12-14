@@ -18,7 +18,7 @@ export class CategoriesListComponent implements OnInit {
 
   ngOnInit() { }
 
-  categoryDelete(category: { [key: string]: number | string }) {
+  categoryDelete(category: { [key: string]: number | string | Date }) {
     this.OnDeleteCategory.emit({ category });
   }
 

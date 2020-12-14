@@ -8,10 +8,12 @@ import { environment } from '@environments/environment';
 import { SlugService } from '@helpers/slug/slug.service';
 
 import { CategoryService } from './category.service';
+import { CategoryModel } from '@models/category.model';
+import { CategoryMock } from '@mocks/category.mock';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
 describe('CategoryService', () => {
   let service: CategoryService;
-  let httpClientSpy: { getAll: jasmine.Spy };
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
@@ -22,10 +24,12 @@ describe('CategoryService', () => {
         RouterTestingModule, 
         StoreModule.forRoot(appReducers)
       ],
-      providers: [ SlugService ]
+      providers: [ 
+        SlugService,
+        AngularFirestore
+      ]
     });
     service = TestBed.inject(CategoryService);
-    httpClientSpy = jasmine.createSpyObj('HttpClient', ['getAll']);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 
@@ -35,6 +39,21 @@ describe('CategoryService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  describe('Tests Http calls', () => {
+    const expectedCategories: CategoryModel[] = CategoryMock;
+    let afs: AngularFirestore;
+
+    beforeEach(() => {
+      afs = TestBed.inject(AngularFirestore);
+    });
+
+    it('Testing collection categories is an AngularFirestoreCollection', () => {
+      const collection = afs.collection('categories');
+      expect(collection instanceof AngularFirestoreCollection).toBe(true);
+    });
+
   });
 
 });

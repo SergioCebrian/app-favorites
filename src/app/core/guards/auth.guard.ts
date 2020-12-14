@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate, CanLoad {
     private authService: AuthService
   ) {}
 
-  canLoad(): Observable<boolean> {
+  canLoad(): Observable<any> {
     return this.authService
                .isAuth()
                .pipe(
