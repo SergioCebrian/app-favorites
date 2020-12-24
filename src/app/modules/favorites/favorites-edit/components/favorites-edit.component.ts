@@ -32,7 +32,7 @@ export class FavoritesEditComponent implements OnInit {
       title: [this.favorite.title, Validators.required],
       description: [this.favorite.description, [ Validators.minLength(4), Validators.required ]],
       category: [this.favorite.category_id, [ Validators.required ]],
-      url: [this.favorite.url, [ Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?'), Validators.required ]],
+      url: [this.favorite.url, [ Validators.required ]],
       important: [this.favorite.important, [ ]]
     });
   }

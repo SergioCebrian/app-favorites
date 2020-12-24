@@ -27,7 +27,7 @@ export class FavoritesCreateComponent implements OnInit {
       title: ['', [ Validators.minLength(4), Validators.required ]],
       description: ['', [ Validators.minLength(4), Validators.required ]],
       category_id: ['', [ Validators.required ]],
-      url: ['', [ Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?'), Validators.required ]],
+      url: ['', [ Validators.required ]],
       important: [false, [ ]]
     });
   }

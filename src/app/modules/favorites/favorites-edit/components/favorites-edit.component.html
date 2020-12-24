@@ -28,7 +28,7 @@
     <ion-row>
       <ion-col class="c-form-group" [ngClass]="editFavoriteForm.get('url').valid ? 'is-valid' : ''">
         <ion-label for="url" position="fixed">Url: <ion-text color="danger">*</ion-text></ion-label>
-        <ion-input id="url" name="url" formControlName="url"></ion-input>
+        <ion-input id="url" type="url" name="url" formControlName="url"></ion-input>
         <ion-icon name="checkmark-circle-outline" *ngIf="editFavoriteForm.get('url').valid"></ion-icon>
       </ion-col>
     </ion-row>
