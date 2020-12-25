@@ -36,20 +36,20 @@ describe('CounterComponent', () => {
     });
   });
 
-  describe('tests text property', () => {
-    const expectedPluralText: { [key: string]: string } = { plural: 'Plural' },
-          expectedSingleText: { [key: string]: string } = { single: 'single' };
+  /*describe('tests text property', () => {
+    let expectedText: any;
+
+    beforeEach(() => {
+      expectedText = { plural: 'Plural', single: 'Single' };
+      component.text = expectedText;
+    })
 
     it('text value is plural', () => {
-      component.text = expectedPluralText;
-      expect(component.text).toBe(expectedPluralText);
+      component.counter = 10;
+      expect(component.text.plural).toEqual(expectedText.plural)
     });
 
-    it('text value is single', () => {
-      component.text = expectedSingleText;
-      expect(component.text).toBe(expectedSingleText);
-    });
-  });
+  });*/
 
   describe('tests flag property', () => {
     const expectedFlagText: string = 'Flag';
