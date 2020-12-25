@@ -26,7 +26,9 @@
         <ion-input type="hidden" id="id" formControlName="id" readonly></ion-input>
         <ion-button expand="block" [disabled]="editCategoryForm.invalid" title="Update category" 
                     type="submit" class="ion-no-margin" *ngIf="isLoading === false">Update</ion-button>
-        <ion-button expand="block" class="ion-no-margin" *ngIf="isLoading === true" disabled>Updating</ion-button>       
+        <ion-button expand="block" class="ion-no-margin  c-btn  c-btn--loading" *ngIf="isLoading === true" disabled>
+          <ion-spinner name="crescent"></ion-spinner>
+        </ion-button>       
       </ion-col>
     </ion-row>
   </form>

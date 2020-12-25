@@ -31,8 +31,8 @@
           Connect
           <ion-ripple-effect></ion-ripple-effect>
         </ion-button>
-        <ion-button expand="block" *ngIf="isLoading === true" disabled>
-          Connecting
+        <ion-button class="c-btn c-btn--loading" expand="block" *ngIf="isLoading === true" disabled>
+          <ion-spinner name="crescent"></ion-spinner>
         </ion-button>
       </ion-col>
     </ion-row>

@@ -1,3 +1,32 @@
+/**
+ * Content file:
+ *
+ * $Animations
+ * $Buttons
+ * $Forms
+ * $Icons
+ * $Inputs
+ * $Links
+ *
+ */
+
+/*=======================================================================*\
+  $Animations
+/*=======================================================================*/
+
+@keyframes changeWidth {
+    0% { width: 100% }
+    100% { width: 30% }
+}
+
+.c-btn--loading {
+    transition: all .2s ease-in-out;
+    animation-name: changeWidth;
+    animation-duration: 200ms;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
 /*==========================================================================*\
   +++ Forms +++
 /*==========================================================================*/
@@ -16,6 +45,8 @@ ion-input[type="hidden"] {
 .c-form {
 
     ion-button {
+        margin-left: auto;
+        margin-right: auto;
         --background: var(--ion-color-brown);
     }
 
