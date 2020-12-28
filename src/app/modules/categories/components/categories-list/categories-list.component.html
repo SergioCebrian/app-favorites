@@ -2,7 +2,7 @@
   <ion-item-sliding [id]="category.id" *ngFor="let category of allCategories; trackBy: trackByFn">
     <ion-item lines="none" [title]="category.title" [routerLink]="category.slug">
       <ion-card class="ion-no-margin">
-        <img [src]="'assets/images/categories/' + category.slug + '.jpg'" [alt]="category.title" appImageFallback>
+        <img [src]="category.image" [alt]="category.title" appImageFallback>
         <ion-card-header>
           <ion-card-subtitle>{{ category.type }}</ion-card-subtitle>
           <ion-card-title> {{ category.title }}</ion-card-title>

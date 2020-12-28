@@ -6,6 +6,17 @@
   outline: 0;
 }
 
+abbr {
+  color: var(--ion-color-danger, #eb445a);
+
+  &[title] {
+    border-bottom: none;
+    cursor: inherit;
+    text-decoration: none;
+  }
+
+}
+
 ion-content {
   --background: var(--ion-color-grey-medium);
 }

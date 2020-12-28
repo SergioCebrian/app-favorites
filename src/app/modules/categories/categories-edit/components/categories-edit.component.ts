@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UploadService } from '@services/upload/upload.service';
 
 @Component({
   selector: 'app-categories-edit',
@@ -18,15 +19,18 @@ export class CategoriesEditComponent implements OnInit {
   public editCategoryForm: FormGroup;
   public isLoading: boolean = false;
 
-  constructor(private fb: FormBuilder) { 
-  }
+  constructor(
+    private fb: FormBuilder,
+    private uploadService: UploadService
+  ) { }
 
   ngOnInit() {
     this.editCategoryForm = this.fb.group({
       id: [this.category.id, Validators.required],
       title: [this.category.title, Validators.required],
       description: [this.category.description, Validators.required],
-      type: [this.category.type, Validators.required]
+      type: [this.category.type, Validators.required],
+      image: [this.category.image, Validators.required]
     });
   }
 
@@ -39,11 +43,16 @@ export class CategoriesEditComponent implements OnInit {
         id: this.editCategoryForm.value.id,
         title: this.editCategoryForm.value.title,
         description: this.editCategoryForm.value.description,
-        type: this.editCategoryForm.value.type
+        type: this.editCategoryForm.value.type,
+        image: this.editCategoryForm.value.image
       }
       this.OnEditCategory.emit({ category: updateCategory });
       setTimeout(() => this.isLoading = false, 3000);
     }
+  }
+
+  uploadFile(event): void {
+    this.uploadService.uploadFile(event);
   }
 
 }

@@ -36,20 +36,25 @@ describe('CounterComponent', () => {
     });
   });
 
-  /*describe('tests text property', () => {
-    let expectedText: any;
+  describe('tests text property', () => {
+    let expectedText: any = { plural: 'Plural', single: 'Single' };
+    component.text = expectedText;
 
-    beforeEach(() => {
-      expectedText = { plural: 'Plural', single: 'Single' };
-      component.text = expectedText;
-    })
+    /*it('text value is single', () => {
+      component.counter = 1;
+      component.message = expectedText.single;
+      fixture.detectChanges();
+      expect(component.message).toEqual('single')
+    });
 
     it('text value is plural', () => {
       component.counter = 10;
-      expect(component.text.plural).toEqual(expectedText.plural)
-    });
+      component.message = expectedText.plural;
+      fixture.detectChanges();
+      expect(component.message).toEqual('plural')
+    });*/
 
-  });*/
+  });
 
   describe('tests flag property', () => {
     const expectedFlagText: string = 'Flag';

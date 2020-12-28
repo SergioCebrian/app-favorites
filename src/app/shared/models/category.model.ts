@@ -4,5 +4,6 @@ export interface CategoryModel {
     description: string,
     type: string,
     slug: string,
+    image: string,
     lastModifiedDate: Date
 }

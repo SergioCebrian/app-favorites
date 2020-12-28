@@ -2,21 +2,21 @@
   <form class="c-form" [formGroup]="editFavoriteForm" (ngSubmit)="updateFavorite()">
     <ion-row>
       <ion-col class="c-form-group" [ngClass]="editFavoriteForm.get('title').valid ? 'is-valid' : ''">
-        <ion-label for="title" position="fixed">Title: <ion-text color="danger">*</ion-text></ion-label>
+        <ion-label for="title" position="fixed">Title: <abbr title="Campo obligatorio">*</abbr></ion-label>
         <ion-input id="title" name="title" formControlName="title"></ion-input>
         <ion-icon name="checkmark-circle-outline" *ngIf="editFavoriteForm.get('title').valid"></ion-icon>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="c-form-group" [ngClass]="editFavoriteForm.get('description').valid ? 'is-valid' : ''">
-        <ion-label for="description" position="fixed">Description: <ion-text color="danger">*</ion-text></ion-label>
+        <ion-label for="description" position="fixed">Description: <abbr title="Campo obligatorio">*</abbr></ion-label>
         <ion-textarea id="description" name="description" formControlName="description"></ion-textarea>
         <ion-icon name="checkmark-circle-outline" *ngIf="editFavoriteForm.get('description').valid"></ion-icon>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="c-form-group" [ngClass]="editFavoriteForm.get('category').valid ? 'is-valid' : ''">
-        <ion-label for="category" position="fixed">Category: <ion-text color="danger">*</ion-text></ion-label>
+        <ion-label for="category" position="fixed">Category: <abbr title="Campo obligatorio">*</abbr></ion-label>
         <ion-select id="category"  class="form-control" formControlName="category">
           <ion-select-option [id]="cat.id" [value]="cat.id" *ngFor="let cat of categories">
             {{ cat.title }}
@@ -27,7 +27,7 @@
     </ion-row>
     <ion-row>
       <ion-col class="c-form-group" [ngClass]="editFavoriteForm.get('url').valid ? 'is-valid' : ''">
-        <ion-label for="url" position="fixed">Url: <ion-text color="danger">*</ion-text></ion-label>
+        <ion-label for="url" position="fixed">Url: <abbr title="Campo obligatorio">*</abbr></ion-label>
         <ion-input id="url" type="url" name="url" formControlName="url"></ion-input>
         <ion-icon name="checkmark-circle-outline" *ngIf="editFavoriteForm.get('url').valid"></ion-icon>
       </ion-col>

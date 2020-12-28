@@ -2,23 +2,41 @@
   <form class="c-form" [formGroup]="editCategoryForm" (ngSubmit)="updateCategory()">
     <ion-row>
       <ion-col class="c-form-group" [ngClass]="editCategoryForm.get('title').valid ? 'is-valid' : ''">
-        <ion-label for="title" position="fixed">Title: <ion-text color="danger">*</ion-text></ion-label>
+        <ion-label for="title" position="fixed">Title: <abbr title="Campo obligatorio">*</abbr></ion-label>
         <ion-input id="title" name="title" formControlName="title"></ion-input>
         <ion-icon name="checkmark-circle-outline" *ngIf="editCategoryForm.get('title').valid"></ion-icon>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="c-form-group" [ngClass]="editCategoryForm.get('description').valid ? 'is-valid' : ''">
-        <ion-label for="description" position="fixed">Description: <ion-text color="danger">*</ion-text></ion-label>
+        <ion-label for="description" position="fixed">Description: <abbr title="Campo obligatorio">*</abbr></ion-label>
         <ion-input id="description" name="description" formControlName="description"></ion-input>
         <ion-icon name="checkmark-circle-outline" *ngIf="editCategoryForm.get('description').valid"></ion-icon>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="c-form-group" [ngClass]="editCategoryForm.get('type').valid ? 'is-valid' : ''">
-        <ion-label for="type" position="fixed">Type: <ion-text color="danger">*</ion-text></ion-label>
+        <ion-label for="type" position="fixed">Type: <abbr title="Campo obligatorio">*</abbr></ion-label>
         <ion-input id="type" name="type" formControlName="type"></ion-input>
         <ion-icon name="checkmark-circle-outline" *ngIf="editCategoryForm.get('type').valid"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <!--<ion-col class="c-form-group" [ngClass]="createCategoryForm.get('image').valid ? 'is-valid' : ''">-->
+        <ion-col class="c-form-group">
+        <ion-label for="image" position="fixed">Image: <abbr title="Campo obligatorio">*</abbr></ion-label>
+        <ion-img [src]="category.image" [alt]="category.title"></ion-img>
+        <!--<div class="c-form__file">
+          <ion-input id="image" type="file" name="image" formControlName="image" (change)="uploadFile($event)" accept=".jpg"></ion-input>
+          <span>Drop files here or click to upload</span>
+          <div class="c-form__file--upload" *ngIf="uploadService.uploadProgress | async as val">
+            <progress type="warning" [value]="val" [ngStyle]="{ 'width': val }" max="100"></progress>
+            <samp>{{ uploadService.uploadProgress | async }}%</samp>
+          </div>        
+        </div>
+        <img id="category-image" [src]="uploadService.downloadURL | async" appImageFallback *ngIf="(uploadService.uploadProgress | async)==100">
+      -->
+        <!--<ion-icon name="checkmark-circle-outline" *ngIf="createCategoryForm.get('image').valid && (uploadService.uploadProgress | async)==100"></ion-icon>-->
       </ion-col>
     </ion-row>
     <ion-row>

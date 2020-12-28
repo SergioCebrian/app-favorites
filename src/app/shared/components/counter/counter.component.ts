@@ -17,8 +17,12 @@ export class CounterComponent implements OnInit {
   @Input()
   flag?: string;
 
+  public message: string;
+
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.message = (this.counter > 1) ? this.text.plural : this.text.single;
+  }
 
 }

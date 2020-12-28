@@ -3,6 +3,7 @@ export interface ICategory {
     description: string,
     type: string,
     slug: string,
+    image: string,
     createdDate: Date,
     lastModifiedDate: Date
 }
