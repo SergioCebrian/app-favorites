@@ -16,6 +16,7 @@ export class TimelinePage implements OnInit {
   public currentTimeline: ILogger[];
   public currentTimelineDay: string;
   public currentTimelineMonth: string;
+  public currentTimelineYear: string;
   public currentTimelineParam: string;
 
   constructor(
@@ -27,6 +28,7 @@ export class TimelinePage implements OnInit {
     this.currentTimelineParam = this.activatedRouter.snapshot.params.timeline;
     this.currentTimelineDay = this.currentTimelineParam.split('-')[1];
     this.currentTimelineMonth = this.currentTimelineParam.split('-')[2];
+    this.currentTimelineYear = this.currentTimelineParam.split('-')[3];
     this.store.pipe(select(selectOneLogger, { logger: this.currentTimelineParam }))
               .subscribe((logger: ILogger[]) => this.currentTimeline = logger);
   }

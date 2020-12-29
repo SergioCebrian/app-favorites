@@ -5,8 +5,10 @@
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-title>
-      <ion-icon name="calendar-outline"></ion-icon> 
-      {{ data.day }} {{ title }}
+      <!--<ion-icon name="calendar-outline"></ion-icon>-->
+      <span>{{ data.day }}</span> 
+      <span>{{ title }}</span> 
+      <span>{{ data.year }}</span>
     </ion-title>
     <ion-icon title="Logout" name="power-outline" (click)="logOut()" slot="end"></ion-icon>
   </ion-toolbar>
