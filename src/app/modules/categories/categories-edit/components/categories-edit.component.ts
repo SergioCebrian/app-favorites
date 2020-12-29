@@ -1,5 +1,8 @@
 import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { UploadService } from '@services/upload/upload.service';
 
 @Component({
@@ -18,10 +21,13 @@ export class CategoriesEditComponent implements OnInit {
 
   public editCategoryForm: FormGroup;
   public isLoading: boolean = false;
+  public uploadProgress: Observable<number>;
+  public downloadURL: Observable<string>;
 
   constructor(
     private fb: FormBuilder,
-    private uploadService: UploadService
+    private storage: AngularFireStorage
+    // private uploadService: UploadService
   ) { }
 
   ngOnInit() {
@@ -44,7 +50,7 @@ export class CategoriesEditComponent implements OnInit {
         title: this.editCategoryForm.value.title,
         description: this.editCategoryForm.value.description,
         type: this.editCategoryForm.value.type,
-        image: this.editCategoryForm.value.image
+        image: this.editCategoryForm.value.image || document.getElementById('category-image').getAttribute('src')
       }
       this.OnEditCategory.emit({ category: updateCategory });
       setTimeout(() => this.isLoading = false, 3000);
@@ -52,7 +58,18 @@ export class CategoriesEditComponent implements OnInit {
   }
 
   uploadFile(event): void {
-    this.uploadService.uploadFile(event);
+    // return this.uploadService.uploadFile(event);
+    const file = event.target.files[0],
+    fileName = Math.random().toString(36).substring(2),
+    filePath = `images/categories/${ fileName }`,
+    fileRef = this.storage.ref(filePath),
+    task = this.storage.upload(filePath, file);
+
+    this.uploadProgress = task.percentageChanges();
+    task.snapshotChanges().pipe(
+      finalize(() => this.downloadURL = fileRef.getDownloadURL() )
+    )
+    .subscribe()
   }
 
 }

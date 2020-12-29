@@ -14,6 +14,7 @@ import { SkeletonComponent } from '@components/skeleton/skeleton.component';
 import { ImageFallbackDirective } from '@directives/image-fallback/image-fallback.directive';
 import { TruncatePipe } from '@pipes/truncate/truncate.pipe';
 import { FillPipe } from '@pipes/fill/fill.pipe';
+import { DragAndDropDirective } from './directives/drag-and-drop/drag-and-drop.directive';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { FillPipe } from '@pipes/fill/fill.pipe';
     SkeletonComponent,
     FillPipe,
     TruncatePipe,
-    ImageFallbackDirective
+    ImageFallbackDirective,
+    DragAndDropDirective
   ],
   imports: [
     CommonModule,
@@ -43,6 +45,7 @@ import { FillPipe } from '@pipes/fill/fill.pipe';
     SkeletonComponent,
     FillPipe,
     TruncatePipe,
+    DragAndDropDirective,
     ImageFallbackDirective
   ]
 })

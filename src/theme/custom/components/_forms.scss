@@ -2,11 +2,8 @@
  * Content file:
  *
  * $Animations
- * $Buttons
  * $Forms
- * $Icons
- * $Inputs
- * $Links
+ * $Upload
  *
  */
 
@@ -184,4 +181,96 @@ ion-input[type="hidden"] {
             border-bottom-color: var(--ion-color-success);
         }
     }
+}
+
+/*==========================================================================*\
+  +++ Upload +++
+/*==========================================================================*/
+
+.c-form {
+
+    &__dropzone {
+        height: 200px;
+        position: relative;
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+        box-sizing: border-box;
+        margin-top: .3rem;
+        border: 3px dashed #CCC;
+
+        [type="file"] {
+            opacity: 0;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 1;
+        }
+
+        progress {
+            height: 18px;
+
+            &::-webkit-progress-bar {
+              background-color: #CCC;
+            }
+
+            &::-webkit-progress-value {
+              background-color: orange;
+            }
+        }
+
+        samp {
+            margin-left: 5px;
+        }
+
+        samp,
+        span {
+            font-size: .87rem;
+            text-align: center;
+            color: var(--ion-color-medium-shade);
+        }
+
+        span {
+        }
+
+        mark {
+            display: block;
+            width: max-content;
+            padding: 7px 12px;
+            border-radius: 15px;
+            margin-top: 7px;
+            text-align: center;
+            background: orange;
+            color: var(--ion-color-primary-contrast);
+        }
+    }
+
+    &__upload {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: .7rem 0;
+
+        ion-icon {
+            position: relative;
+            vertical-align: middle;
+            bottom: 0 !important;
+            right: 0 !important;
+        }
+
+        & + img {
+            width: 55%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+    }
+
+}
+
+ion-progress-bar {
+    max-width: 90%;
 }

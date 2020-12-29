@@ -8,8 +8,8 @@ import { finalize } from 'rxjs/operators';
 })
 export class UploadService {
 
-  public uploadProgress: Observable<number>;
-  public downloadURL: Observable<string>;
+  private uploadProgress: Observable<number>;
+  private downloadURL: Observable<string>;
 
   constructor(
     private storage: AngularFireStorage
@@ -27,6 +27,14 @@ export class UploadService {
         finalize(() => this.downloadURL = fileRef.getDownloadURL() )
      )
     .subscribe()
+  }
+
+  getDownloadUrl(): Observable<string> {
+    return this.downloadURL;
+  }
+
+  getUploadProgress(): Observable<number> {
+    return this.uploadProgress;
   }
 
 }

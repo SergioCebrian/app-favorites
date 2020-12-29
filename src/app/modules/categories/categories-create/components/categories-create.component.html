@@ -1,5 +1,7 @@
 <ion-grid class="o-grid">
   <form class="c-form" [formGroup]="createCategoryForm" (ngSubmit)="createCategory()">
+    
+    <!-- Title -->
     <ion-row>
       <ion-col class="c-form-group" [ngClass]="createCategoryForm.get('title').valid ? 'is-valid' : ''">
         <ion-label for="title" position="fixed">Title: <abbr title="Campo obligatorio">*</abbr></ion-label>
@@ -7,6 +9,8 @@
         <ion-icon name="checkmark-circle-outline" *ngIf="createCategoryForm.get('title').valid"></ion-icon>
       </ion-col>
     </ion-row>
+    
+    <!-- Description -->
     <ion-row>
       <ion-col class="c-form-group" [ngClass]="createCategoryForm.get('description').valid ? 'is-valid' : ''">
         <ion-label for="description" position="fixed">Description: <abbr title="Campo obligatorio">*</abbr></ion-label>
@@ -14,6 +18,8 @@
         <ion-icon name="checkmark-circle-outline" *ngIf="createCategoryForm.get('description').valid"></ion-icon>
       </ion-col>
     </ion-row>
+
+    <!-- Type -->
     <ion-row>
       <ion-col class="c-form-group" [ngClass]="createCategoryForm.get('type').valid ? 'is-valid' : ''">
         <ion-label for="type" position="fixed">Type: <abbr title="Campo obligatorio">*</abbr></ion-label>
@@ -21,21 +27,23 @@
         <ion-icon name="checkmark-circle-outline" *ngIf="createCategoryForm.get('type').valid"></ion-icon>
       </ion-col>
     </ion-row>
+
+    <!-- Image -->
     <ion-row>
       <ion-col class="c-form-group" [ngClass]="createCategoryForm.get('image').valid ? 'is-valid' : ''">
         <ion-label for="image" position="fixed">Image: <abbr title="Campo obligatorio">*</abbr></ion-label>
-        <div class="c-form__file">
+        <div class="c-form__dropzone">
           <ion-input id="image" type="file" name="image" formControlName="image" (change)="uploadFile($event)" accept=".jpg"></ion-input>
-          <span>Drop files here or click to upload</span>
-          <div class="c-form__file--upload" *ngIf="uploadService.uploadProgress | async as val">
-            <progress type="warning" [value]="val" [ngStyle]="{ 'width': val }" max="100"></progress>
-            <samp>{{ uploadService.uploadProgress | async }}%</samp>
-          </div>        
+          <span>Drop files here <br>or <mark>Click to upload</mark></span>       
         </div>
-        <img id="category-image" [src]="uploadService.downloadURL | async" appImageFallback *ngIf="(uploadService.uploadProgress | async)==100">
-        <ion-icon name="checkmark-circle-outline" *ngIf="createCategoryForm.get('image').valid && (uploadService.uploadProgress | async)==100"></ion-icon>
+        <div class="c-form__upload" *ngIf="uploadProgress | async as val">
+          <ion-progress-bar [value]="val % 100"></ion-progress-bar>
+          <ion-icon name="checkmark-circle-outline" *ngIf="createCategoryForm.get('image').valid && (uploadProgress | async)==100"></ion-icon>
+        </div> 
+        <img id="category-image" [src]="downloadURL | async" appImageFallback *ngIf="(uploadProgress | async)==100">
       </ion-col>
     </ion-row>
+
     <ion-row>
       <ion-col>
         <ion-button expand="block" [disabled]="createCategoryForm.invalid" title="New category" 
@@ -45,5 +53,6 @@
         </ion-button>
       </ion-col>
     </ion-row>
+
   </form> 
 </ion-grid>

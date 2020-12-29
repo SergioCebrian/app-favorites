@@ -11,6 +11,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 
 import { AngularFireModule } from '@angular/fire';
+import { AngularFireAnalyticsModule, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
@@ -33,6 +34,7 @@ import { appReducers } from '@store/reducers/app.reducers';
   imports: [
     BrowserModule, 
     AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireAnalyticsModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
     AngularFireAuthModule,
@@ -56,6 +58,8 @@ import { appReducers } from '@store/reducers/app.reducers';
   providers: [
     StatusBar,
     SplashScreen,
+    ScreenTrackingService,
+    UserTrackingService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
