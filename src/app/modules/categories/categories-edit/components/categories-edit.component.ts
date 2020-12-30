@@ -45,14 +45,12 @@ export class CategoriesEditComponent implements OnInit {
 
     if (this.editCategoryForm.valid) {
       this.isLoading = true;
-      const updateCategory = { 
-        id: this.editCategoryForm.value.id,
-        title: this.editCategoryForm.value.title,
-        description: this.editCategoryForm.value.description,
-        type: this.editCategoryForm.value.type,
-        image: this.editCategoryForm.value.image || document.getElementById('category-image').getAttribute('src')
-      }
-      this.OnEditCategory.emit({ category: updateCategory });
+      const categoryImageUpload = document.getElementById('category-image');
+      this.editCategoryForm.setValue({ 
+        ...this.editCategoryForm.value, 
+        image: (categoryImageUpload === null) ? this.editCategoryForm.value.image : categoryImageUpload.getAttribute('src') 
+      });
+      this.OnEditCategory.emit({ category: this.editCategoryForm.value });
       setTimeout(() => this.isLoading = false, 3000);
     }
   }
