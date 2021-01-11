@@ -11,6 +11,7 @@ import { CategoryService } from './category.service';
 import { CategoryModel } from '@models/category.model';
 import { CategoryMock } from '@mocks/category.mock';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 describe('CategoryService', () => {
   let service: CategoryService;
@@ -41,18 +42,52 @@ describe('CategoryService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('Tests Http calls', () => {
-    const expectedCategories: CategoryModel[] = CategoryMock;
+  describe('Tests Firestore calls', () => {
+    const expectedCategories: CategoryModel[] = CategoryMock,
+          expectedCategory: CategoryModel = expectedCategories[0];
     let afs: AngularFirestore;
 
     beforeEach(() => {
       afs = TestBed.inject(AngularFirestore);
     });
 
-    it('Testing collection categories is an AngularFirestoreCollection', () => {
+    it('Testing getAll return an Observable', () => {
+      expect(service.getAll()).toEqual(jasmine.any(Observable));
+    });
+
+    it('Testing getOne return an Observable', () => {
+      expect(service.getOne(expectedCategory.id)).toEqual(jasmine.any(Observable));
+    });
+
+    it('Testing delete return a Promise', () => {
+      expect(service.delete(expectedCategory.id)).toEqual(jasmine.any(Promise));
+    });
+
+    it('Testing edit a category return a Promise', () => {
+      const categoryToEdit = {
+        ...expectedCategory,
+        lastModifiedDate: new Date()
+      };
+      expect(service.edit(categoryToEdit)).toEqual(jasmine.any(Promise));
+    });
+
+    it('Testing editPartial a category return a Promise', () => {
+      expect(service.editPartial(expectedCategory.id, expectedCategory)).toEqual(jasmine.any(Promise));
+    });
+
+    it('Testing create a category return a Promise', () => {
+      const categoryToSave = { 
+        ...expectedCategory, 
+        createdDate: new Date(),
+        lastModifiedDate: new Date()
+      };
+      expect(service.save(categoryToSave)).toEqual(jasmine.any(Promise));
+    });
+
+    /*it('Testing collection categories is an AngularFirestoreCollection', () => {
       const collection = afs.collection('categories');
       expect(collection instanceof AngularFirestoreCollection).toBe(true);
-    });
+    });*/
 
   });
 

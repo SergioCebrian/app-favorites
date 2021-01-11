@@ -32,7 +32,8 @@
       "@pipes/*": ["app/shared/pipes/*"],
       "@services/*": ["app/core/services/*"],
       "@shared/*": ["app/shared/*"],
-      "@store/*": ["app/shared/store/*"]
+      "@store/*": ["app/shared/store/*"],
+      "@testing/*": ["testing/*"]
     }
   },
   "angularCompilerOptions": {

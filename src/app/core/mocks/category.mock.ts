@@ -5,7 +5,7 @@ export const CategoryMock = [
         description: 'Description 1',
         image: 'image1.jpg',
         type: 'Type 1',
-        slug: 'Slug 1',
+        slug: 'slug-1',
         lastModifiedDate: new Date()
     },
     {
@@ -14,7 +14,7 @@ export const CategoryMock = [
         description: 'Description 2',
         image: 'image2.jpg',
         type: 'Type 2',
-        slug: 'Slug 2',
+        slug: 'slug-2',
         lastModifiedDate: new Date()
     }
 ];

@@ -12,6 +12,7 @@ import { CategoryMock } from '@mocks/category.mock';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
 import { UploadService } from './upload.service';
+import { Observable } from 'rxjs';
 
 describe('UploadService', () => {
   let service: UploadService;
@@ -41,4 +42,17 @@ describe('UploadService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  describe('Tests upload methods', () => {
+
+    /*it('Testing url uploaded file return a Observable', () => {
+      expect(service.getDownloadUrl()).toEqual(jasmine.any(Observable));
+    });*/
+
+    /*it('Testing upload progress return a Observable', () => {
+      expect(service.getUploadProgress()).toEqual(jasmine.any(Observable));
+    });*/
+
+  });
+
 });

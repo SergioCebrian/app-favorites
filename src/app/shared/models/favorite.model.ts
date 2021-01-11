@@ -8,7 +8,8 @@ export interface FavoriteModel {
     slug: string,
     category: CategoryModel,
     category_id: string,
-    lastModifiedDate: Date,
+    image: string,
+    lastModifiedDate?: Date,
     important: Boolean,
     visits: Number
 }

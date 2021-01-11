@@ -1,15 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import { ErrorConfig } from '@configs/error.config';
-
 import { ErrorService } from './error.service';
 
 describe('ErrorService', () => {
   let service: ErrorService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      // imports: [ErrorConfig]
-    });
+    TestBed.configureTestingModule({ });
     service = TestBed.inject(ErrorService);
   });
 
@@ -17,8 +13,13 @@ describe('ErrorService', () => {
     expect(service).toBeTruthy();
   });
 
-  /*it('return an error object', () => {
-    service.get({ 'code' });
+  /*describe('Tests error service', () => {
+
+    it('Testing get error code', () => {
+      const fakeErrorMock = { code: 'Error code', message: 'Error message' }
+      expect(service.get(fakeErrorMock)).toBe({ code: ['Error code'], message: fakeErrorMock.message });
+    });
+
   });*/
 
 });
