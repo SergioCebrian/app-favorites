@@ -29,6 +29,12 @@ ion-tabs {
             font-weight: 600;
         }
     }
+
+    &:not(.is-active) {
+        ion-icon {
+            color: #595757;
+        }
+    }
 }
 
 ion-tab-button {
@@ -39,7 +45,7 @@ ion-tab-button {
         --color: var(--ion-color-step-400) !important;
     }
 
-    &:not(:last-of-type) {
+    /*&:not(:last-of-type) {
         border-right: 1px solid #eae0e0;
-    }
+    }*/
 }

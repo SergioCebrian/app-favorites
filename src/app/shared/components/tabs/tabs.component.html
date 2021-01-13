@@ -1,25 +1,25 @@
 <ion-tabs>
   <ion-tab-bar slot="bottom">
     <ion-tab-button (click)="redirectUrl('/')" [ngClass]="(active === 'favorites') ? 'is-active' : ''">
-      <ion-icon name="star"></ion-icon>
+      <ion-icon name="star-outline"></ion-icon>
       <ion-label>Favorites</ion-label>
       <ion-badge *ngIf="totalFavorites > 0">{{ totalFavorites }}</ion-badge>
     </ion-tab-button>
 
     <ion-tab-button (click)="redirectUrl('categories')" [ngClass]="(active === 'categories') ? 'is-active' : ''">
-      <ion-icon name="bookmark"></ion-icon>
+      <ion-icon name="bookmark-outline"></ion-icon>
       <ion-label>Categories</ion-label>
       <ion-badge *ngIf="totalCategories > 0">{{ totalCategories }}</ion-badge>
     </ion-tab-button>
 
     <ion-tab-button (click)="redirectUrl('history')" [ngClass]="(active === 'history') ? 'is-active' : ''">
-      <ion-icon name="eye"></ion-icon>
+      <ion-icon name="eye-outline"></ion-icon>
       <ion-label>History</ion-label>
       <ion-badge *ngIf="totalFavoritesHistory > 0">{{ totalFavoritesHistory }}</ion-badge>
     </ion-tab-button>
 
     <ion-tab-button (click)="redirectUrl('likes')" [ngClass]="(active === 'likes') ? 'is-active' : ''">
-      <ion-icon name="heart"></ion-icon>
+      <ion-icon name="heart-outline"></ion-icon>
       <ion-label>Likes</ion-label>
       <ion-badge *ngIf="totalFavoritesLikes > 0">{{ totalFavoritesLikes }}</ion-badge>
     </ion-tab-button>

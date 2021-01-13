@@ -6,6 +6,7 @@ import { CounterComponent } from './counter.component';
 describe('CounterComponent', () => {
   let component: CounterComponent;
   let fixture: ComponentFixture<CounterComponent>;
+  let expectedText;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -15,6 +16,8 @@ describe('CounterComponent', () => {
 
     fixture = TestBed.createComponent(CounterComponent);
     component = fixture.componentInstance;
+    expectedText = { plural: 'Plural', single: 'Single' };
+    component.text = expectedText;
     fixture.detectChanges();
   }));
 
@@ -22,47 +25,38 @@ describe('CounterComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('tests counter property', () => {
-    const expectedCounter: number = 8;
+  describe('test flag property', () => {
+    
+    it('Testing flag is a string', () => {
+      component.flag = 'Flag';
+      expect(component.flag).toEqual(jasmine.any(String));
+    });
 
-    it('counter is a number', () => {
-      component.counter = expectedCounter;
+  });
+
+  describe('test counter', () => {
+
+    it('Testing counter is a number', () => {
+      component.counter = 1;
       expect(component.counter).toEqual(jasmine.any(Number));
     });
 
-    it('counter value is eight', () => {
-      component.counter = expectedCounter;
-      expect(component.counter).toBe(expectedCounter);
-    });
   });
 
-  describe('tests text property', () => {
-    let expectedText: any = { plural: 'Plural', single: 'Single' };
-    component.text = expectedText;
+  describe('test message', () => {
 
-    /*it('text value is single', () => {
+    it('Testing message is single when counter is less or equal to one', () => {
       component.counter = 1;
-      component.message = expectedText.single;
-      fixture.detectChanges();
-      expect(component.message).toEqual('single')
+      component.text = expectedText.single;
+      expect(component.text).toBe(expectedText.single);
     });
 
-    it('text value is plural', () => {
-      component.counter = 10;
-      component.message = expectedText.plural;
-      fixture.detectChanges();
-      expect(component.message).toEqual('plural')
-    });*/
-
-  });
-
-  describe('tests flag property', () => {
-    const expectedFlagText: string = 'Flag';
-    
-    it('flag value is a string', () => {
-      component.flag = expectedFlagText;
-      expect(component.flag).toBe(expectedFlagText);
+    it('Testing message is plural when counter is more to one', () => {
+      component.counter = 8;
+      component.text = expectedText.plural;
+      expect(component.text).toBe(expectedText.plural);
     });
+
   });
 
 });

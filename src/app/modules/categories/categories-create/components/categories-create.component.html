@@ -47,7 +47,7 @@
     <ion-row>
       <ion-col>
         <ion-button expand="block" [disabled]="createCategoryForm.invalid" title="New category" 
-                    type="submit" class="ion-no-margin" *ngIf="isLoading === false">Create</ion-button>
+                    type="submit" id="create-btn" class="ion-no-margin" *ngIf="isLoading === false">Create</ion-button>
         <ion-button expand="block" class="ion-no-margin  c-btn  c-btn--loading" *ngIf="isLoading === true" disabled>
           <ion-spinner name="crescent"></ion-spinner>
         </ion-button>

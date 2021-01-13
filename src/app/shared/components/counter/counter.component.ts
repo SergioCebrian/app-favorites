@@ -9,20 +9,16 @@ import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core
 export class CounterComponent implements OnInit {
 
   @Input()
+  flag?: string;
+
+  @Input()
   counter: number;
 
   @Input()
   text: { [key: string]: string };
 
-  @Input()
-  flag?: string;
-
-  public message: string;
-
   constructor() { }
 
-  ngOnInit() {
-    this.message = (this.counter > 1) ? this.text.plural : this.text.single;
-  }
+  ngOnInit() { }
 
 }

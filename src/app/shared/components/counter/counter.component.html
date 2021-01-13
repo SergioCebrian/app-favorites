@@ -1,5 +1,5 @@
 <ion-label class="c-counter">
   <strong>{{ counter }}</strong> 
-  {{ message }} 
+  {{ (this.counter > 1) ? this.text.plural : this.text.single }} 
   <ion-text *ngIf="flag">{{ flag | titlecase }}</ion-text>
 </ion-label>

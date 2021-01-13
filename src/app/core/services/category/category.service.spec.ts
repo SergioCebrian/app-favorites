@@ -84,11 +84,6 @@ describe('CategoryService', () => {
       expect(service.save(categoryToSave)).toEqual(jasmine.any(Promise));
     });
 
-    /*it('Testing collection categories is an AngularFirestoreCollection', () => {
-      const collection = afs.collection('categories');
-      expect(collection instanceof AngularFirestoreCollection).toBe(true);
-    });*/
-
   });
 
 });

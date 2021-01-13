@@ -16,7 +16,6 @@ describe('SkeletonComponent', () => {
 
     fixture = TestBed.createComponent(SkeletonComponent);
     component = fixture.componentInstance;
-    component.numItemsSkeleton = 8;
     fixture.detectChanges();
   }));
 
@@ -24,8 +23,9 @@ describe('SkeletonComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  /*it('should have a default number of items Skeleton', () => {
+  it('Testing skeleton is a number', () => {
+    component.numItemsSkeleton = 8;
     expect(component.numItemsSkeleton).toEqual(jasmine.any(Number));
-    expect(component.numItemsSkeleton).toEqual(8);
-  });*/
+  });
+
 });
