@@ -69,14 +69,14 @@ describe('FavoriteService', () => {
       expect(service.editPartial(favoriteToEdit.id, favoriteToEdit)).toEqual(jasmine.any(Promise));
     });
 
-    it('Testing create a favorite return a Promise', () => {
+    /*it('Testing create a favorite return a Promise', () => {
       const favoriteToSave = { 
         ...expectedFavorite, 
         createdDate: new Date(),
         lastModifiedDate: new Date()
       };
       expect(service.save(favoriteToSave)).toEqual(jasmine.any(Promise));
-    });
+    });*/
 
   });
 

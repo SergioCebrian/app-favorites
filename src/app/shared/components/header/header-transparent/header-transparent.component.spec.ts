@@ -1,3 +1,5 @@
+import { Location } from '@angular/common';
+import { SpyLocation } from '@angular/common/testing';
 import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed, tick } from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire';
@@ -7,11 +9,12 @@ import { IonicModule } from '@ionic/angular';
 import { environment } from '@environments/environment';
 
 import { HeaderTransparentComponent } from './header-transparent.component';
-import { Location } from '@angular/common';
 
 describe('HeaderTransparentComponent', () => {
   let component: HeaderTransparentComponent;
   let fixture: ComponentFixture<HeaderTransparentComponent>;
+  let data: { [key: string]: string };
+  let location: SpyLocation;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -20,11 +23,19 @@ describe('HeaderTransparentComponent', () => {
         AngularFireModule.initializeApp(environment.firebaseConfig),
         RouterTestingModule,
         IonicModule.forRoot()
+      ],
+      providers: [
+        { provider: Location, useClass: SpyLocation }
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(HeaderTransparentComponent);
     component = fixture.componentInstance;
+    location = TestBed.get(Location);
+    data = { category: 'fake-category' };
+    component.data = data;
+    component.customClass = 'fake-class';
+    component.title = 'Fake title';
     fixture.detectChanges();
   }));
 
@@ -32,48 +43,33 @@ describe('HeaderTransparentComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('test input properties', () => {
+  describe('tests input properties', () => {
 
     it('Testing customClass property', () => {
-      component.customClass = 'fake-class';
+      expect(component.customClass).toBe('fake-class');
       expect(component.customClass).toString();
     });
 
     it('Testing title property', () => {
-      component.title = 'Fake title';
+      expect(component.title).toBe('Fake title');
       expect(component.title).toString();
     });
 
     it('Testing data property', () => {
-      component.data = { category: 'Fake category' };
+      expect(component.data).toBe(data);
       expect(component.data.category).toString();
     });
 
   });
 
-  /*
-  describe('test location back', () => {
-    const locationSpy = { back: jasmine.createSpy('back') };
+  describe('tests location', () => {
 
-    TestBed.configureTestingModule({
-      imports: [ Location ],
-      providers: [
-        {
-          provide: Location, 
-          useValue: locationSpy
-        },
-        Location
-      ]
+    it('Testing go back to previous page', () => {
+      spyOn(location, 'back');
+      component.goBack();
+      expect(location.back).toHaveBeenCalled();
     });
-  
-    it('Testing location back', () => {
-      // expect(locationSpy.back).toHaveBeenCalled();
-      const location = TestBed.get(Location);
-      expect(location.back()).toBe('/')
-    });
-  
+
   });
-  */
-  
 
 });

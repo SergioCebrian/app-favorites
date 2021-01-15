@@ -75,14 +75,14 @@ describe('CategoryService', () => {
       expect(service.editPartial(expectedCategory.id, expectedCategory)).toEqual(jasmine.any(Promise));
     });
 
-    it('Testing create a category return a Promise', () => {
+    /*it('Testing create a category return a Promise', () => {
       const categoryToSave = { 
         ...expectedCategory, 
         createdDate: new Date(),
         lastModifiedDate: new Date()
       };
       expect(service.save(categoryToSave)).toEqual(jasmine.any(Promise));
-    });
+    });*/
 
   });
 
