@@ -22,7 +22,7 @@ describe('loading reducers', () => {
 
         it('Testing loading stop', () => {
             const fakeNewState = { isLoading: false },
-                  fakeAction = LOADING_ACTIONS.stopLoading (),
+                  fakeAction = LOADING_ACTIONS.stopLoading(),
                   fakeState = loadingReducer(initialState, fakeAction);
 
             expect(fakeState).toEqual(fakeNewState);
