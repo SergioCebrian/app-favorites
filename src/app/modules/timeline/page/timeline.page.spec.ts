@@ -1,4 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { AngularFireModule } from '@angular/fire';
+import { RouterTestingModule } from '@angular/router/testing';
+import { StoreModule } from '@ngrx/store';
+import { appReducers } from '@shared/store/reducers/app.reducers';
+import { environment } from '@environments/environment';
 import { IonicModule } from '@ionic/angular';
 
 import { TimelinePage } from './timeline.page';
@@ -10,7 +15,12 @@ describe('TimelinePage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ TimelinePage ],
-      imports: [IonicModule.forRoot()]
+      imports: [
+        IonicModule.forRoot(),
+        AngularFireModule.initializeApp(environment.firebaseConfig),
+        RouterTestingModule,
+        StoreModule.forRoot(appReducers)
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TimelinePage);
@@ -21,4 +31,5 @@ describe('TimelinePage', () => {
   /*it('should create', () => {
     expect(component).toBeTruthy();
   });*/
+
 });

@@ -18,11 +18,13 @@ ion-tabs {
     }
 
     .is-active {
-        --background: linear-gradient(45deg, var(--ion-color-orange) 55%, var(--ion-color-yellow) 95%);
-        --color: var(--ion-color-primary-contrast);
+        --color: var(--ion-color-orange);
+        // --background: linear-gradient(45deg, var(--ion-color-orange) 55%, var(--ion-color-yellow) 95%);
+        // --color: var(--ion-color-primary-contrast);
         
         ion-icon {
-            color: var(--ion-color-primary-contrast);
+            --color: var(--ion-color-orange);
+            // color: var(--ion-color-primary-contrast);
         }
 
         ion-label {
